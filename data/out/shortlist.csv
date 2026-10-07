@@ -1,111 +1,112 @@
 block,operator,abn,entity_type,n_licences,n_premises_total,premises,regions,segment,details_coverage,licence_numbers
-multi_site,Tynan Motors Pty Ltd,,Company,3,3,,Illawarra; Sydney,service,0/3,MVRL1737; MVRL35891; MVRL44491
-multi_site,D & A Luck Automotive Pty Ltd,,Company,2,2,,Sydney,service,0/2,MVRL53524; MVRL54835
-multi_site,David Mitchell AutoBody Services Pty Ltd,,Company,2,2,,Illawarra,service,0/2,MVRL43512; MVRL8834
-multi_site,Express Lube Pty Ltd,,Company,2,2,,Central Coast; Newcastle,service,0/2,MVRL47278; MVRL48567
-multi_site,Ken Ross Repairs Mudgee Pty Ltd,,Company,2,2,,Hunter; Unknown (no address in register),service,0/2,MVRL30597; MVRL35066
-multi_site,Kumar Motors (Bankstown) Pty Ltd,,Company,2,2,,Sydney,service,0/2,MVRL39370; MVRL41962
-multi_site,North Star Motors (NSW) Pty Ltd,,Company,2,2,,Mid North Coast; New England / North West,service,0/2,MVRL24604; MVRL35308
+multi_site,Express Lube Pty Ltd,,Company,2,11,"56 Memorial Ave WOY WOY; Shop 1  1 Charlton St CESSNOCK; 246-248 The Entrance Road LONG JETTY; UNIT 1 379 MANNS RD WEST GOSFORD; UNIT 2 25 ARIZONA RD CHARMHAVEN; 318-320 Manns Rd WEST GOSFORD; 4 Karalta Rd ERINA; ; Unit 9A, Building 9, 1-10 Amy Close WYONG; Unit 1 & 2 166 Pacific Hwy TUGGERAH; ",Central Coast; Newcastle,service,2/2,MVRL47278; MVRL48567
+multi_site,S M A Motors Pty Ltd,53000158725,Company,2,5,11 Waltham Street ARTARMON; 43 HOTHAM PDE ARTARMON; 445-447 Willoughby Rd WILLOUGHBY; 49-53 Parramatta Rd CONCORD; 20 Carter Street LIDCOMBE,Sydney,service,2/2,MVRL24145; MVRL50622
+multi_site,Wollongong City Motors Pty Ltd,,Company,2,5,93-97 Princes Highway ALBION PARK RAIL; 101 Montague Street NORTH WOLLONGONG; 103-105 Montague Street NORTH WOLLONGONG; Cnr Flinders & Station Streets NORTH WOLLONGONG; Cnr Bourke & Flinders Sts WOLLONGONG,Illawarra,service,2/2,MVRL36705; MVRL48635
+multi_site,Tynan Motors Pty Ltd,,Company,3,3,39 Beatson Street WOLLONGONG; 3/1 KIORA RD MIRANDA; 98 Oak Road KIRRAWEE,Illawarra; Sydney,service,3/3,MVRL1737; MVRL35891; MVRL44491
+multi_site,D & A Luck Automotive Pty Ltd,28600293758,Company,2,3,60 Hopson St DOUGLAS PARK; 8 29 Camden St WILTON; ,Sydney,service,2/2,MVRL53524; MVRL54835
+multi_site,Kumar Motors (Bankstown) Pty Ltd,,Company,2,3,376 Edgar Street BANKSTOWN; ; ,Sydney,service,2/2,MVRL39370; MVRL41962
+multi_site,Suttons Motors Arncliffe Pty Ltd,,Company,2,3,484-486 VICTORIA ST WETHERILL PARK; 59-93 Princes Highway ARNCLIFFE; ,Sydney; Unknown (no address in register),service,2/2,MVRL43651; MVRL5064
+multi_site,A To Z Automotive Services Pty Ltd,,Company,1,3,3 22 Munibung Road CARDIFF; 74 MITCHELL RD CARDIFF; ,Newcastle,service,1/1,MVRL56122
+multi_site,Ken Ross Repairs Mudgee Pty Ltd,,Company,2,2,5 Horatio Lane MUDGEE; ,Hunter; Unknown (no address in register),service,2/2,MVRL30597; MVRL35066
+multi_site,North Star Motors (NSW) Pty Ltd,,Company,2,2,337-341 Pacific Highway HEATHERBRAE; Lot 5 Kilkenny Place GLENN INNES,Mid North Coast; New England / North West,service,2/2,MVRL24604; MVRL35308
 multi_site,Owen Patrick Bull,,Individual/Partnership,2,2,,Central Coast,service,0/2,MVRL38696; MVRL60843
 multi_site,Rocco Junior Zoccali,,Individual/Partnership,2,2,,Sydney; Unknown (no address in register),service,0/2,MVRL29234; MVRL35697
-multi_site,Suttons Motors Arncliffe Pty Ltd,,Company,2,2,,Sydney; Unknown (no address in register),service,0/2,MVRL43651; MVRL5064
-multi_site,Wollongong City Motors Pty Ltd,,Company,2,2,,Illawarra,service,0/2,MVRL36705; MVRL48635
-single_site_company,083 Motors Pty Ltd,,Company,1,1,,Riverina,service,0/1,MVRL26563
-single_site_company,168 MOTOR MECHANIC PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL62668
-single_site_company,1ST CHOICE MECHANICAL REPAIRS PTY LTD,,Company,1,1,,Illawarra,service,0/1,MVRL59080
-single_site_company,2370 HIGHLAND AUTOMOTIVE PTY LTD,,Company,1,1,,New England / North West,service,0/1,MVRL57550
-single_site_company,313 Automotive Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL50513
-single_site_company,3MD Auto Pty Ltd,,Company,1,1,,Hunter,service,0/1,MVRL54434
-single_site_company,4 B Action Mechanical Services Pty Ltd,,Company,1,1,,Newcastle,service,0/1,MVRL46295
-single_site_company,4 Way Suspension Products Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL60927
-single_site_company,4K Motors Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL62983
-single_site_company,50SEVEN AUTOMOTIVE PTY LTD,,Company,1,1,,Far West / Orana,service,0/1,MVRL60535
-single_site_company,5AB Motors Pty Ltd,,Company,1,1,,Capital Region,service,0/1,MVRL50760
-single_site_company,911 AUTOMOTIVE PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL58549
-single_site_company,95 Mulga Road Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL35660
-single_site_company,A  A West Automotive Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL43006
-single_site_company,A & A COMBINED PTY. LTD,,Company,1,1,,Sydney,service,0/1,MVRL61615
-single_site_company,A & B Automotive Specialists Pty Ltd,,Company,1,1,,Hunter,service,0/1,MVRL61386
-single_site_company,A & B Campbell Pty Ltd,,Company,1,1,,Northern Rivers,service,0/1,MVRL48312
-single_site_company,A & B WELLS SUPER PROPERTY PTY LTD,,Company,1,1,,Northern Rivers,service,0/1,MVRL63390
-single_site_company,A & D Auto Mechanical Repairs Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL54649
-single_site_company,A & D Motors Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL29836
-single_site_company,A & J AUTOMOTIVE PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL60752
-single_site_company,A & J Automotive Repair Services Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL50746
-single_site_company,A & J MARFLEET PTY LTD,,Company,1,1,,Central Coast,service,0/1,MVRL63540
-single_site_company,A & K Tsakiris Pty Ltd,,Company,1,1,,Capital Region,service,0/1,MVRL52217
-single_site_company,A & L Mechanical Repairs Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL59817
-single_site_company,A & P Swadling Pty Ltd,,Company,1,1,,Capital Region,service,0/1,MVRL54098
-single_site_company,A J & M V Rockliff Pty Ltd,,Company,1,1,,Riverina,service,0/1,MVRL63954
-single_site_company,A Plus Automotive Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL57726
-single_site_company,A R K Automotive Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL54266
-single_site_company,A To Z Automotive Services Pty Ltd,,Company,1,1,,Newcastle,service,0/1,MVRL56122
-single_site_company,A&D AUTOMOTIVE PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL55134
-single_site_company,A&R MECHANICAL AUTO REPAIR PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL60664
-single_site_company,A-Z AUTO SYDNEY PTY. LTD.,,Company,1,1,,Sydney,service,0/1,MVRL56993
-single_site_company,A.A.C. AUTOMOTIVE SPECIALISTS PTY. LIMITED,,Company,1,1,,Sydney,service,0/1,MVRL64356
-single_site_company,A.P Automotive Repairs Pty Ltd,,Company,1,1,,Unknown (no address in register),service,0/1,MVRL55916
-single_site_company,A1 Automotive Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL46308
-single_site_company,A1 Europro Automotive Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL55178
-single_site_company,A1 Frey Pty Ltd,,Company,1,1,,Northern Rivers,service,0/1,MVRL54352
-single_site_company,AA Automotive Pty Ltd,,Company,1,1,,Mid North Coast,service,0/1,MVRL59694
-single_site_company,AAA Auto Specialist Pty Ltd,,Company,1,1,,Central Coast,service,0/1,MVRL49420
-single_site_company,AAA REPAIR & SERVICE PTY LTD,,Company,1,1,,Central West,service,0/1,MVRL63561
-single_site_company,AAA REPAIRS AND MODIFICATIONS PTY LTD,,Company,1,1,,Unknown (no address in register),service,0/1,MVRL60014
-single_site_company,AAA Service Autos Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL53613
-single_site_company,AAMK Autos Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL59943
-single_site_company,Aaron & Claire Hills Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL56226
-single_site_company,ABC Trading Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL64035
-single_site_company,ABES Safer Brakes Pty Limited,,Company,1,1,,Sydney,service,0/1,MVRL22629
-single_site_company,Abrahamsen Automotive Pty Ltd,,Company,1,1,,New England / North West,service,0/1,MVRL42777
-single_site_company,ABS Batemans Bay Pty Ltd,,Company,1,1,,Southern Highlands / Shoalhaven,service,0/1,MVRL48906
-single_site_company,Abtrol Pty Ltd,,Company,1,1,,Mid North Coast,service,0/1,MVRL15192
-single_site_company,ACD Auto Service Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL51924
-single_site_company,ACE AUTO SERVICES PTY LTD,,Company,1,1,,New England / North West,service,0/1,MVRL59631
-single_site_company,Ace Automotive Mechanical Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL50299
-single_site_company,ACE PRESTIGE AUTO REPAIRS PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL64398
-single_site_company,Active Automatic Transmissions Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL40572
-single_site_company,Actual Car Care Pty Ltd,,Company,1,1,,Unknown (no address in register),service,0/1,MVRL44450
-single_site_company,Adams Auto Fix Pty Ltd,,Company,1,1,,Newcastle,service,0/1,MVRL41529
-single_site_company,Adams Automotive Servicing Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL51362
-single_site_company,ADFA Pty Ltd,,Company,1,1,,Newcastle,service,0/1,MVRL60500
-single_site_company,ADM Automotive Pty Limited,,Company,1,1,,Central Coast,service,0/1,MVRL56160
-single_site_company,ADONIS AUTOMOTIVE SERVICES PTY LTD,,Company,1,1,,Unknown (no address in register),service,0/1,MVRL59611
-single_site_company,Adrio Pty Ltd,,Company,1,1,,Hunter,service,0/1,MVRL24375
-single_site_company,ADVANCE AUTO REPAIRS PTY LIMITED,,Company,1,1,,Sydney,service,0/1,MVRL55058
-single_site_company,Advance Automotive Repair Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL56244
-single_site_company,Advance Vehicle Services Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL56020
-single_site_company,Advanced Auto Tech Pty Ltd,,Company,1,1,,Mid North Coast,service,0/1,MVRL61738
-single_site_company,Advanced Automotive Instrument Company Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL58686
-single_site_company,ADVANCED AUTOMOTIVE PLUS PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL63569
-single_site_company,Advanced Installation Service Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL56089
-single_site_company,Advanced Mechanical Services (NSW) Pty Ltd,,Company,1,1,,Hunter,service,0/1,MVRL55993
-single_site_company,Advanced Mechanics Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL53280
-single_site_company,ADVANCED SQUARED PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL57900
-single_site_company,ADVANCED VEHICLE SERVICES PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL56557
-single_site_company,ADY MOTORS PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL62625
-single_site_company,AF Motors Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL56769
-single_site_company,AFM CAR REPAIRS PTY. LTD.,,Company,1,1,,Sydney,service,0/1,MVRL57602
-single_site_company,AG AUTO WORKS PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL63907
-single_site_company,AGA Automotive Services Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL34909
-single_site_company,Agfix Mechanical Pty Ltd,,Company,1,1,,New England / North West,service,0/1,MVRL51096
-single_site_company,Agius Enterprises Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL53579
-single_site_company,Air Dinkum Mechanical Pty Ltd,,Company,1,1,,Central West,service,0/1,MVRL60692
-single_site_company,AIRCO AUTO INSTRUMENTS PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL59562
-single_site_company,Airmech Newcastle Pty Ltd,,Company,1,1,,Newcastle,service,0/1,MVRL55319
-single_site_company,AJ AUTOMOTIVE SERVICES PTY LTD,,Company,1,1,,Newcastle,service,0/1,MVRL64258
-single_site_company,AJ's Mechanical Solutions Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL47741
-single_site_company,AJC AUTOMOTIVE PTY LTD,,Company,1,1,,Illawarra,service,0/1,MVRL55834
-single_site_company,AJC SPECIALISED SERVICES PTY LTD,,Company,1,1,,Hunter,service,0/1,MVRL63496
-single_site_company,AJE MECHANICAL PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL57671
-single_site_company,AJF & SON PTY LTD,,Company,1,1,,Illawarra,service,0/1,MVRL56795
-single_site_company,AJM Mechanical Services Pty Ltd,,Company,1,1,,Unknown (no address in register),service,0/1,MVRL62328
-single_site_company,AJM PROJECTS GROUP PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL57056
-single_site_company,Al's Mechanical Repairs Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL24840
-single_site_company,AL-EHSAN CARE PTY LTD,,Company,1,1,,Sydney,service,0/1,MVRL64087
-single_site_company,Alan Croker Pty Ltd,,Company,1,1,,Southern Highlands / Shoalhaven,service,0/1,MVRL57734
-single_site_company,Albion Automotive Repairs (NSW) Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL63871
-single_site_company,ALBURY AUTO CENTRE PTY LTD,,Company,1,1,,Murray,service,0/1,MVRL62031
+multi_site,313 Automotive Pty Ltd,,Company,1,2,313 Lyons Rd RUSSELL LEA; ,Sydney,service,1/1,MVRL50513
+multi_site,4K Motors Pty Ltd,97677442983,Company,1,2,644-654 PARRAMATTA RD CROYDON; 144 FRANCES ST LIDCOMBE,Sydney,service,1/1,MVRL62983
+multi_site,911 AUTOMOTIVE PTY LTD,26646401774,Company,1,2,1 AVERILL ST RHODES; 90 DICKSON AV ARTARMON,Sydney,service,1/1,MVRL58549
+multi_site,AFM CAR REPAIRS PTY. LTD.,37636300297,Company,1,2,30 WOODFIELD BVD CARINGBAH; ,Sydney,service,1/1,MVRL57602
+multi_site,Air Dinkum Mechanical Pty Ltd,,Company,1,2,50 LEEWOOD DR ORANGE; ,Central West,service,1/1,MVRL60692
+multi_site,AJ AUTOMOTIVE SERVICES PTY LTD,57696630403,Company,1,2,31 FOURTH ST BOOLAROO; ,Newcastle,service,1/1,MVRL64258
+multi_site,AJC SPECIALISED SERVICES PTY LTD,99644642393,Company,1,2,11 FARRIER PL RUTHERFORD; ,Hunter,service,1/1,MVRL63496
+multi_site,AL-EHSAN CARE PTY LTD,30683466668,Company,1,2,UNIT 1 11 MEMORIAL AV INGLEBURN; ,Sydney,service,1/1,MVRL64087
+multi_site,David Mitchell AutoBody Services Pty Ltd,,Company,2,1,104 - 106 Gipps St WOLLONGONG,Illawarra,service,2/2,MVRL43512; MVRL8834
+single_site_company,083 Motors Pty Ltd,,Company,1,1,"Yass Trade Centre, 5/81 Laidlaw Street YASS",Riverina,service,1/1,MVRL26563
+single_site_company,168 MOTOR MECHANIC PTY LTD,57675885131,Company,1,1,UNIT 3 247 RAILWAY PDE CABRAMATTA,Sydney,service,1/1,MVRL62668
+single_site_company,1ST CHOICE MECHANICAL REPAIRS PTY LTD,67169134552,Company,1,1,UNIT 7 30 SWAN ST WOLLONGONG,Illawarra,service,1/1,MVRL59080
+single_site_company,2370 HIGHLAND AUTOMOTIVE PTY LTD,14640387033,Company,1,1,3  150 Ferguson Street GLEN INNES,New England / North West,service,1/1,MVRL57550
+single_site_company,3MD Auto Pty Ltd,18620606171,Company,1,1,U 1  219 High St MAITLAND,Hunter,service,1/1,MVRL54434
+single_site_company,4 B Action Mechanical Services Pty Ltd,,Company,1,1,30 MAITLAND RD MAYFIELD,Newcastle,service,1/1,MVRL46295
+single_site_company,4 Way Suspension Products Pty Ltd,46003121604,Company,1,1,14 DARLING ST MARSDEN PARK,Sydney,service,1/1,MVRL60927
+single_site_company,50SEVEN AUTOMOTIVE PTY LTD,11661764183,Company,1,1,16 DAPVILLE ST COBAR,Far West / Orana,service,1/1,MVRL60535
+single_site_company,5AB Motors Pty Ltd,,Company,1,1,23 Paterson Pde QUEANBEYAN WEST,Capital Region,service,1/1,MVRL50760
+single_site_company,95 Mulga Road Pty Ltd,,Company,1,1,95 Mulga Road OATLEY,Sydney,service,1/1,MVRL35660
+single_site_company,A  A West Automotive Pty Ltd,,Company,1,1,Unit 2  28 Groves Avenue MCGRATHS HILL,Sydney,service,1/1,MVRL43006
+single_site_company,A & A COMBINED PTY. LTD,,Company,1,1,UNIT 4&5 10-16 Argyle St CAMDEN,Sydney,service,1/1,MVRL61615
+single_site_company,A & B Automotive Specialists Pty Ltd,69668774696,Company,1,1,UNIT 2 352 SOLDIERS POINT RD SALAMANDER BAY,Hunter,service,1/1,MVRL61386
+single_site_company,A & B Campbell Pty Ltd,,Company,1,1,13 Piper Dr BALLINA,Northern Rivers,service,1/1,MVRL48312
+single_site_company,A & B WELLS SUPER PROPERTY PTY LTD,29613990453,Company,1,1,40 DE-HAVILLAND CR BALLINA,Northern Rivers,service,1/1,MVRL63390
+single_site_company,A & D Auto Mechanical Repairs Pty Ltd,22621292555,Company,1,1,25 Mary Parade RYDALMERE,Sydney,service,1/1,MVRL54649
+single_site_company,A & D Motors Pty Ltd,,Company,1,1,10/2-4 Stout Road MOUNT DRUITT,Sydney,service,1/1,MVRL29836
+single_site_company,A & J AUTOMOTIVE PTY LTD,93661760096,Company,1,1,636 PARRAMATTA RD CROYDON,Sydney,service,1/1,MVRL60752
+single_site_company,A & J Automotive Repair Services Pty Ltd,,Company,1,1,U 4 47 Third Ave BLACKTOWN,Sydney,service,1/1,MVRL50746
+single_site_company,A & J MARFLEET PTY LTD,28689915464,Company,1,1,UNIT 6 8 KERTA RD KINCUMBER,Central Coast,service,1/1,MVRL63540
+single_site_company,A & K Tsakiris Pty Ltd,83606697509,Company,1,1,39 Merimbula Dr MERIMBULA,Capital Region,service,1/1,MVRL52217
+single_site_company,A & L Mechanical Repairs Pty Ltd,,Company,1,1,UNIT 2 2-4 DUNLOP ST STRATHFIELD SOUTH,Sydney,service,1/1,MVRL59817
+single_site_company,A & P Swadling Pty Ltd,36617748517,Company,1,1,2-5 44 Shelley Rd MORUYA,Capital Region,service,1/1,MVRL54098
+single_site_company,A J & M V Rockliff Pty Ltd,,Company,1,1,18 URANA ST LOCKHART,Riverina,service,1/1,MVRL63954
+single_site_company,A Plus Automotive Pty Ltd,,Company,1,1,7 Edwin Street MORTLAKE,Sydney,service,1/1,MVRL57726
+single_site_company,A R K Automotive Pty Ltd,,Company,1,1,U 3  2 Paton Pl BALGOWLAH,Sydney,service,1/1,MVRL54266
+single_site_company,A&D AUTOMOTIVE PTY LTD,,Company,1,1,UNIT 4 788-798 OLD ILLAWARRA RD MENAI,Sydney,service,1/1,MVRL55134
+single_site_company,A&R MECHANICAL AUTO REPAIR PTY LTD,,Company,1,1,17 43 FAIRFIELD OLD GUILDORD,Sydney,service,1/1,MVRL60664
+single_site_company,A-Z AUTO SYDNEY PTY. LTD.,,Company,1,1,596-598 Princes Highway ST PETERS,Sydney,service,1/1,MVRL56993
+single_site_company,A.A.C. AUTOMOTIVE SPECIALISTS PTY. LIMITED,64069382234,Company,1,1,UNIT 3 66-68 HEATHCOTE RD MOOREBANK,Sydney,service,1/1,MVRL64356
+single_site_company,A.P Automotive Repairs Pty Ltd,,Company,1,1,,Unknown (no address in register),service,1/1,MVRL55916
+single_site_company,A1 Automotive Pty Ltd,,Company,1,1,UNIT 3 5 GRIEVE RD WEST GOSFORD,Sydney,service,1/1,MVRL46308
+single_site_company,A1 Europro Automotive Pty Ltd,,Company,1,1,UNIT 1 11 MILL RD CAMPBELLTOWN,Sydney,service,1/1,MVRL55178
+single_site_company,A1 Frey Pty Ltd,13616717214,Company,1,1,U 1  42 Machinery Dr TWEED HEADS SOUTH,Northern Rivers,service,1/1,MVRL54352
+single_site_company,AA Automotive Pty Ltd,37651502108,Company,1,1,72 KULAROO DR FORSTER,Mid North Coast,service,1/1,MVRL59694
+single_site_company,AAA Auto Specialist Pty Ltd,38157993336,Company,1,1,326 The Entrance Rd LONG JETTY,Central Coast,service,1/1,MVRL49420
+single_site_company,AAA REPAIR & SERVICE PTY LTD,95691142855,Company,1,1,14 VALE RD SOUTH BATHURST,Central West,service,1/1,MVRL63561
+single_site_company,AAA REPAIRS AND MODIFICATIONS PTY LTD,61653166673,Company,1,1,,Unknown (no address in register),service,1/1,MVRL60014
+single_site_company,AAA Service Autos Pty Ltd,,Company,1,1,U 5 92 Milperra Rd REVESBY,Sydney,service,1/1,MVRL53613
+single_site_company,AAMK Autos Pty Ltd,54654120368,Company,1,1,UNIT 6 5 STEEL ST BLACKTOWN,Sydney,service,1/1,MVRL59943
+single_site_company,Aaron & Claire Hills Pty Ltd,,Company,1,1,U 5  48-50 Regentville Road JAMISONTOWN,Sydney,service,1/1,MVRL56226
+single_site_company,ABC Trading Pty Ltd,,Company,1,1,5A KURRAJONG RD NORTH ST MARYS,Sydney,service,1/1,MVRL64035
+single_site_company,ABES Safer Brakes Pty Limited,,Company,1,1,99 EDGECLIFF RD BONDI JUNCTION,Sydney,service,1/1,MVRL22629
+single_site_company,Abrahamsen Automotive Pty Ltd,,Company,1,1,322 Frome St MOREE,New England / North West,service,1/1,MVRL42777
+single_site_company,ABS Batemans Bay Pty Ltd,,Company,1,1,28 Kylie Cres BATEMANS BAY,Southern Highlands / Shoalhaven,service,1/1,MVRL48906
+single_site_company,Abtrol Pty Ltd,,Company,1,1,5 Port Stephens Street RAYMOND TERRACE,Mid North Coast,service,1/1,MVRL15192
+single_site_company,ACD Auto Service Pty Ltd,56604298535,Company,1,1,2 Henley Marine Dr FIVE DOCK,Sydney,service,1/1,MVRL51924
+single_site_company,ACE AUTO SERVICES PTY LTD,50653200563,Company,1,1,9-11 ANSON ST TAMINDA,New England / North West,service,1/1,MVRL59631
+single_site_company,Ace Automotive Mechanical Pty Ltd,,Company,1,1,Unit 1A 6 McCormack St ARNDELL PARK,Sydney,service,1/1,MVRL50299
+single_site_company,ACE PRESTIGE AUTO REPAIRS PTY LTD,12699118164,Company,1,1,42 JUSTIN ST SMITHFIELD,Sydney,service,1/1,MVRL64398
+single_site_company,Active Automatic Transmissions Pty Ltd,,Company,1,1,U 3 10 FORGE ST BLACKTOWN,Sydney,service,1/1,MVRL40572
+single_site_company,Actual Car Care Pty Ltd,,Company,1,1,"Cnr Ocean Drive & Emerald Drive PORT MACQUARIE, 2441",Mid North Coast,service,1/1,MVRL44450
+single_site_company,Adams Auto Fix Pty Ltd,,Company,1,1,U 1  19 Abundance Rd MEDOWIE,Newcastle,service,1/1,MVRL41529
+single_site_company,Adams Automotive Servicing Pty Ltd,,Company,1,1,U 4 284 Manns Rd WEST GOSFORD,Sydney,service,1/1,MVRL51362
+single_site_company,ADFA Pty Ltd,,Company,1,1,43 WYONG RD LAMBTON,Newcastle,service,1/1,MVRL60500
+single_site_company,ADM Automotive Pty Limited,,Company,1,1,"Bay 9, 10, 11, 15 Arizona Road CHARMHAVEN",Central Coast,service,1/1,MVRL56160
+single_site_company,ADONIS AUTOMOTIVE SERVICES PTY LTD,85651982124,Company,1,1,,Unknown (no address in register),service,1/1,MVRL59611
+single_site_company,Adrio Pty Ltd,,Company,1,1,32 Sydney Road MUDGEE,Hunter,service,1/1,MVRL24375
+single_site_company,ADVANCE AUTO REPAIRS PTY LIMITED,,Company,1,1,U 7 2 Burrows Rd South ST PETERS,Sydney,service,1/1,MVRL55058
+single_site_company,Advance Automotive Repair Pty Ltd,,Company,1,1,813 Fifteenth Ave WEST HOXTON 2171,Sydney,service,1/1,MVRL56244
+single_site_company,Advance Vehicle Services Pty Ltd,,Company,1,1,38-40 Anzac Pde KENSINGTON,Sydney,service,1/1,MVRL56020
+single_site_company,Advanced Auto Tech Pty Ltd,40672651955,Company,1,1,17 URALLA RD PORT MACQUARIE,Mid North Coast,service,1/1,MVRL61738
+single_site_company,Advanced Automotive Instrument Company Pty Ltd,37062691070,Company,1,1,B1 77 Carrington St REVESBY,Sydney,service,1/1,MVRL58686
+single_site_company,ADVANCED AUTOMOTIVE PLUS PTY LTD,82690971914,Company,1,1,UNIT 4 38 BESSEMER ST BLACKTOWN,Sydney,service,1/1,MVRL63569
+single_site_company,Advanced Installation Service Pty Ltd,,Company,1,1,U 1 29 Attunga Rd BLAXLAND,Sydney,service,1/1,MVRL56089
+single_site_company,Advanced Mechanical Services (NSW) Pty Ltd,,Company,1,1,U 2 136 George Rd SALAMANDER BAY,Hunter,service,1/1,MVRL55993
+single_site_company,Advanced Mechanics Pty Ltd,35609374727,Company,1,1,47 RAILWAY ST YENNORA,Sydney,service,1/1,MVRL53280
+single_site_company,ADVANCED SQUARED PTY LTD,,Company,1,1,UNIT 1 13 LORRAINE ST PEAKHURST,Sydney,service,1/1,MVRL57900
+single_site_company,ADVANCED VEHICLE SERVICES PTY LTD,,Company,1,1,9-11 Anzac Parade KENSINGTON,Sydney,service,1/1,MVRL56557
+single_site_company,ADY MOTORS PTY LTD,17681421652,Company,1,1,UNIT 2 11 ELIZABETH ST CAMPSIE,Sydney,service,1/1,MVRL62625
+single_site_company,AF Motors Pty Ltd,13626013125,Company,1,1,UNIT 7 27 MOXON RD PUNCHBOWL,Sydney,service,1/1,MVRL56769
+single_site_company,AG AUTO WORKS PTY LTD,15689955922,Company,1,1,UNIT 10 7 CARRINGTON RD CASTLE HILL,Sydney,service,1/1,MVRL63907
+single_site_company,AGA Automotive Services Pty Ltd,,Company,1,1,196 Chetwynd Road GUILDFORD,Sydney,service,1/1,MVRL34909
+single_site_company,Agfix Mechanical Pty Ltd,32164318016,Company,1,1,214 Aerodrome Rd WALCHA,New England / North West,service,1/1,MVRL51096
+single_site_company,Agius Enterprises Pty Ltd,50612881268,Company,1,1,13 Railway Street EMU PLAINS,Sydney,service,1/1,MVRL53579
+single_site_company,AIRCO AUTO INSTRUMENTS PTY LTD,,Company,1,1,UNIT 33 105A VANESSA ST KINGSGROVE,Sydney,service,1/1,MVRL59562
+single_site_company,Airmech Newcastle Pty Ltd,34098267531,Company,1,1,12 Mitchell St MEREWETHER,Newcastle,service,1/1,MVRL55319
+single_site_company,AJ's Mechanical Solutions Pty Ltd,,Company,1,1,Unit 2 8 Grex Ave MINCHINBURY,Sydney,service,1/1,MVRL47741
+single_site_company,AJC AUTOMOTIVE PTY LTD,,Company,1,1,131 Kembla St WOLLONGONG,Illawarra,service,1/1,MVRL55834
+single_site_company,AJE MECHANICAL PTY LTD,31639692658,Company,1,1,U 4  7 Mill Road CAMPBELLTOWN,Sydney,service,1/1,MVRL57671
+single_site_company,AJF & SON PTY LTD,64634297742,Company,1,1,U 1  22 Sunset Avenue BARRACK HEIGHTS,Illawarra,service,1/1,MVRL56795
+single_site_company,AJM Mechanical Services Pty Ltd,64644018093,Company,1,1,,Unknown (no address in register),service,1/1,MVRL62328
+single_site_company,AJM PROJECTS GROUP PTY LTD,,Company,1,1,U 1  30 Airds Road MINTO,Sydney,service,1/1,MVRL57056
+single_site_company,Al's Mechanical Repairs Pty Ltd,,Company,1,1,405 Forest Rd PENSHURST,Sydney,service,1/1,MVRL24840
+single_site_company,Alan Croker Pty Ltd,,Company,1,1,4A BLACKBURN RD ULLADULLA,Southern Highlands / Shoalhaven,service,1/1,MVRL57734
+single_site_company,Albion Automotive Repairs (NSW) Pty Ltd,,Company,1,1,58 ALBION ST ANNANDALE,Sydney,service,1/1,MVRL63871
+single_site_company,ALBURY AUTO CENTRE PTY LTD,71674592039,Company,1,1,288 KIEWA ST SOUTH ALBURY,Murray,service,1/1,MVRL62031
 single_site_company,Aleco Mechanical Pty Ltd,,Company,1,1,,Unknown (no address in register),service,0/1,MVRL58713
 single_site_company,ALESSI MECHANICAL REPAIRS PTY LTD,,Company,1,1,,Unknown (no address in register),service,0/1,MVRL63551
 single_site_company,Alexs Auto Services Pty Ltd,,Company,1,1,,Sydney,service,0/1,MVRL32587
