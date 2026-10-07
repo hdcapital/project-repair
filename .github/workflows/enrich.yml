@@ -1,0 +1,72 @@
+name: enrich
+
+on:
+  schedule:
+    - cron: '7 * * * *'
+  workflow_dispatch:
+    inputs:
+      run_seconds:
+        description: 'Seconds to spend fetching this run (default 3000 = 50 min)'
+        default: '3000'
+        required: false
+      dry_run:
+        description: 'Set to 1 to skip API calls and pushes'
+        default: '0'
+        required: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: enrich
+  cancel-in-progress: false
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      NSW_API_KEY: ${{ secrets.NSW_API_KEY }}
+      NSW_API_SECRET: ${{ secrets.NSW_API_SECRET }}
+      ABR_GUID: ${{ secrets.ABR_GUID }}
+      RUN_SECONDS: ${{ inputs.run_seconds || '3000' }}
+      DRY_RUN: ${{ inputs.dry_run || '0' }}
+      MONTHLY_CALL_BUDGET: ${{ vars.MONTHLY_CALL_BUDGET || '0' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Start the run clock
+        run: echo "RUN_DEADLINE=$(( $(date +%s) + RUN_SECONDS ))" >> "$GITHUB_ENV"
+
+      - name: Fetch details (adaptive rate, checkpoint commits every 200)
+        run: python3 pipeline.py fetch-details
+
+      - name: Fetch ABR entity details (skipped unless ABR_GUID is set)
+        if: always()
+        run: python3 pipeline.py fetch-abr
+
+      - name: Build outputs
+        if: always()
+        run: python3 pipeline.py build
+
+      - name: Commit and push data/
+        if: always()
+        run: python3 pipeline.py commit
+
+      - name: Disable this workflow when the queue is empty
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$(python3 -c "import json;print(json.load(open('data/status.json')).get('complete'))")" = "True" ]; then
+            echo "queue empty -> disabling enrich.yml"
+            gh workflow disable enrich.yml --repo "$GITHUB_REPOSITORY"
+          else
+            echo "not complete; workflow stays enabled"
+          fi
