@@ -7,6 +7,7 @@ Trivett Automotive Retail Pty Ltd,,,Company,,,7,7,0,,Sydney,dealer,,False,True,0
 Bridgestone Australia Ltd,,007516841,Company,,,5,5,1,Cnr Dampier St & Wallamore Rd TAMWORTH,Illawarra; New England / North West; Riverina; Southern Highlands / Shoalhaven; Sydney,unknown,Bridgestone,False,False,1/5,MVRL19149; MVRL32678; MVRL43937; MVRL45633; MVRL49945,acn:007516841
 McCarroll's Of Moss Vale Pty Ltd,,,Company,,,5,5,0,,Newcastle; Sydney,dealer,,False,True,0/5,MVRL23718; MVRL36580; MVRL38413; MVRL41234; MVRL44305,name:MCCARROLL S OF MOSS VALE
 Wollongong City Motors Pty Ltd,,002019598,Company,,,2,5,5,93-97 Princes Highway ALBION PARK RAIL; 101 Montague Street NORTH WOLLONGONG; 103-105 Montague Street NORTH WOLLONGONG; Cnr Flinders & Station Streets NORTH WOLLONGONG; Cnr Bourke & Flinders Sts WOLLONGONG,Illawarra; Southern Highlands / Shoalhaven,service,,False,False,2/2,MVRL36705; MVRL48635,acn:002019598
+Auto Solutions NSW Pty Ltd,,108264928,Company,,,1,5,5,128 Hume St GOULBURN; 22-24 HILLCREST ST HOMEBUSH; 121 HUME HWY GREENACRE; 378 CLARINDA ST PARKES; 374 CLARINDA ST PARKES,Central West; Sydney,service,,False,False,1/1,MVRL54920,acn:108264928
 Paul Wakeling Motor Group Pty Ltd,,,Company,,,4,4,0,,Sydney; Unknown (no address in register),dealer,,False,True,0/4,MVRL43026; MVRL43027; MVRL43029; MVRL43030,name:PAUL WAKELING MOTOR GROUP
 STM TRUCKS & MACHINERY PTY LTD,,,Company,,,4,4,0,,Sydney; Unknown (no address in register),specialist,,False,False,0/4,MVRL48894; MVRL48895; MVRL48896; MVRL48897,name:STM TRUCKS AND MACHINERY
 Alweal Pty. Limited,,,Company,,,3,3,0,,Hunter; Newcastle,body,,False,False,0/3,MVRL32116; MVRL43725; MVRL47494,name:ALWEAL
@@ -88,6 +89,13 @@ VDL Group Pty Ltd,,,Company,,,2,2,0,,Mid North Coast; Unknown (no address in reg
 911 AUTOMOTIVE PTY LTD,26646401774,646401774,Company,,,1,2,2,1 AVERILL ST RHODES; 90 DICKSON AV ARTARMON,Sydney,service,,False,False,1/1,MVRL58549,acn:646401774
 A To Z Automotive Services Pty Ltd,,630763245,Company,,,1,2,2,3 22 Munibung Road CARDIFF; 74 MITCHELL RD CARDIFF,Newcastle,service,,False,False,1/1,MVRL56122,acn:630763245
 AAA72 Pty Ltd,20672847022,672847022,Company,,,1,2,2,42 BOURKE ST DUBBO; 225 OLD HUME HWY MITTAGONG,Far West / Orana; Southern Highlands / Shoalhaven,service,Ultra Tune,False,False,1/1,MVRL61810,acn:672847022
+AMH FINANCIAL SERVICES PTY LIMITED,86610815908,610815908,Company,,,1,2,2,91 CAMPBELL ST MORUYA; 47 KYLIE CR BATEMANS BAY,Capital Region; Southern Highlands / Shoalhaven,service,,False,False,1/1,MVRL59276,acn:610815908
+Andrew Miedecke Motors Pty Ltd,,002582621,Company,,,1,2,2,157 HASTINGS RIVER DR PORT MACQUARIE; 100 Hastings River Drive PORT MACQUARIE,Mid North Coast,service,,False,False,1/1,MVRL15017,acn:002582621
+APEX MECH REPAIRS PTY LTD,42639002485,639002485,Company,,,1,2,2,86 RACECOURSE RD RUTHERFORD; 970 HUNTER ST NEWCASTLE WEST,Hunter; Newcastle,service,,False,False,1/1,MVRL62019,acn:639002485
+ARRB Mechanical Pty Ltd,11109321459,109321459,Company,,,1,2,2,102 Laurel Avenue LISMORE; 16 ENDEAVOUR CL BALLINA,Northern Rivers,service,,False,False,1/1,MVRL56613,acn:109321459
+ARS Radiators Australia Pty Ltd,,128893523,Company,,,1,2,2,522 Botany Rd BEACONSFIELD; U 13 380 West Botany St ROCKDALE,Sydney,service,,False,False,1/1,MVRL51610,acn:128893523
+AUTO AIR WORLD PTY LTD,63649341873,649341873,Company,,,1,2,2,29 OATLEY ST KINGSGROVE; UNIT 2 11 ELIZABETH ST CAMPSIE,Sydney,service,,False,False,1/1,MVRL59518,acn:649341873
+Automate Car Care Pty Ltd,,114619046,Company,,,1,2,2,63 Boundary Rd MORTDALE; 61 Boundary Rd MORTDALE,Sydney,service,,False,False,1/1,MVRL55575,acn:114619046
 David Mitchell AutoBody Services Pty Ltd,,001381595,Company,,,2,1,1,104 - 106 Gipps St WOLLONGONG,Illawarra,service,,False,False,2/2,MVRL43512; MVRL8834,acn:001381595
 Ken Ross Repairs Mudgee Pty Ltd,,105155299,Company,,,2,1,1,5 Horatio Lane MUDGEE,Hunter; Unknown (no address in register),service,,False,False,2/2,MVRL30597; MVRL35066,acn:105155299
 Kumar Motors (Bankstown) Pty Ltd,,003857832,Company,,,2,1,1,376 Edgar Street BANKSTOWN,Sydney,service,,False,False,2/2,MVRL39370; MVRL41962,acn:003857832
@@ -561,21 +569,19 @@ Albion Automotive Repairs (NSW) Pty Ltd,,083257845,Company,,,1,1,1,58 ALBION ST 
 ALBION PARK SMASH REPAIRS PTY LTD,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,body,,False,False,0/1,MVRL59302,name:ALBION PARK SMASH REPAIRS
 Albjay Management Pty Ltd,,,Company,,,1,1,0,,Murray,unknown,,False,False,0/1,MVRL61028,name:ALBJAY MANAGEMENT
 ALBURY AUTO CENTRE PTY LTD,71674592039,674592039,Company,,,1,1,1,288 KIEWA ST SOUTH ALBURY,Murray,service,,False,False,1/1,MVRL62031,acn:674592039
-ALBURY AUTO MASTERS PTY LTD,,,Company,,,1,1,0,,Murray,service,Auto Masters,False,False,0/1,MVRL63361,name:ALBURY AUTO MASTERS
+ALBURY AUTO MASTERS PTY LTD,12688982283,688982283,Company,,,1,1,1,216B FALLON ST NORTH ALBURY,Murray,service,Auto Masters,False,False,1/1,MVRL63361,acn:688982283
 Albury City Council,,,Individual/Partnership,,,1,1,0,,Murray,other,,True,False,0/1,MVRL32163,name:ALBURY CITY COUNCIL
 Albury Dealership Pty Ltd,,,Company,,,1,1,0,,Murray,dealer,,False,True,0/1,MVRL60100,name:ALBURY DEALERSHIP
 Albury Wodonga Automotive Group Pty Ltd,,,Company,,,1,1,0,,New England / North West,dealer,,False,True,0/1,MVRL55487,name:ALBURY WODONGA AUTOMOTIVE GROUP
-ALBURY WODONGA SUSPENSION AND BRAKES PTY LTD,,,Company,,,1,1,0,,Murray,service,Pedders,False,False,0/1,MVRL60119,name:ALBURY WODONGA SUSPENSION AND BRAKES
+ALBURY WODONGA SUSPENSION AND BRAKES PTY LTD,77656695564,656695564,Company,,,1,1,1,UNIT 1 566 NURIGONG ST SOUTH ALBURY,Murray,service,Pedders,False,False,1/1,MVRL60119,acn:656695564
 ALCOCK BROS. PTY LTD,,,Company,,,1,1,0,,Capital Region,specialist,,False,False,0/1,MVRL64104,name:ALCOCK BROS
 Aldo Petrella,,,Individual/Partnership,,,1,1,0,,Sydney,body,,True,False,0/1,MVRL28367,name:ALDO PETRELLA
-Aleco Mechanical Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL58713,name:ALECO MECHANICAL
 ALEIRA ENTERPRISES PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL55068,name:ALEIRA ENTERPRISES
 Aleksandar Karanfiloski,,,Individual/Partnership,,,1,1,0,,Illawarra,other,,True,False,0/1,MVRL25688,name:ALEKSANDAR KARANFILOSKI
 Aleksandar Sirijovski,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL61185,name:ALEKSANDAR SIRIJOVSKI
 Alesd Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL28339,name:ALESD
 Alessandro Gilardi,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL64240,name:ALESSANDRO GILARDI
 Alessandro Vincenzo Ditto,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL64187,name:ALESSANDRO VINCENZO DITTO
-ALESSI MECHANICAL REPAIRS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL63551,name:ALESSI MECHANICAL REPAIRS
 Alex Apostolovski,,,Individual/Partnership,,,1,1,0,,Illawarra,unknown,,True,False,0/1,MVRL55001,name:ALEX APOSTOLOVSKI
 Alex Chris Nicolopoulos,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL41058,name:ALEX CHRIS NICOLOPOULOS
 Alex Edwin Kingsley,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL63538,name:ALEX EDWIN KINGSLEY
@@ -602,7 +608,7 @@ Alexandria & City Smash Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,Fa
 Alexandria Bespoke Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL63083,name:ALEXANDRIA BESPOKE
 Alexandria Collision Centre No. 2 Pty Limited,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL52660,name:ALEXANDRIA COLLISION CENTRE NO 2
 Alexandros Athanasoulas,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL21075,name:ALEXANDROS ATHANASOULAS
-Alexs Auto Services Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL32587,name:ALEXS AUTO SERVICES
+Alexs Auto Services Pty Ltd,,077624894,Company,,,1,1,1,63 Bay St BOTANY,Sydney,service,,False,False,1/1,MVRL32587,acn:077624894
 ALFAKON PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL62869,name:ALFAKON
 ALFIDICH PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL58854,name:ALFIDICH
 Alfio Guglielmino,,,Individual/Partnership,,,1,1,0,,Riverina,service,,True,False,0/1,MVRL18074,name:ALFIO GUGLIELMINO
@@ -610,7 +616,7 @@ Alfocam Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,unknown,,False,False,0/1,MVRL
 Alfred Arenelli,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL54888,name:ALFRED ARENELLI
 Alfred Johns,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL45379,name:ALFRED JOHNS
 ALG SMASH REPAIRS PTY LIMITED,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL62593,name:ALG SMASH REPAIRS
-ALI AUTO MECHANICAL SERVICES PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL63109,name:ALI AUTO MECHANICAL SERVICES
+ALI AUTO MECHANICAL SERVICES PTY LTD,73646154994,646154994,Company,,,1,1,1,68 RAILWAY ST YENNORA,Sydney,service,,False,False,1/1,MVRL63109,acn:646154994
 Ali El Masri,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL52846,name:ALI EL MASRI
 Ali Hazim,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL63000,name:ALI HAZIM
 Ali Kayachi,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL43119,name:ALI KAYACHI
@@ -627,27 +633,26 @@ Ali Shanaa,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),un
 Align Right (NSW) Pty Ltd,,,Company,,,1,1,0,,Capital Region,unknown,,False,False,0/1,MVRL38226,name:ALIGN RIGHT NSW
 Alireza Moradtabrizi,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL63921,name:ALIREZA MORADTABRIZI
 Alison Victoria Kelly,,,Individual/Partnership,,,1,1,0,,Coffs Harbour - Grafton,unknown,,True,False,0/1,MVRL39060,name:ALISON VICTORIA KELLY
-All Area Services Pty Ltd,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,service,,False,False,0/1,MVRL64146,name:ALL AREA SERVICES
-ALL AUTO & MECHANICAL PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL63037,name:ALL AUTO AND MECHANICAL
+All Area Services Pty Ltd,42167053107,167053107,Company,,,1,1,1,FACTORY 1 1 CAVENDISH ST MITTAGONG,Southern Highlands / Shoalhaven,service,,False,False,1/1,MVRL64146,acn:167053107
 All Autosmash Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL60473,name:ALL AUTOSMASH
 ALL BARRED UP PTY LIMITED,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,unknown,,False,False,0/1,MVRL61877,name:ALL BARRED UP
-ALL CARE CAR SERVICES KURRI KURRI PTY LTD,,,Company,,,1,1,0,,Hunter,service,,False,False,0/1,MVRL59020,name:ALL CARE CAR SERVICES KURRI KURRI
+ALL CARE CAR SERVICES KURRI KURRI PTY LTD,42648927075,648927075,Company,,,1,1,1,33 WERMOL ST KURRI KURRI,Hunter,service,,False,False,1/1,MVRL59020,acn:648927075
 All Commercial Truck Repairs Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL62634,name:ALL COMMERCIAL TRUCK REPAIRS
 All Cranes 4 Hire Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL62828,name:ALL CRANES 4 HIRE
 All Dent Solutions Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL61237,name:ALL DENT SOLUTIONS
-ALL DRIVE GEARBOX AND  DIFF PTY LIMITED,,,Company,,,1,1,0,,Newcastle,service,,False,False,0/1,MVRL59226,name:ALL DRIVE GEARBOX AND DIFF
+ALL DRIVE GEARBOX AND  DIFF PTY LIMITED,,650166608,Company,,,1,1,1,UNIT 2 8 NELSON RD CARDIFF,Newcastle,service,,False,False,1/1,MVRL59226,acn:650166608
 All Drive Subaroo Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL50401,name:ALL DRIVE SUBAROO
-All Engine Repairs Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,service,,False,False,0/1,MVRL39364,name:ALL ENGINE REPAIRS
+All Engine Repairs Pty Ltd,,103853596,Company,,,1,1,1,108-110 QUARRY RD SOUTH MURWILLUMBAH,Northern Rivers,service,,False,False,1/1,MVRL39364,acn:103853596
 All Equipment Solutions Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),unknown,,False,False,0/1,MVRL63394,name:ALL EQUIPMENT SOLUTIONS
 ALL FLEET INDUSTRIES PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL55931,name:ALL FLEET INDUSTRIES
 All Hose & Hydraulics Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL62033,name:ALL HOSE AND HYDRAULICS
 All Insurance Auto Body Works Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL53314,name:ALL INSURANCE AUTO BODY WORKS
-All Make Auto Repairs Pty Limited,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL53926,name:ALL MAKE AUTO REPAIRS
+All Make Auto Repairs Pty Limited,,611163770,Company,,,1,1,1,517 Great Western Hwy GREYSTANES,Sydney,service,,False,False,1/1,MVRL53926,acn:611163770
 All Millenium Smash Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL37151,name:ALL MILLENIUM SMASH REPAIRS
 ALL MODEL WINDSCREEN SERVICE PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL58531,name:ALL MODEL WINDSCREEN SERVICE
 All Parts Auto (Aust) Pty Ltd,,,Company,,,1,1,0,,Sydney,other,,False,False,0/1,MVRL57401,name:ALL PARTS AUTO AUST
 ALL PRESTIGE BODY REPAIRS PTY LTD,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL57369,name:ALL PRESTIGE BODY REPAIRS
-All Pro Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL63649,name:ALL PRO AUTOMOTIVE
+All Pro Automotive Pty Ltd,,099828403,Company,,,1,1,1,5 BROOKS AV WYOMING,Sydney,service,,False,False,1/1,MVRL63649,acn:099828403
 ALL ROUND DIESEL INDUSTRIES PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL63879,name:ALL ROUND DIESEL INDUSTRIES
 All State Smash Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL61561,name:ALL STATE SMASH REPAIRS
 ALL STATES ADAS & AUTO GLASS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL64300,name:ALL STATES ADAS AND AUTO GLASS
@@ -656,16 +661,14 @@ All States Trailer Spares Pty Ltd,,,Company,,,1,1,0,,Newcastle,specialist,,False
 All Terrain 4WD Services Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL34589,name:ALL TERRAIN 4WD SERVICES
 ALL TERRAIN DIESEL PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL63204,name:ALL TERRAIN DIESEL
 All Track Engineering Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL54209,name:ALL TRACK ENGINEERING
-All Trans Mechanical Pty Ltd,,,Company,,,1,1,0,,Far West / Orana,service,,False,False,0/1,MVRL63008,name:ALL TRANS MECHANICAL
+All Trans Mechanical Pty Ltd,91657001262,657001262,Company,,,1,1,1,UNIT 1 16 HAWTHORN ST DUBBO,Far West / Orana,service,,False,False,1/1,MVRL63008,acn:657001262
 All Truck Mechanics Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL56123,name:ALL TRUCK MECHANICS
-All Vehicle Repairs and Inspections Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL54536,name:ALL VEHICLE REPAIRS AND INSPECTIONS
-All West Mechanical Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL61202,name:ALL WEST MECHANICAL
-ALL YOUR REPAIRS AND MAINTENANCE NEEDS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL64341,name:ALL YOUR REPAIRS AND MAINTENANCE NEEDS
+All Vehicle Repairs and Inspections Pty Ltd,98603414544,603414544,Company,,,1,1,1,306-328 Forest Road BEXLEY,Sydney,service,,False,False,1/1,MVRL54536,acn:603414544
 ALL-ROUND AUTO ELECTRICS & AIR CONDITIONING PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL62510,name:ALL ROUND AUTO ELECTRICS AND AIR CONDITIONING
 All-Terrain 4x4 Specialised Vehicles Pty Ltd,,,Company,,,1,1,0,,New England / North West,specialist,,False,False,0/1,MVRL48478,name:ALL TERRAIN 4X4 SPECIALISED VEHICLES
 All-Trans Spares Pty Ltd,,,Company,,,1,1,0,,Sydney,other,,False,False,0/1,MVRL33120,name:ALL TRANS SPARES
 ALL-WHEEL DRIVE MECHANICS PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL63887,name:ALL WHEEL DRIVE MECHANICS
-Allambie Mechanical Centre Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL57166,name:ALLAMBIE MECHANICAL CENTRE
+Allambie Mechanical Centre Pty Ltd,,112950615,Company,,,1,1,1,9 Orchard Road BROOKVALE,Sydney,service,,False,False,1/1,MVRL57166,acn:112950615
 Allan Affouf,,,Individual/Partnership,,,1,1,0,,Sydney,body,,True,False,0/1,MVRL52652,name:ALLAN AFFOUF
 Allan Akar Sleiman,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL27650,name:ALLAN AKAR SLEIMAN
 Allan Clifton Lambert,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL20650,name:ALLAN CLIFTON LAMBERT
@@ -676,17 +679,17 @@ Allan Jason Newton,,,Individual/Partnership,,,1,1,0,,Far West / Orana,unknown,,T
 Allan John Perkins,,,Individual/Partnership,,,1,1,0,,Central Coast,service,,True,False,0/1,MVRL58377,name:ALLAN JOHN PERKINS
 Allan Morris Garfoot,,,Individual/Partnership,,,1,1,0,,Hunter,unknown,,True,False,0/1,MVRL58455,name:ALLAN MORRIS GARFOOT
 Allan Rex Churchill,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL59404,name:ALLAN REX CHURCHILL
-Allan Ross Automotive Pty Ltd,,,Company,,,1,1,0,,Central Coast,service,,False,False,0/1,MVRL32969,name:ALLAN ROSS AUTOMOTIVE
+Allan Ross Automotive Pty Ltd,,080034064,Company,,,1,1,1,"Lot 7, 22-24 Arizona Rd CHARMHAVEN",Central Coast,service,,False,False,1/1,MVRL32969,acn:080034064
 Allan S Burke,,,Individual/Partnership,,,1,1,0,,Sydney,specialist,,True,False,0/1,MVRL29994,name:ALLAN S BURKE
-Allan's Automotive Repairs Pty Ltd,,,Company,,,1,1,0,,Murray,service,,False,False,0/1,MVRL52509,name:ALLAN S AUTOMOTIVE REPAIRS
+Allan's Automotive Repairs Pty Ltd,,100307837,Company,,,1,1,1,54 Queen Street COROWA,Murray,service,,False,False,1/1,MVRL52509,acn:100307837
 ALLANDALE INDUSTRIES PTY LTD,,,Company,,,1,1,0,,Central West,specialist,,False,False,0/1,MVRL62763,name:ALLANDALE INDUSTRIES
-ALLANVALE PTY LTD,,,Company,,,1,1,0,,New England / North West,service,Natrad,False,False,0/1,MVRL64243,name:ALLANVALE
+ALLANVALE PTY LTD,,698153794,Company,,,1,1,1,111 SMITH ST KEMPSEY,New England / North West,service,Natrad,False,False,1/1,MVRL64243,acn:698153794
 Allen Craig Wicks,,,Individual/Partnership,,,1,1,0,,Mid North Coast,specialist,,True,False,0/1,MVRL63084,name:ALLEN CRAIG WICKS
 Allen Dawood Sulaiman Kali,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL60176,name:ALLEN DAWOOD SULAIMAN KALI
-Allen Dean Management Services Pty Ltd,,,Company,,,1,1,0,,Central West,service,,False,False,0/1,MVRL54560,name:ALLEN DEAN MANAGEMENT SERVICES
+Allen Dean Management Services Pty Ltd,,002128592,Company,,,1,1,1,84-96 Dalton St PARKES,Central West,service,,False,False,1/1,MVRL54560,acn:002128592
 Allen John Spencer,,,Individual/Partnership,,,1,1,0,,Southern Highlands / Shoalhaven,unknown,,True,False,0/1,MVRL29371,name:ALLEN JOHN SPENCER
 Allen Joseph Simpson,,,Individual/Partnership,,,1,1,0,,Central Coast,specialist,,True,False,0/1,MVRL56548,name:ALLEN JOSEPH SIMPSON
-Allen W Mechanical Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL34884,name:ALLEN W MECHANICAL REPAIRS
+Allen W Mechanical Repairs Pty Ltd,,081561328,Company,,,1,1,1,1499 Botany Road BOTANY,Sydney,service,,False,False,1/1,MVRL34884,acn:081561328
 Allens Coaches Coolamon Pty. Ltd.,,,Company,,,1,1,0,,Riverina,specialist,,False,False,0/1,MVRL51154,name:ALLENS COACHES COOLAMON
 Alliance Auto Group Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL54389,name:ALLIANCE AUTO GROUP
 ALLIGN TYRE & MECHANICAL PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,Tyres & More,False,False,0/1,MVRL59901,name:ALLIGN TYRE AND MECHANICAL
@@ -708,13 +711,12 @@ Alpha Transport Pty Ltd,,,Company,,,1,1,0,,Sydney,other,,False,False,0/1,MVRL383
 Alpha Tyres Pty Ltd,,,Company,,,1,1,0,,Murray,specialist,,False,False,0/1,MVRL60286,name:ALPHA TYRES
 ALPHATEX INDUSTRIES PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL56828,name:ALPHATEX INDUSTRIES
 ALPINE AUTOMOTIVE GROUP PTY LTD,,,Company,,,1,1,0,,Capital Region,dealer,,False,True,0/1,MVRL63905,name:ALPINE AUTOMOTIVE GROUP
-ALR MECHANICAL SERVICES PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL55418,name:ALR MECHANICAL SERVICES
-Alry Enterprises Pty Ltd,,,Company,,,1,1,0,,Newcastle,service,Ultra Tune,False,False,0/1,MVRL60608,name:ALRY ENTERPRISES
+Alry Enterprises Pty Ltd,,660354969,Company,,,1,1,1,59 TURTON ST METFORD,Newcastle,service,Ultra Tune,False,False,1/1,MVRL60608,acn:660354969
 ALSR Pty Ltd,,,Company,,,1,1,0,,Hunter,unknown,,False,False,0/1,MVRL64012,name:ALSR
-Alstonville Automotive Services Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,service,,False,False,0/1,MVRL56836,name:ALSTONVILLE AUTOMOTIVE SERVICES
+Alstonville Automotive Services Pty Ltd,69635976911,635976911,Company,,,1,1,1,33 Northcott Crescent ALSTONVILLE,Northern Rivers,service,,False,False,1/1,MVRL56836,acn:635976911
 ALSTONVILLE DIESEL REPAIR PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL64204,name:ALSTONVILLE DIESEL REPAIR
 ALSTONVILLE SMASH REPAIRS PTY LTD,,,Company,,,1,1,0,,Northern Rivers,body,,False,False,0/1,MVRL64133,name:ALSTONVILLE SMASH REPAIRS
-ALTAI GROUP PTY. LTD.,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL54804,name:ALTAI GROUP
+ALTAI GROUP PTY. LTD.,,621825492,Company,,,1,1,1,U 6 814-822 Old Illawarra Rd MENAI,Sydney,service,,False,False,1/1,MVRL54804,acn:621825492
 Alternate Auto Electric Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL42430,name:ALTERNATE AUTO ELECTRIC
 Alto Artarmon Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL1692,name:ALTO ARTARMON
 Alto Blacktown Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL55260,name:ALTO BLACKTOWN
@@ -726,32 +728,28 @@ Alto Prestige Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL56694
 Alto Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL49199,name:ALTO
 ALTO WOLLONGONG PTY LTD,,,Company,,,1,1,0,,Illawarra,unknown,,False,False,0/1,MVRL63253,name:ALTO WOLLONGONG
 ALTORA AG PTY LTD,,,Company,,,1,1,0,,Riverina,unknown,,False,False,0/1,MVRL49008,name:ALTORA AG
-Alvin Automotive Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL62297,name:ALVIN AUTOMOTIVE
 Alvin Moodley,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),service,,True,False,0/1,MVRL54111,name:ALVIN MOODLEY
 AM AUTOWORKS PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL64140,name:AM AUTOWORKS
-AM MECHANICS BROOKVALE PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL58807,name:AM MECHANICS BROOKVALE
+AM MECHANICS BROOKVALE PTY LTD,50648013334,648013334,Company,,,1,1,1,232 HARBORD RD BROOKVALE,Sydney,service,,False,False,1/1,MVRL58807,acn:648013334
 AM OFF ROAD DESIGN AND FABRICATION PTY LTD,,,Company,,,1,1,0,,Northern Rivers,specialist,,False,False,0/1,MVRL64244,name:AM OFF ROAD DESIGN AND FABRICATION
 AMA Group Solutions Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL47098,name:AMA GROUP SOLUTIONS
-Amakar Pty Ltd,,,Company,,,1,1,0,,Coffs Harbour - Grafton,service,,False,False,0/1,MVRL51352,name:AMAKAR
+Amakar Pty Ltd,33602121497,602121497,Company,,,1,1,1,U 2 6 Lawson Cres COFFS HARBOUR,Coffs Harbour - Grafton,service,,False,False,1/1,MVRL51352,acn:602121497
 Amazonas 4WD Specialist Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL54789,name:AMAZONAS 4WD SPECIALIST
 Ambrose Abraham Jefferson Cleaven,,,Individual/Partnership,,,1,1,0,,Illawarra,service,,True,False,0/1,MVRL57776,name:AMBROSE ABRAHAM JEFFERSON CLEAVEN
 AMC Maintenance & Hire Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),other,,False,False,0/1,MVRL61691,name:AMC MAINTENANCE AND HIRE
-AMCE SERVICES PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL61870,name:AMCE SERVICES
 AMD Co Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),unknown,,False,False,0/1,MVRL60629,name:AMD
 Amedeo Avati,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL36485,name:AMEDEO AVATI
-Amelabelle Pty Ltd,,,Company,,,1,1,0,,Mid North Coast,service,,False,False,0/1,MVRL62167,name:AMELABELLE
+Amelabelle Pty Ltd,66662583324,662583324,Company,,,1,1,1,22 ELIZABETH AV TAREE,Mid North Coast,service,,False,False,1/1,MVRL62167,acn:662583324
 Amer Kassaa,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL38676,name:AMER KASSAA
 Amer Shehadeh,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL43585,name:AMER SHEHADEH
-AMG AUTO REPAIRS PTY LTD,,,Company,,,1,1,0,,Riverina,service,,False,False,0/1,MVRL63723,name:AMG AUTO REPAIRS
+AMG AUTO REPAIRS PTY LTD,,693012690,Company,,,1,1,1,UNIT 3 43 PEARSON ST WAGGA WAGGA,Riverina,service,,False,False,1/1,MVRL63723,acn:693012690
 AMG Castle Hill Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL37423,name:AMG CASTLE HILL
 AMG Headquarters Eighteen Pty Ltd,,,Company,,,1,1,0,,Hunter,unknown,,False,False,0/1,MVRL64260,name:AMG HEADQUARTERS EIGHTEEN
 AMG Headquarters Fourteen Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL61689,name:AMG HEADQUARTERS FOURTEEN
 AMG Headquarters Twelve Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL61433,name:AMG HEADQUARTERS TWELVE
 AMG Hornsby Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL51862,name:AMG HORNSBY
-AMG Mechanical Repairs Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL62028,name:AMG MECHANICAL REPAIRS
 AMG Waitara Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL53836,name:AMG WAITARA
 AMG Windsor Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL42687,name:AMG WINDSOR
-AMH FINANCIAL SERVICES PTY LIMITED,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,service,,False,False,0/1,MVRL59276,name:AMH FINANCIAL SERVICES
 Amiecity Pty Ltd,,,Company,,,1,1,0,,Newcastle,specialist,,False,False,0/1,MVRL54890,name:AMIECITY
 Amin Aliman Abdul Malek,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL63334,name:AMIN ALIMAN ABDUL MALEK
 Amin Chahda,,,Individual/Partnership,,,1,1,0,,Murray,unknown,,True,False,0/1,MVRL55212,name:AMIN CHAHDA
@@ -759,7 +757,7 @@ Amin Charnia,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),
 Amir Abdul Rahman,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL63375,name:AMIR ABDUL RAHMAN
 Amir Anbarasaroy,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL60114,name:AMIR ANBARASAROY
 Amit Satishbhai Patel,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL58502,name:AMIT SATISHBHAI PATEL
-AMJ AUTO PTY LTD,,,Company,,,1,1,0,,Riverina,service,,False,False,0/1,MVRL62721,name:AMJ AUTO
+AMJ AUTO PTY LTD,,677067435,Company,,,1,1,1,54-56 DENILIQUIN RD TOCUMWAL,Riverina,service,,False,False,1/1,MVRL62721,acn:677067435
 Amko Group Holdings Pty Ltd,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL61471,name:AMKO GROUP HOLDINGS
 Ammar Ishak,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL37959,name:AMMAR ISHAK
 AMN Auto Electrical Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL56034,name:AMN AUTO ELECTRICAL
@@ -776,18 +774,18 @@ Amy Kate Grice,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register
 Anacleto Vasquez,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL56839,name:ANACLETO VASQUEZ
 ANALOG MACHINE COMPANY PTY LTD,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL59248,name:ANALOG MACHINE
 Anamalai Pillay,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL35788,name:ANAMALAI PILLAY
-ANAMBAH AUTO REPAIRS PTY. LTD,,,Company,,,1,1,0,,Hunter,service,,False,False,0/1,MVRL61823,name:ANAMBAH AUTO REPAIRS
-Anand Motors Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL63345,name:ANAND MOTORS
+ANAMBAH AUTO REPAIRS PTY. LTD,44673416101,673416101,Company,,,1,1,1,UNIT 3 9 METEOR PL RUTHERFORD,Hunter,service,,False,False,1/1,MVRL61823,acn:673416101
+Anand Motors Pty Ltd,56672002747,672002747,Company,,,1,1,1,UNIT 2 54 WELLINGTON ST RIVERSTONE,Sydney,service,,False,False,1/1,MVRL63345,acn:672002747
 Ananda Doddaindalavadi Lingappa,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL29973,name:ANANDA DODDAINDALAVADI LINGAPPA
 Anastasios Stergiopoulos,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL42633,name:ANASTASIOS STERGIOPOULOS
-ANB Aust Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL50871,name:ANB AUST
+ANB Aust Pty Ltd,,167667727,Company,,,1,1,1,U 4b 4 Homepride Ave WARWICK FARM,Sydney,service,,False,False,1/1,MVRL50871,acn:167667727
 Andco (1970) Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL16605,name:ANDCO 1970
-Anderson Automotive Kempsey Pty Ltd,,,Company,,,1,1,0,,New England / North West,service,,False,False,0/1,MVRL53986,name:ANDERSON AUTOMOTIVE KEMPSEY
-Anderson's Automotive and Air-conditioning Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,service,,False,False,0/1,MVRL61957,name:ANDERSON S AUTOMOTIVE AND AIR CONDITIONING
-Andersons Radiator Services Pty Ltd,,,Company,,,1,1,0,,New England / North West,service,Natrad,False,False,0/1,MVRL29012,name:ANDERSONS RADIATOR SERVICES
+Anderson Automotive Kempsey Pty Ltd,,615863379,Company,,,1,1,1,32 Forth St KEMPSEY,New England / North West,service,,False,False,1/1,MVRL53986,acn:615863379
+Anderson's Automotive and Air-conditioning Pty Ltd,22675233280,675233280,Company,,,1,1,1,130 SUMMERLAND WAY KYOGLE,Northern Rivers,service,,False,False,1/1,MVRL61957,acn:675233280
+Andersons Radiator Services Pty Ltd,,003968741,Company,,,1,1,1,111 Smith Street KEMPSEY,New England / North West,service,Natrad,False,False,1/1,MVRL29012,acn:003968741
 Andi Jankel,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL63132,name:ANDI JANKEL
 Andlach Pty Ltd,,,Company,,,1,1,0,,Central West,unknown,,False,False,0/1,MVRL52721,name:ANDLACH
-Andre Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL59883,name:ANDRE AUTOMOTIVE
+Andre Automotive Pty Ltd,69624860822,624860822,Company,,,1,1,1,U 1 2 Kurrajong Ave MOUNT DRUITT,Sydney,service,,False,False,1/1,MVRL59883,acn:624860822
 Andre Dagher,,,Individual/Partnership,,,1,1,0,,Sydney,specialist,,True,False,0/1,MVRL48325,name:ANDRE DAGHER
 Andre Daniel Amirkhanian,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL62042,name:ANDRE DANIEL AMIRKHANIAN
 Andre Evelyn Smith,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL59851,name:ANDRE EVELYN SMITH
@@ -853,7 +851,6 @@ Andrew Martin Dwyer,,,Individual/Partnership,,,1,1,0,,Unknown (no address in reg
 Andrew McKenzie Finch,,,Individual/Partnership,,,1,1,0,,New England / North West,unknown,,True,False,0/1,MVRL56085,name:ANDREW MCKENZIE FINCH
 Andrew Michael Byrnes,,,Individual/Partnership,,,1,1,0,,Riverina,service,,True,False,0/1,MVRL57757,name:ANDREW MICHAEL BYRNES
 Andrew Michael Xuereb,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL56163,name:ANDREW MICHAEL XUEREB
-Andrew Miedecke Motors Pty Ltd,,,Company,,,1,1,0,,Mid North Coast,service,,False,False,0/1,MVRL15017,name:ANDREW MIEDECKE MOTORS
 Andrew Miller,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL61070,name:ANDREW MILLER
 Andrew Milton Jarrett,,,Individual/Partnership,,,1,1,0,,New England / North West,unknown,,True,False,0/1,MVRL29094,name:ANDREW MILTON JARRETT
 Andrew Nahlous,,,Individual/Partnership,,,1,1,0,,Illawarra,service,,True,False,0/1,MVRL61785,name:ANDREW NAHLOUS
@@ -871,7 +868,7 @@ Andrew Terrence Price,,,Individual/Partnership,,,1,1,0,,Unknown (no address in r
 Andrew Thomas Albert Anderson,,,Individual/Partnership,,,1,1,0,,Southern Highlands / Shoalhaven,specialist,,True,False,0/1,MVRL58917,name:ANDREW THOMAS ALBERT ANDERSON
 Andrew Thomas Ward,,,Individual/Partnership,,,1,1,0,,Mid North Coast,unknown,,True,False,0/1,MVRL34892,name:ANDREW THOMAS WARD
 Andrew Tony Cirillo,,,Individual/Partnership,,,1,1,0,,Sydney,specialist,,True,False,0/1,MVRL57470,name:ANDREW TONY CIRILLO
-Andrew Walsh Mechanical Pty Ltd,,,Company,,,1,1,0,,Riverina,service,,False,False,0/1,MVRL60742,name:ANDREW WALSH MECHANICAL
+Andrew Walsh Mechanical Pty Ltd,87634053571,634053571,Company,,,1,1,1,365 EDWARD ST WAGGA WAGGA,Riverina,service,,False,False,1/1,MVRL60742,acn:634053571
 Andrew Welsh,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL58118,name:ANDREW WELSH
 Andrew William Barnett,,,Individual/Partnership,,,1,1,0,,Northern Rivers,service,,True,False,0/1,MVRL48649,name:ANDREW WILLIAM BARNETT
 Andrew William Cummings,,,Individual/Partnership,,,1,1,0,,Hunter,unknown,,True,False,0/1,MVRL58759,name:ANDREW WILLIAM CUMMINGS
@@ -882,9 +879,9 @@ Andrew Worsnop,,,Individual/Partnership,,,1,1,0,,Murray,unknown,,True,False,0/1,
 ANDREW'S COLLISION AUTO REPAIRS PTY LIMITED,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL54776,name:ANDREW S COLLISION AUTO REPAIRS
 ANDREW'S SMASH REPAIRS PTY LTD,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL64314,name:ANDREW S SMASH REPAIRS
 Andrews Smash Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL52688,name:ANDREWS SMASH REPAIRS
-Andris Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL55207,name:ANDRIS AUTOMOTIVE
-Andywill Pty Ltd,,,Company,,,1,1,0,,New England / North West,service,,False,False,0/1,MVRL51873,name:ANDYWILL
-Angel Auto Services Pty Ltd,,,Company,,,1,1,0,,Central Coast,service,,False,False,0/1,MVRL46292,name:ANGEL AUTO SERVICES
+Andris Automotive Pty Ltd,,624616299,Company,,,1,1,1,U 6 42-44 Chard Rd BROOKVALE,Sydney,service,,False,False,1/1,MVRL55207,acn:624616299
+Andywill Pty Ltd,,128030106,Company,,,1,1,1,75 Ebsworth St TAMWORTH,New England / North West,service,,False,False,1/1,MVRL51873,acn:128030106
+Angel Auto Services Pty Ltd,,116068832,Company,,,1,1,1,Lot 1 Scenic Drive Doyalson,Central Coast,service,,False,False,1/1,MVRL46292,acn:116068832
 Angela Therese Habkouk,,,Individual/Partnership,,,1,1,0,,Sydney,body,,True,False,0/1,MVRL45146,name:ANGELA THERESE HABKOUK
 Angelo Gava,,,Individual/Partnership,,,1,1,0,,Northern Rivers,unknown,,True,False,0/1,MVRL3429,name:ANGELO GAVA
 Angelo Photiou,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL7843,name:ANGELO PHOTIOU
@@ -900,7 +897,7 @@ Anil Janwa,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),un
 Anis Reece Galayini,,,Individual/Partnership,,,1,1,0,,Sydney,specialist,,True,False,0/1,MVRL61251,name:ANIS REECE GALAYINI
 ANM AUTO ELECTRICS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL58031,name:ANM AUTO ELECTRICS
 Ann Shirley Seddon,,,Individual/Partnership,,,1,1,0,,Newcastle,service,,True,False,0/1,MVRL14270,name:ANN SHIRLEY SEDDON
-Annanda Motor Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL59882,name:ANNANDA MOTOR REPAIRS
+Annanda Motor Repairs Pty Ltd,45646017914,646017914,Company,,,1,1,1,UNIT 2 57-61 JOHN ST LEICHHARDT,Sydney,service,,False,False,1/1,MVRL59882,acn:646017914
 Annlyn Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL32633,name:ANNLYN
 Ansens Tyre & Auto Pty Ltd,,,Company,,,1,1,0,,Newcastle,specialist,,False,False,0/1,MVRL41138,name:ANSENS TYRE AND AUTO
 Antella & Lloyd Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL3790,name:ANTELLA AND LLOYD
@@ -954,8 +951,8 @@ Anthony Melville Evans,,,Individual/Partnership,,,1,1,0,,Central West,body,,True
 Anthony Michael Macpherson-Rogers,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL60532,name:ANTHONY MICHAEL MACPHERSON ROGERS
 Anthony Michael Steinhour,,,Individual/Partnership,,,1,1,0,,Mid North Coast,service,,True,False,0/1,MVRL55842,name:ANTHONY MICHAEL STEINHOUR
 Anthony Monteiro,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL48973,name:ANTHONY MONTEIRO
-Anthony Motors Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL24178,name:ANTHONY MOTORS
-ANTHONY NEWMAN MOTOR REPAIRS PTY LTD,,,Company,,,1,1,0,,Illawarra,service,,False,False,0/1,MVRL55374,name:ANTHONY NEWMAN MOTOR REPAIRS
+Anthony Motors Pty Ltd,,000857572,Company,,,1,1,1,6 WATSON RD PADSTOW,Sydney,service,,False,False,1/1,MVRL24178,acn:000857572
+ANTHONY NEWMAN MOTOR REPAIRS PTY LTD,,626159313,Company,,,1,1,1,98 Princes Hwy FIGTREE,Illawarra,service,,False,False,1/1,MVRL55374,acn:626159313
 Anthony Neyle Patricks,,,Individual/Partnership,,,1,1,0,,New England / North West,service,,True,False,0/1,MVRL26658,name:ANTHONY NEYLE PATRICKS
 Anthony Parisi,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL32241,name:ANTHONY PARISI
 Anthony Paul Collorafi,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL60908,name:ANTHONY PAUL COLLORAFI
@@ -994,27 +991,26 @@ Antony Roy Watson,,,Individual/Partnership,,,1,1,0,,Newcastle,unknown,,True,Fals
 Antoon Gerrit Vanderbent,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL21218,name:ANTOON GERRIT VANDERBENT
 Anupinder Singh,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL57855,name:ANUPINDER SINGH
 ANYTHING EARTHMOVING & MECHANICAL PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL60838,name:ANYTHING EARTHMOVING AND MECHANICAL
-ANYTIME MOTORS PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL60925,name:ANYTIME MOTORS
-AOK MANAGEMENT PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL63352,name:AOK MANAGEMENT
+ANYTIME MOTORS PTY LTD,,632753578,Company,,,1,1,1,UNIT 1 14 BRENNAN CL ASQUITH,Sydney,service,,False,False,1/1,MVRL60925,acn:632753578
+AOK MANAGEMENT PTY LTD,34680361433,680361433,Company,,,1,1,1,UNIT 1 2 NOONAN RD INGLEBURN,Sydney,service,,False,False,1/1,MVRL63352,acn:680361433
 AOM SYDNEY PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL60606,name:AOM SYDNEY
 AP WAREHOUSE PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL55074,name:AP WAREHOUSE
-Apex Auto Express Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL62075,name:APEX AUTO EXPRESS
+Apex Auto Express Pty Ltd,,676350520,Company,,,1,1,1,UNIT 3D 23-25 WINDSOR RD NORTHMEAD,Sydney,service,,False,False,1/1,MVRL62075,acn:676350520
 APEX AUTOHAUS PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL55634,name:APEX AUTOHAUS
 Apex Autoworks & Tyres Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL51365,name:APEX AUTOWORKS AND TYRES
-APEX MECH REPAIRS PTY LTD,,,Company,,,1,1,0,,Newcastle,service,,False,False,0/1,MVRL62019,name:APEX MECH REPAIRS
 APEX PERFORMANCE AND REPAIR PTY. LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL63430,name:APEX PERFORMANCE AND REPAIR
 APEX TOWING ORANGE PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),other,,False,False,0/1,MVRL62817,name:APEX TOWING ORANGE
 APEX TYRE & AUTO PTY LIMITED,,,Company,,,1,1,0,,Newcastle,specialist,,False,False,0/1,MVRL56280,name:APEX TYRE AND AUTO
-APLUS REGO N SERVICE CENTRE PTY LTD,,,Company,,,1,1,0,,Capital Region,service,,False,False,0/1,MVRL63054,name:APLUS REGO N SERVICE CENTRE
+APLUS REGO N SERVICE CENTRE PTY LTD,18686124149,686124149,Company,,,1,1,1,121 BOUNDARY RD BEGA,Capital Region,service,,False,False,1/1,MVRL63054,acn:686124149
 APO Coffs Harbour Pty Ltd,,,Company,,,1,1,0,,Coffs Harbour - Grafton,unknown,,False,False,0/1,MVRL64377,name:APO COFFS HARBOUR
 APO Kempsey Pty Ltd,,,Company,,,1,1,0,,New England / North West,unknown,,False,False,0/1,MVRL64269,name:APO KEMPSEY
 Apple City Auto Electrics Pty Ltd,,,Company,,,1,1,0,,Central West,specialist,,False,False,0/1,MVRL55256,name:APPLE CITY AUTO ELECTRICS
-APPLETON AUTOMOTIVE PTY LTD,,,Company,,,1,1,0,,Newcastle,service,,False,False,0/1,MVRL64275,name:APPLETON AUTOMOTIVE
-Applied Mechanical Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL47796,name:APPLIED MECHANICAL REPAIRS
+APPLETON AUTOMOTIVE PTY LTD,18697119985,697119985,Company,,,1,1,1,UNIT 11 7 CONCORD ST BOOLAROO,Newcastle,service,,False,False,1/1,MVRL64275,acn:697119985
+Applied Mechanical Repairs Pty Ltd,,139363410,Company,,,1,1,1,Unit 1 4 Bellingham St NARELLAN,Sydney,service,,False,False,1/1,MVRL47796,acn:139363410
 Approved Collision Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL40819,name:APPROVED COLLISION REPAIRS
 AR & AH Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL54571,name:AR AND AH
-AR Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL27652,name:AR
-AR TRANSMISSION PTY LTD,,,Company,,,1,1,0,,Newcastle,service,,False,False,0/1,MVRL64295,name:AR TRANSMISSION
+AR Pty Ltd,,059527454,Company,,,1,1,1,22D Crystal St ROZELLE,Sydney,service,,False,False,1/1,MVRL27652,acn:059527454
+AR TRANSMISSION PTY LTD,46692274669,692274669,Company,,,1,1,1,242 LAMBTON RD NEW LAMBTON,Newcastle,service,,False,False,1/1,MVRL64295,acn:692274669
 Ara Ansourian,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL49589,name:ARA ANSOURIAN
 Arash Ali Aryan,,,Individual/Partnership,,,1,1,0,,Sydney,body,,True,False,0/1,MVRL60006,name:ARASH ALI ARYAN
 ARB Brookvale Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL56841,name:ARB BROOKVALE
@@ -1025,13 +1021,13 @@ Arbab Javed,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVR
 Arbabi Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL49568,name:ARBABI
 Arbee Trading Pty Ltd,,,Company,,,1,1,0,,Riverina,unknown,,False,False,0/1,MVRL50075,name:ARBEE TRADING
 Archbold Industries Pty Ltd,,,Company,,,1,1,0,,Coffs Harbour - Grafton,unknown,,False,False,0/1,MVRL20526,name:ARCHBOLD INDUSTRIES
-ARCHCORP HOLDINGS PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL60205,name:ARCHCORP HOLDINGS
-Archer's Motor Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL1107,name:ARCHER S MOTOR REPAIRS
+ARCHCORP HOLDINGS PTY LTD,67641129204,641129204,Company,,,1,1,1,8 EVAN ST PENRITH,Sydney,service,,False,False,1/1,MVRL60205,acn:641129204
+Archer's Motor Repairs Pty Ltd,,081634317,Company,,,1,1,1,143 PARRAMATTA RD GRANVILLE,Sydney,service,,False,False,1/1,MVRL1107,acn:081634317
 ARCHERS MECHANICAL & SMASH REPAIRS PTY LTD,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL61108,name:ARCHERS MECHANICAL AND SMASH REPAIRS
 Arctic Automotive Air Conditioning Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL52806,name:ARCTIC AUTOMOTIVE AIR CONDITIONING
-Arcu Pty Ltd,,,Company,,,1,1,0,,Newcastle,service,Ultra Tune,False,False,0/1,MVRL61922,name:ARCU
-ARDYS AUTOMOTIVE SERVICES PTY LTD,,,Company,,,1,1,0,,Capital Region,service,,False,False,0/1,MVRL56816,name:ARDYS AUTOMOTIVE SERVICES
-Argyle Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL58446,name:ARGYLE AUTOMOTIVE
+Arcu Pty Ltd,,145220908,Company,,,1,1,1,132 CARY ST TORONTO,Newcastle,service,Ultra Tune,False,False,1/1,MVRL61922,acn:145220908
+ARDYS AUTOMOTIVE SERVICES PTY LTD,88635732722,635732722,Company,,,1,1,1,U 1 7 Toallo Street PAMBULA,Capital Region,service,,False,False,1/1,MVRL56816,acn:635732722
+Argyle Automotive Pty Ltd,,622473330,Company,,,1,1,1,22 KEATS AV ROCKDALE,Sydney,service,,False,False,1/1,MVRL58446,acn:622473330
 Ari Aligiannis,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL22855,name:ARI ALIGIANNIS
 Ariana Group Holdings Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL64013,name:ARIANA GROUP HOLDINGS
 Ariel Marha,,,Individual/Partnership,,,1,1,0,,Newcastle,unknown,,True,False,0/1,MVRL53633,name:ARIEL MARHA
@@ -1046,22 +1042,19 @@ Armen Rostamians,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/
 ARMIDALE AUTOMOTIVE GROUP PTY LIMITED,,,Company,,,1,1,0,,New England / North West,dealer,,False,True,0/1,MVRL59796,name:ARMIDALE AUTOMOTIVE GROUP
 Armidale Regional Council,,,Individual/Partnership,,,1,1,0,,New England / North West,other,,True,False,0/1,MVRL45513,name:ARMIDALE REGIONAL COUNCIL
 Armidale Smash Pty Ltd,,,Company,,,1,1,0,,New England / North West,body,,False,False,0/1,MVRL54208,name:ARMIDALE SMASH
-ARMOUR AUTOMOTIVE SERVICES PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL64154,name:ARMOUR AUTOMOTIVE SERVICES
+ARMOUR AUTOMOTIVE SERVICES PTY LTD,97693680616,693680616,Company,,,1,1,1,79 COX AV KINGSWOOD,New England / North West,service,,False,False,1/1,MVRL64154,acn:693680616
 Armour Motorsport Services Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL58325,name:ARMOUR MOTORSPORT SERVICES
 Arndell Park Auto Electrics Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL56867,name:ARNDELL PARK AUTO ELECTRICS
 Arnoldus Marie Joseph Stoffels,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL61908,name:ARNOLDUS MARIE JOSEPH STOFFELS
-Arraco Pty Ltd,,,Company,,,1,1,0,,Coffs Harbour - Grafton,service,,False,False,0/1,MVRL52608,name:ARRACO
+Arraco Pty Ltd,86609143642,609143642,Company,,,1,1,1,48 Marcia St COFFS HARBOUR,Coffs Harbour - Grafton,service,,False,False,1/1,MVRL52608,acn:609143642
 Arran Michael Savaro,,,Individual/Partnership,,,1,1,0,,Central West,unknown,,True,False,0/1,MVRL55218,name:ARRAN MICHAEL SAVARO
-ARRB Mechanical Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,service,,False,False,0/1,MVRL56613,name:ARRB MECHANICAL
 Arren Michael Ghazarian,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL64299,name:ARREN MICHAEL GHAZARIAN
 ARRIVE MOTIVE PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),unknown,,False,False,0/1,MVRL61530,name:ARRIVE MOTIVE
 Arron John Walker,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL61815,name:ARRON JOHN WALKER
-ARROWSMITH AUTOMOTIVE PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL59096,name:ARROWSMITH AUTOMOTIVE
 ARS ANYTIME CAR REMOVAL PTY LTD,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,unknown,,False,False,0/1,MVRL63444,name:ARS ANYTIME CAR REMOVAL
-ARS Radiators Australia Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL51610,name:ARS RADIATORS AUSTRALIA
 ART SKIN PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL58403,name:ART SKIN
-Artarmon Auto & Air Pty Limited,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL61995,name:ARTARMON AUTO AND AIR
-Artarmon Mechanical Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL56791,name:ARTARMON MECHANICAL REPAIRS
+Artarmon Auto & Air Pty Limited,70659366097,659366097,Company,,,1,1,1,78 WHITING ST ARTARMON,Sydney,service,,False,False,1/1,MVRL61995,acn:659366097
+Artarmon Mechanical Repairs Pty Ltd,,097687422,Company,,,1,1,1,77-81 Reserve Road ARTARMON,Sydney,service,,False,False,1/1,MVRL56791,acn:097687422
 Arthur Charlton Norton,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL48969,name:ARTHUR CHARLTON NORTON
 Arthur Circosta,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL14148,name:ARTHUR CIRCOSTA
 Arthur Frith,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),specialist,,True,False,0/1,MVRL46030,name:ARTHUR FRITH
@@ -1073,11 +1066,11 @@ Arvin Gerodias,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,
 Arvin Karan,,,Individual/Partnership,,,1,1,0,,Riverina,service,,True,False,0/1,MVRL37932,name:ARVIN KARAN
 Arya Auto Group Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL64313,name:ARYA AUTO GROUP
 AS ROBINSON ENTERPRISES PTY LTD,,,Company,,,1,1,0,,Mid North Coast,specialist,JAX,False,False,0/1,MVRL58997,name:AS ROBINSON ENTERPRISES
-ASCH GROUP PTY LTD,,,Company,,,1,1,0,,Sydney,service,Pedders,False,False,0/1,MVRL60635,name:ASCH GROUP
+ASCH GROUP PTY LTD,70663030813,663030813,Company,,,1,1,1,UNIT 7 377 NEWBRIDGE RD MOOREBANK,Sydney,service,Pedders,False,False,1/1,MVRL60635,acn:663030813
 ASG HAIL PTY LTD,,,Company,,,1,1,0,,Newcastle,body,,False,False,0/1,MVRL62496,name:ASG HAIL
 ASG MELBOURNE PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL55093,name:ASG MELBOURNE
 ASH DIESEL PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL64173,name:ASH DIESEL
-ASHBURY SERVICE CENTRE PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL63690,name:ASHBURY SERVICE CENTRE
+ASHBURY SERVICE CENTRE PTY LTD,46615956842,615956842,Company,,,1,1,1,22 CHARLES ST CANTERBURY,Sydney,service,,False,False,1/1,MVRL63690,acn:615956842
 Ashcarl Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL16734,name:ASHCARL
 Ashir Akkaoui,,,Individual/Partnership,,,1,1,0,,Sydney,body,,True,False,0/1,MVRL56180,name:ASHIR AKKAOUI
 Ashley Adrian Sheather,,,Individual/Partnership,,,1,1,0,,Riverina,unknown,,True,False,0/1,MVRL62610,name:ASHLEY ADRIAN SHEATHER
@@ -1089,34 +1082,32 @@ Ashley John Sultana,,,Individual/Partnership,,,1,1,0,,Unknown (no address in reg
 Ashley Micheal Ursino,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL63284,name:ASHLEY MICHEAL URSINO
 Ashley Shayne Jennings,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL53515,name:ASHLEY SHAYNE JENNINGS
 Ashley Stan Vaupotic,,,Individual/Partnership,,,1,1,0,,Central West,service,,True,False,0/1,MVRL62777,name:ASHLEY STAN VAUPOTIC
-Ashmore Mechanical Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL59264,name:ASHMORE MECHANICAL
+Ashmore Mechanical Pty Ltd,19648006795,648006795,Company,,,1,1,1,16 JOYCE ST PENDLE HILL,Sydney,service,,False,False,1/1,MVRL59264,acn:648006795
 Ashot Nazarian,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL55144,name:ASHOT NAZARIAN
 Ashour Khano,,,Individual/Partnership,,,1,1,0,,Sydney,body,,True,False,0/1,MVRL58606,name:ASHOUR KHANO
 Ashraf Hassan,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL34915,name:ASHRAF HASSAN
 Ashraf Saad,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL45191,name:ASHRAF SAAD
 Askew Motor Body Consultants Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL34800,name:ASKEW MOTOR BODY CONSULTANTS
 Askfind Pty Ltd,,,Company,,,1,1,0,,New England / North West,specialist,,False,False,0/1,MVRL30973,name:ASKFIND
-ASM REPAIRS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL61215,name:ASM REPAIRS
 ASPARSS ENTERPRISES PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,Midas,False,False,0/1,MVRL58415,name:ASPARSS ENTERPRISES
-ASR Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL45856,name:ASR AUTOMOTIVE
-ASR Automotive Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL61514,name:ASR AUTOMOTIVE REPAIRS
+ASR Automotive Pty Ltd,,129786009,Company,,,1,1,1,9/7 Carrington Rd CASTLE HILL,Sydney,service,,False,False,1/1,MVRL45856,acn:129786009
+ASR Automotive Repairs Pty Ltd,63663435489,663435489,Company,,,1,1,1,11 FOWLER RD MERRYLANDS WEST,Sydney,service,,False,False,1/1,MVRL61514,acn:663435489
 Asset Diesel Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL51726,name:ASSET DIESEL
 ASSET TRUCK AND FLEET SERVICES PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL59111,name:ASSET TRUCK AND FLEET SERVICES
 Asset Vegetation Management Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),unknown,,False,False,0/1,MVRL61124,name:ASSET VEGETATION MANAGEMENT
 ASSK Investments Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL37280,name:ASSK INVESTMENTS
-Astavel Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL8869,name:ASTAVEL
+Astavel Pty Ltd,,001579595,Company,,,1,1,1,"McLennan Lane LISMORE, 2480",Northern Rivers,specialist,,False,False,1/1,MVRL8869,acn:001579595
 ASV Sales & Services Pty Ltd,,,Company,,,1,1,0,,Newcastle,dealer,,False,True,0/1,MVRL57225,name:ASV SALES AND SERVICES
 Asyan Pty Ltd,,,Company,,,1,1,0,,New England / North West,dealer,,False,True,0/1,MVRL49481,name:ASYAN
-At Call Auto Services Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL59816,name:AT CALL AUTO SERVICES
+At Call Auto Services Pty Ltd,24656175236,656175236,Company,,,1,1,1,UNIT 13 11 ROMFORD RD KINGS PARK,Sydney,service,,False,False,1/1,MVRL59816,acn:656175236
 ATA FLEET REPAIRER GROUP PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL63591,name:ATA FLEET REPAIRER GROUP
 Atanas Petrovski,,,Individual/Partnership,,,1,1,0,,Sydney,specialist,,True,False,0/1,MVRL28910,name:ATANAS PETROVSKI
 ATB Morton Pty Ltd,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL47523,name:ATB MORTON
-ATBI Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL53570,name:ATBI
+ATBI Pty Ltd,51610952657,610952657,Company,,,1,1,1,39 Carlingford St REGENTS PARK,Sydney,service,,False,False,1/1,MVRL53570,acn:610952657
 Atchison Truck Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL5131,name:ATCHISON TRUCK REPAIRS
 ATD ELECTRICAL CONTRACTORS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL63077,name:ATD ELECTRICAL CONTRACTORS
-Ateco Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL8225,name:ATECO AUTOMOTIVE
+Ateco Automotive Pty Ltd,,000486706,Company,,,1,1,1,2a Hill Rd LIDCOMBE,Sydney,service,,False,False,1/1,MVRL8225,acn:000486706
 Atef Obeid,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL64248,name:ATEF OBEID
-ATELIER AUTOMOTIVE PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL59778,name:ATELIER AUTOMOTIVE
 Athanasios Papaconstantinou,,,Individual/Partnership,,,1,1,0,,Sydney,service,,True,False,0/1,MVRL39170,name:ATHANASIOS PAPACONSTANTINOU
 Athol Ivan Luke,,,Individual/Partnership,,,1,1,0,,Capital Region,unknown,,True,False,0/1,MVRL18826,name:ATHOL IVAN LUKE
 Atlas 4X4 Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL63359,name:ATLAS 4X4
@@ -1135,36 +1126,36 @@ Auburn Tyre Service,,,Individual/Partnership,,,1,1,0,,Sydney,specialist,,True,Fa
 Audel Jovero,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL59661,name:AUDEL JOVERO
 AUDI Australia Retail Operations Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL45021,name:AUDI AUSTRALIA RETAIL OPERATIONS
 Aun Lim,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL27922,name:AUN LIM
-AURAMOTIVE MECHANICAL SERVICES PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL58511,name:AURAMOTIVE MECHANICAL SERVICES
-Aus Auto Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL53128,name:AUS AUTO REPAIRS
+AURAMOTIVE MECHANICAL SERVICES PTY LTD,48645515733,645515733,Company,,,1,1,1,34 CHARD RD BROOKVALE,Sydney,service,,False,False,1/1,MVRL58511,acn:645515733
+Aus Auto Repairs Pty Ltd,46611180100,611180100,Company,,,1,1,1,231a Wardell Rd DULWICH HILL,Sydney,service,,False,False,1/1,MVRL53128,acn:611180100
 AUS AUTOMOTIVE GROUP PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),dealer,,False,True,0/1,MVRL55540,name:AUS AUTOMOTIVE GROUP
-Aus Prestige Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL63310,name:AUS PRESTIGE REPAIRS
+Aus Prestige Repairs Pty Ltd,72670937318,670937318,Company,,,1,1,1,39 RICHMOND RD HOMEBUSH WEST,Sydney,service,,False,False,1/1,MVRL63310,acn:670937318
 AUS-1 INTERNATIONAL PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL57433,name:AUS 1 INTERNATIONAL
 Ausgas Heavy Vehicle Inspections Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL60917,name:AUSGAS HEAVY VEHICLE INSPECTIONS
-Ausind Export & Import Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL38208,name:AUSIND EXPORT AND IMPORT
-Auslank Mechanical Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL50908,name:AUSLANK MECHANICAL REPAIRS
+Ausind Export & Import Pty Ltd,,095431771,Company,,,1,1,1,3 Cobham St KINGS PARK,Sydney,service,,False,False,1/1,MVRL38208,acn:095431771
+Auslank Mechanical Repairs Pty Ltd,,168783462,Company,,,1,1,1,U 22 17-19 Kurrajong Rd NORTH ST MARYS,Sydney,service,,False,False,1/1,MVRL50908,acn:168783462
 Ausmech Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL58813,name:AUSMECH
-Auspeed Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL40982,name:AUSPEED
-AUSPLANT MECHANICAL SERVICES PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL62965,name:AUSPLANT MECHANICAL SERVICES
+Auspeed Pty Ltd,,111625300,Company,,,1,1,1,108 FOREST RD HURSTVILLE,Sydney,service,,False,False,1/1,MVRL40982,acn:111625300
+AUSPLANT MECHANICAL SERVICES PTY LTD,26099043400,099043400,Company,,,1,1,1,UNIT 4 53 ARGYLE ST SOUTH WINDSOR,Sydney,service,,False,False,1/1,MVRL62965,acn:099043400
 AUSROAD TRUCK HIRE PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL57969,name:AUSROAD TRUCK HIRE
 AUSSIE AUTO GLASS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL59652,name:AUSSIE AUTO GLASS
 Aussie Forklift Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL51223,name:AUSSIE FORKLIFT REPAIRS
 Aussie Hail PDR Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL49792,name:AUSSIE HAIL PDR
 Aussie Hail Pty Ltd,,,Company,,,1,1,0,,Far West / Orana,body,,False,False,0/1,MVRL52558,name:AUSSIE HAIL
 AUSTAR WHEELS & TYRES PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL56008,name:AUSTAR WHEELS AND TYRES
-Austate Enterprises Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL54704,name:AUSTATE ENTERPRISES
+Austate Enterprises Pty Ltd,99601640206,601640206,Company,,,1,1,1,15 Swaffham Rd MINTO,Sydney,service,,False,False,1/1,MVRL54704,acn:601640206
 AUSTEC FABRICATIONS PTY LIMITED,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL57154,name:AUSTEC FABRICATIONS
-Austech Motors Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL43340,name:AUSTECH MOTORS
-Austeire Contractors Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL46331,name:AUSTEIRE CONTRACTORS
+Austech Motors Pty Ltd,,103141331,Company,,,1,1,1,610 Bringelly Rd ROSSMORE,Sydney,service,,False,False,1/1,MVRL43340,acn:103141331
+Austeire Contractors Pty Ltd,,106364756,Company,,,1,1,1,U 2 16 Enterprise Cl WEST GOSFORD,Sydney,service,,False,False,1/1,MVRL46331,acn:106364756
 Austlift Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL46872,name:AUSTLIFT
 Austral Auto Electrics Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL12391,name:AUSTRAL AUTO ELECTRICS
 Australasian Agriculture Commercial Trading Pty Ltd,,,Company,,,1,1,0,,Riverina,specialist,,False,False,0/1,MVRL62211,name:AUSTRALASIAN AGRICULTURE COMMERCIAL TRADING
 Australasian Hail Network Pty Limited,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL60417,name:AUSTRALASIAN HAIL NETWORK
 Australia Longwell Motor Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL50354,name:AUSTRALIA LONGWELL MOTOR
-AUSTRALIA MECHANICAL REFRIGERATION PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL57267,name:AUSTRALIA MECHANICAL REFRIGERATION
+AUSTRALIA MECHANICAL REFRIGERATION PTY LTD,19636142277,636142277,Company,,,1,1,1,U 5 203 Fairfield Road GUILDFORD WEST,Sydney,service,,False,False,1/1,MVRL57267,acn:636142277
 AUSTRALIAN ALLOY INDUSTRIES PTY LTD,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL62789,name:AUSTRALIAN ALLOY INDUSTRIES
-Australian Auto Network Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL59559,name:AUSTRALIAN AUTO NETWORK
-Australian Brake Controls Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL47998,name:AUSTRALIAN BRAKE CONTROLS
+Australian Auto Network Pty Ltd,,117576477,Company,,,1,1,1,11-15 CLEVEDON ST BOTANY,Sydney,service,,False,False,1/1,MVRL59559,acn:117576477
+Australian Brake Controls Pty Ltd,,139366868,Company,,,1,1,1,103 Long St SMITHFIELD,Sydney,service,,False,False,1/1,MVRL47998,acn:139366868
 Australian Dent Solutions Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),body,,False,False,0/1,MVRL51317,name:AUSTRALIAN DENT SOLUTIONS
 Australian Eco Adventures Pty Limited,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL63178,name:AUSTRALIAN ECO ADVENTURES
 AUSTRALIAN ELECTRIC VEHICLE SPECIALISTS PTY LTD,,,Company,,,1,1,0,,Newcastle,specialist,,False,False,0/1,MVRL63374,name:AUSTRALIAN ELECTRIC VEHICLE SPECIALISTS
@@ -1175,53 +1166,46 @@ AUSTRALIAN MOBILE RADIO PTY LTD,,,Company,,,1,1,0,,Sydney,mobile,,False,False,0/
 Australian Motor Homes Pty Ltd,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL51937,name:AUSTRALIAN MOTOR HOMES
 Australian Native Landscapes Pty Limited,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL59247,name:AUSTRALIAN NATIVE LANDSCAPES
 AUSTRALIAN PLASTIC MOULDINGS PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL63630,name:AUSTRALIAN PLASTIC MOULDINGS
-Australian Transmission Centre Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL44270,name:AUSTRALIAN TRANSMISSION CENTRE
+Australian Transmission Centre Pty Ltd,,125980805,Company,,,1,1,1,5 Bourke St NORTH PARRAMATTA,Sydney,service,,False,False,1/1,MVRL44270,acn:125980805
 AUSTRALIAN TRANSPORT MAINTENANCE PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),other,,False,False,0/1,MVRL62722,name:AUSTRALIAN TRANSPORT MAINTENANCE
 Australian Tyre Specialists Pty Ltd,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,specialist,,False,False,0/1,MVRL56896,name:AUSTRALIAN TYRE SPECIALISTS
 Auswide Caravans & RV's Pty Ltd,,,Company,,,1,1,0,,Newcastle,specialist,,False,False,0/1,MVRL56456,name:AUSWIDE CARAVANS AND RV S
-AUSWIDE VEHICLE SERVICES PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL61018,name:AUSWIDE VEHICLE SERVICES
-AUTHENTIC AUTOMOTIVE PTY LTD,,,Company,,,1,1,0,,Coffs Harbour - Grafton,service,,False,False,0/1,MVRL55851,name:AUTHENTIC AUTOMOTIVE
+AUSWIDE VEHICLE SERVICES PTY LTD,31624575542,624575542,Company,,,1,1,1,UNIT 17 378 PARRAMATTA RD HOMEBUSH WEST,Sydney,service,,False,False,1/1,MVRL61018,acn:624575542
+AUTHENTIC AUTOMOTIVE PTY LTD,,628367680,Company,,,1,1,1,33 RIVER ST WOOLGOOLGA,Coffs Harbour - Grafton,service,,False,False,1/1,MVRL55851,acn:628367680
 AUTO A/C SERVICES PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL62581,name:AUTO A C SERVICES
-AUTO AIR WORLD PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL59518,name:AUTO AIR WORLD
-Auto Assist Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL55633,name:AUTO ASSIST
-AUTO AUSTRALIA PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL60194,name:AUTO AUSTRALIA
 Auto Body Smash Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL49802,name:AUTO BODY SMASH REPAIRS
 AUTO BODY SMASH SOLUTIONS PTY LTD,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL60260,name:AUTO BODY SMASH SOLUTIONS
 AUTO COLOUR GROUP PTY LTD,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL61343,name:AUTO COLOUR GROUP
-AUTO CONSULT HOLDINGS PTY LTD,,,Company,,,1,1,0,,Hunter,service,,False,False,0/1,MVRL55889,name:AUTO CONSULT HOLDINGS
-Auto Day Care Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL51952,name:AUTO DAY CARE
+AUTO CONSULT HOLDINGS PTY LTD,,628169817,Company,,,1,1,1,102 Sydney St MUSWELLBROOK,Hunter,service,,False,False,1/1,MVRL55889,acn:628169817
 Auto Dents Plus Pty Limited,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL42736,name:AUTO DENTS PLUS
 Auto Electrical Express Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL30552,name:AUTO ELECTRICAL EXPRESS
 AUTO ELECTRICAL MOBILE INSTALLATION SERVICED PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL58098,name:AUTO ELECTRICAL MOBILE INSTALLATION SERVICED
-Auto Elements Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL54735,name:AUTO ELEMENTS
-Auto Enginuity Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL59478,name:AUTO ENGINUITY
-Auto Express Australia Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL61236,name:AUTO EXPRESS AUSTRALIA
-Auto Express Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL35539,name:AUTO EXPRESS
+Auto Elements Pty Ltd,73614825302,614825302,Company,,,1,1,1,U 2 15 Cullen Pl SMITHFIELD,Sydney,service,,False,False,1/1,MVRL54735,acn:614825302
+Auto Enginuity Pty Ltd,20651322422,651322422,Company,,,1,1,1,UNIT 2 15 LORRAINE ST PEAKHURST,Sydney,service,,False,False,1/1,MVRL59478,acn:651322422
+Auto Express Australia Pty Ltd,98664854335,664854335,Company,,,1,1,1,1 BLAXLAND RD CAMPBELLTOWN,Sydney,service,,False,False,1/1,MVRL61236,acn:664854335
+Auto Express Pty Ltd,,085618720,Company,,,1,1,1,295 Anzac Parade KINGSFORD,Sydney,service,,False,False,1/1,MVRL35539,acn:085618720
 Auto Fix Auto Electricians Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL56352,name:AUTO FIX AUTO ELECTRICIANS
-AUTO FIX PADSTOW PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL61169,name:AUTO FIX PADSTOW
+AUTO FIX PADSTOW PTY LTD,94651549683,651549683,Company,,,1,1,1,14 BRIDGE ST PADSTOW,Sydney,service,,False,False,1/1,MVRL61169,acn:651549683
 Auto Glass Shop Pty. Ltd.,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL60646,name:AUTO GLASS SHOP
-Auto Heidar Service and Repair Car Center Pty Ltd,,,Company,,,1,1,0,,Newcastle,service,,False,False,0/1,MVRL63489,name:AUTO HEIDAR SERVICE AND REPAIR CAR CENTER
+Auto Heidar Service and Repair Car Center Pty Ltd,,682661132,Company,,,1,1,1,41C THROSBY ST WICKHAM,Newcastle,service,,False,False,1/1,MVRL63489,acn:682661132
 Auto Mate Smash Repair Pty Ltd,,,Company,,,1,1,0,,Central West,body,,False,False,0/1,MVRL62596,name:AUTO MATE SMASH REPAIR
-Auto Motor Care Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL54627,name:AUTO MOTOR CARE
-Auto Parlour Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL49453,name:AUTO PARLOUR
-Auto Plex Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL51880,name:AUTO PLEX
-AUTO PLUS GROUP PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL61281,name:AUTO PLUS GROUP
-Auto Repair Guy Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL50530,name:AUTO REPAIR GUY
+Auto Motor Care Pty Ltd,,620399466,Company,,,1,1,1,45 Vore St SILVERWATER,Sydney,service,,False,False,1/1,MVRL54627,acn:620399466
+Auto Parlour Pty Ltd,,153619848,Company,,,1,1,1,73 Rosedale Ave GREENACRE,Sydney,service,,False,False,1/1,MVRL49453,acn:153619848
+Auto Plex Pty Ltd,,003374249,Company,,,1,1,1,U 14 28 Vore St SILVERWATER,Sydney,service,,False,False,1/1,MVRL51880,acn:003374249
+AUTO PLUS GROUP PTY LTD,76651244594,651244594,Company,,,1,1,1,156 PRINCES HWY ST PETERS,Sydney,service,,False,False,1/1,MVRL61281,acn:651244594
 AUTO RESTORATION AND CABLES PTY LIMITED,,,Company,,,1,1,0,,Newcastle,other,,False,False,0/1,MVRL50019,name:AUTO RESTORATION AND CABLES
 Auto Smart Smash Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL63461,name:AUTO SMART SMASH REPAIRS
-Auto Solutions NSW Pty Ltd,,,Company,,,1,1,0,,Central West,service,,False,False,0/1,MVRL54920,name:AUTO SOLUTIONS NSW
-AUTO SOLUTIONS YASS PTY LTD,,,Company,,,1,1,0,,Riverina,service,,False,False,0/1,MVRL63812,name:AUTO SOLUTIONS YASS
-AUTO SUPPORT PTY. LTD.,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL61709,name:AUTO SUPPORT
+AUTO SOLUTIONS YASS PTY LTD,93693879944,693879944,Company,,,1,1,1,234 COMUR ST YASS,Riverina,service,,False,False,1/1,MVRL63812,acn:693879944
 Auto Tech Automotive & Glass Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL61284,name:AUTO TECH AUTOMOTIVE AND GLASS
 Auto Tech Car and Truck Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL59543,name:AUTO TECH CAR AND TRUCK REPAIRS
 AUTO TECH FLEET SERVICES PTY LTD,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL61118,name:AUTO TECH FLEET SERVICES
-AUTO TIGER PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL55057,name:AUTO TIGER
-Auto Watt Pty Ltd,,,Company,,,1,1,0,,Central West,service,,False,False,0/1,MVRL62102,name:AUTO WATT
-Auto Works Australia Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL60233,name:AUTO WORKS AUSTRALIA
+AUTO TIGER PTY LTD,,607127257,Company,,,1,1,1,20 Newton Road WETHERILL PARK,Sydney,service,,False,False,1/1,MVRL55057,acn:607127257
+Auto Watt Pty Ltd,,139247617,Company,,,1,1,1,UNIT 1 49 SYDNEY RD KELSO,Central West,service,,False,False,1/1,MVRL62102,acn:139247617
+Auto Works Australia Pty Ltd,74655614994,655614994,Company,,,1,1,1,78 MITCHELL RD ALEXANDRIA,Sydney,service,,False,False,1/1,MVRL60233,acn:655614994
 Auto Wreck Australia Pty Ltd,,,Company,,,1,1,0,,Sydney,other,,False,False,0/1,MVRL60668,name:AUTO WRECK AUSTRALIA
 Autobarn Dubbo Pty Ltd,,,Company,,,1,1,0,,Far West / Orana,other,Autobarn,False,False,0/1,MVRL41674,name:AUTOBARN DUBBO
 Autochange Pty Ltd,,,Company,,,1,1,0,,Illawarra,unknown,,False,False,0/1,MVRL50292,name:AUTOCHANGE
-Autocraze Auto Centre Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL53510,name:AUTOCRAZE AUTO CENTRE
+Autocraze Auto Centre Pty Ltd,91614650476,614650476,Company,,,1,1,1,U 5 95-99 Silverwater Rd SILVERWATER,Sydney,service,,False,False,1/1,MVRL53510,acn:614650476
 AUTOFIX COLLISION PTY LTD,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL62729,name:AUTOFIX COLLISION
 Autofrost Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL36264,name:AUTOFROST
 AUTOHAUS DRUMMOYNE PTY LIMITED,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL57350,name:AUTOHAUS DRUMMOYNE
@@ -1231,33 +1215,32 @@ AUTOHOME AUSTRALIA PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MV
 Autohop Pty Ltd,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL51954,name:AUTOHOP
 Autojoy Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL46804,name:AUTOJOY
 Autolab Australia New Zealand Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL38720,name:AUTOLAB AUSTRALIA NEW ZEALAND
-Automate Car Care Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL55575,name:AUTOMATE CAR CARE
-Automatic Transmission Services Pty Ltd,,,Company,,,1,1,0,,Newcastle,service,,False,False,0/1,MVRL4933,name:AUTOMATIC TRANSMISSION SERVICES
+Automatic Transmission Services Pty Ltd,,000204311,Company,,,1,1,1,242-244 Lambton Road NEW LAMBTON,Newcastle,service,,False,False,1/1,MVRL4933,acn:000204311
 Automediks Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL61024,name:AUTOMEDIKS
 Automobility Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL54500,name:AUTOMOBILITY
 Automoda Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL56176,name:AUTOMODA
 Automotive Collision Centre Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL57015,name:AUTOMOTIVE COLLISION CENTRE
-AUTOMOTIVE ELITE GROUP NO 3 PTY LTD,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,service,,False,False,0/1,MVRL63186,name:AUTOMOTIVE ELITE GROUP NO 3
-AUTOMOTIVE ENGINEERS PTY LTD,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL62532,name:AUTOMOTIVE ENGINEERS
-Automotive Gallery Newcastle Pty Ltd,,,Company,,,1,1,0,,Newcastle,service,,False,False,0/1,MVRL43727,name:AUTOMOTIVE GALLERY NEWCASTLE
+AUTOMOTIVE ELITE GROUP NO 3 PTY LTD,53687059052,687059052,Company,,,1,1,1,315 PRINCES HWY BOMADERRY,Southern Highlands / Shoalhaven,body,,False,False,1/1,MVRL63186,acn:687059052
+AUTOMOTIVE ENGINEERS PTY LTD,43681697692,681697692,Company,,,1,1,1,37 ROSEDALE AV GREENACRE,Sydney,service,,False,False,1/1,MVRL62532,acn:681697692
+Automotive Gallery Newcastle Pty Ltd,,117770715,Company,,,1,1,1,8 UNION ST WICKHAM,Newcastle,service,,False,False,1/1,MVRL43727,acn:117770715
 Automotive Hail Repairs Pty Ltd,,,Company,,,1,1,0,,Sydney,body,,False,False,0/1,MVRL55279,name:AUTOMOTIVE HAIL REPAIRS
-Automotive Investment Group Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL62542,name:AUTOMOTIVE INVESTMENT GROUP
-Automotive Investments Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL47068,name:AUTOMOTIVE INVESTMENTS
-Automotive Mechanical Repair Centre Pty Limited,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL53463,name:AUTOMOTIVE MECHANICAL REPAIR CENTRE
-Automotive Options Pty Ltd,,,Company,,,1,1,0,,Central Coast,service,,False,False,0/1,MVRL60419,name:AUTOMOTIVE OPTIONS
-Automotive Professionals Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL22230,name:AUTOMOTIVE PROFESSIONALS
-Automotive Service Masters Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL63074,name:AUTOMOTIVE SERVICE MASTERS
-Automotive Skills Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL55751,name:AUTOMOTIVE SKILLS
+Automotive Investment Group Pty Ltd,74657797156,657797156,Company,,,1,1,1,UNIT 3 28 BUFFALO RD GLADESVILLE,Sydney,service,,False,False,1/1,MVRL62542,acn:657797156
+Automotive Investments Pty Ltd,,115782744,Company,,,1,1,1,1 4 North Rocks Road North PARRAMATTA,Sydney,service,,False,False,1/1,MVRL47068,acn:115782744
+Automotive Mechanical Repair Centre Pty Limited,14612878261,612878261,Company,,,1,1,1,20-22 Babbage Rd ROSEVILLE CHASE,Sydney,service,,False,False,1/1,MVRL53463,acn:612878261
+Automotive Options Pty Ltd,,088023698,Company,,,1,1,1,U 2 501 The Entrance Rd LONG JETTY,Central Coast,service,,False,False,1/1,MVRL60419,acn:088023698
+Automotive Professionals Pty Ltd,,057572228,Company,,,1,1,1,3/10 Hudson Avenue CASTLE HILL,Sydney,service,,False,False,1/1,MVRL22230,acn:057572228
+Automotive Service Masters Pty Ltd,67673144913,673144913,Company,,,1,1,1,707 THE HORSLEY DRIVE SMITHFIELD,Sydney,service,,False,False,1/1,MVRL63074,acn:673144913
+Automotive Skills Pty Ltd,,149830071,Company,,,1,1,1,28-30 HAMPSTEAD RD AUBURN,Sydney,service,,False,False,1/1,MVRL55751,acn:149830071
 Automotive Solutions Australia Pty Ltd,,,Company,,,1,1,0,,Illawarra,dealer,,False,True,0/1,MVRL62393,name:AUTOMOTIVE SOLUTIONS AUSTRALIA
-Automotive Solutions Qld Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,service,Bridgestone,False,False,0/1,MVRL60227,name:AUTOMOTIVE SOLUTIONS QLD
+Automotive Solutions Qld Pty Ltd,44119321489,119321489,Company,,,1,1,1,44 BANGALOW RD BALLINA,Northern Rivers,service,Bridgestone,False,False,1/1,MVRL60227,acn:119321489
 AUTOMOTIVE SPARE PARTS MACKSVILLE PTY LTD,,,Company,,,1,1,0,,Mid North Coast,other,,False,False,0/1,MVRL61447,name:AUTOMOTIVE SPARE PARTS MACKSVILLE
-Automotive Surgery Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL53724,name:AUTOMOTIVE SURGERY
-Automotive Technologies Group Pty Ltd,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,service,,False,False,0/1,MVRL61919,name:AUTOMOTIVE TECHNOLOGIES GROUP
-Automotive Unlimited Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL37272,name:AUTOMOTIVE UNLIMITED
+Automotive Surgery Pty Ltd,24611573374,611573374,Company,,,1,1,1,27 Rochester St BOTANY,Sydney,service,,False,False,1/1,MVRL53724,acn:611573374
+Automotive Technologies Group Pty Ltd,86632476950,632476950,Company,,,1,1,1,104 Princes Highway SOUTH NOWRA,Southern Highlands / Shoalhaven,service,,False,False,1/1,MVRL61919,acn:632476950
+Automotive Unlimited Pty Ltd,,093982515,Company,,,1,1,1,253 Railway Parade CABRAMATTA,Sydney,service,,False,False,1/1,MVRL37272,acn:093982515
 Autonation NSW Pty Ltd,,,Company,,,1,1,0,,Newcastle,dealer,,False,True,0/1,MVRL54364,name:AUTONATION NSW
 Autonet Group Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL53511,name:AUTONET GROUP
-Autonova Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL51700,name:AUTONOVA AUTOMOTIVE
-Autopro MegaStores Pty Ltd,,,Company,,,1,1,0,,Central Coast,service,,False,False,0/1,MVRL59819,name:AUTOPRO MEGASTORES
+Autonova Automotive Pty Ltd,,055171652,Company,,,1,1,1,U 42 2 Hoyle Ave CASTLE HILL,Sydney,service,,False,False,1/1,MVRL51700,acn:055171652
+Autopro MegaStores Pty Ltd,,084268511,Company,,,1,1,1,4 BUNDALEER CR BENSVILLE,Central Coast,service,,False,False,1/1,MVRL59819,acn:084268511
 Autorush Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL57353,name:AUTORUSH
 AUTOSENSE AUTO ELECTRICS PTY LTD,,,Company,,,1,1,0,,Unknown (no address in register),specialist,,False,False,0/1,MVRL62478,name:AUTOSENSE AUTO ELECTRICS
 Autoshift Diesel Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL42640,name:AUTOSHIFT DIESEL
@@ -1266,39 +1249,38 @@ Autosports Five Dock Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MV
 Autosports Leichhardt Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL49876,name:AUTOSPORTS LEICHHARDT
 Autosports Prestige Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL52299,name:AUTOSPORTS PRESTIGE
 Autosports Sutherland Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL45216,name:AUTOSPORTS SUTHERLAND
-Autotech Automotive Services (World Square) Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL45701,name:AUTOTECH AUTOMOTIVE SERVICES WORLD SQUARE
-AUTOTEK AUSTRALIA PTY. LTD.,,,Company,,,1,1,0,,Murray,service,,False,False,0/1,MVRL64090,name:AUTOTEK AUSTRALIA
+Autotech Automotive Services (World Square) Pty Ltd,,124284251,Company,,,1,1,1,Level 6 Parking World Square Shopping Centre 680 George Street SYDNEY,Sydney,service,,False,False,1/1,MVRL45701,acn:124284251
+AUTOTEK AUSTRALIA PTY. LTD.,78603974634,603974634,Company,,,1,1,1,384 GRIFFITH RD LAVINGTON,Murray,service,,False,False,1/1,MVRL64090,acn:603974634
 Autotek New South Wales Pty Ltd,,,Company,,,1,1,0,,Newcastle,unknown,,False,False,0/1,MVRL55300,name:AUTOTEK NEW SOUTH WALES
-Autowerks Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL49210,name:AUTOWERKS AUTOMOTIVE
+Autowerks Automotive Pty Ltd,,154006809,Company,,,1,1,1,169 Penshurst St BEVERLY HILLS,Sydney,service,,False,False,1/1,MVRL49210,acn:154006809
 Autowise Auto Electrics Pty Ltd,,,Company,,,1,1,0,,Illawarra,specialist,,False,False,0/1,MVRL28034,name:AUTOWISE AUTO ELECTRICS
 AUTOWORKS GROUP PTY LTD,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL63414,name:AUTOWORKS GROUP
 Autozap Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,unknown,,False,False,0/1,MVRL63339,name:AUTOZAP
-AVA Automotive Pty Ltd,,,Company,,,1,1,0,,Illawarra,service,,False,False,0/1,MVRL46919,name:AVA AUTOMOTIVE
+AVA Automotive Pty Ltd,,138270452,Company,,,1,1,1,141 INDUSTRIAL RD OAK FLATS,Illawarra,service,,False,False,1/1,MVRL46919,acn:138270452
 Avan Sales (NSW) Pty Ltd,,,Company,,,1,1,0,,Sydney,dealer,,False,True,0/1,MVRL61638,name:AVAN SALES NSW
-Avantcruiser Pty Ltd,,,Company,,,1,1,0,,Northern Rivers,service,,False,False,0/1,MVRL48319,name:AVANTCRUISER
+Avantcruiser Pty Ltd,,141649925,Company,,,1,1,1,36 Durrington Street MURWILLUMBAH,Northern Rivers,service,,False,False,1/1,MVRL48319,acn:141649925
 Avedis Badoyan,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL40446,name:AVEDIS BADOYAN
 Avedis Sarkis Boyadjian,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL15182,name:AVEDIS SARKIS BOYADJIAN
 Averos Brothers Pty Limited,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL61468,name:AVEROS BROTHERS
 Aviana Pty Ltd,,,Company,,,1,1,0,,Far West / Orana,unknown,,False,False,0/1,MVRL29648,name:AVIANA
-Avickers Pty Ltd,,,Company,,,1,1,0,,Hunter,service,,False,False,0/1,MVRL59476,name:AVICKERS
+Avickers Pty Ltd,,103717666,Company,,,1,1,1,151 Wollombi Road CESSNOCK,Hunter,service,,False,False,1/1,MVRL59476,acn:103717666
 Avin Transport Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),other,,False,False,0/1,MVRL39580,name:AVIN TRANSPORT
 Avindra Gangaram,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL42815,name:AVINDRA GANGARAM
-Avoca Auto Services Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL29546,name:AVOCA AUTO SERVICES
+Avoca Auto Services Pty Ltd,,115084467,Company,,,1,1,1,107 Avoca St RANDWICK,Sydney,service,,False,False,1/1,MVRL29546,acn:115084467
 Avron Rafi Sher,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL46379,name:AVRON RAFI SHER
 Avtar Singh,,,Individual/Partnership,,,1,1,0,,New England / North West,unknown,,True,False,0/1,MVRL62373,name:AVTAR SINGH
 Awadis Jakmakian,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL62261,name:AWADIS JAKMAKIAN
 Awaliam Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL63093,name:AWALIAM
-AWC Mechanical Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL61849,name:AWC MECHANICAL
+AWC Mechanical Pty Ltd,65673669433,673669433,Company,,,1,1,1,SHOP 2 130 LANSDOWNE ST GOULBURN,Sydney,service,,False,False,1/1,MVRL61849,acn:673669433
 AWCON PTY LTD,,,Company,,,1,1,0,,Central West,unknown,,False,False,0/1,MVRL57495,name:AWCON
 Awdtech Pty Ltd,,,Company,,,1,1,0,,Southern Highlands / Shoalhaven,specialist,,False,False,0/1,MVRL57193,name:AWDTECH
 AWSE Pty Ltd,,,Company,,,1,1,0,,Central Coast,specialist,,False,False,0/1,MVRL59785,name:AWSE
 Axiak Pty Ltd,,,Company,,,1,1,0,,Sydney,specialist,,False,False,0/1,MVRL51628,name:AXIAK
-Axis Automotive Repair Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),service,,False,False,0/1,MVRL61912,name:AXIS AUTOMOTIVE REPAIR
 Ay - One Tyre & Brake Pty Ltd,,,Company,,,1,1,0,,Mid North Coast,specialist,,False,False,0/1,MVRL36165,name:AY ONE TYRE AND BRAKE
 Ayanuk Pty Ltd,,,Company,,,1,1,0,,Sydney,unknown,,False,False,0/1,MVRL64207,name:AYANUK
 Ayden James White,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL59958,name:AYDEN JAMES WHITE
-Ayers Automotive Pty Ltd,,,Company,,,1,1,0,,Sydney,service,,False,False,0/1,MVRL52989,name:AYERS AUTOMOTIVE
-AYM AUTOMOTIVE PTY LTD,,,Company,,,1,1,0,,Capital Region,service,,False,False,0/1,MVRL63228,name:AYM AUTOMOTIVE
+Ayers Automotive Pty Ltd,34100722138,100722138,Company,,,1,1,1,15 Ada Avenue BROOKVALE,Sydney,service,,False,False,1/1,MVRL52989,acn:100722138
+AYM AUTOMOTIVE PTY LTD,84671349278,671349278,Company,,,1,1,1,38 YASS RD QUEANBEYAN EAST,Capital Region,service,,False,False,1/1,MVRL63228,acn:671349278
 Ayman Tawdrous,,,Individual/Partnership,,,1,1,0,,Sydney,unknown,,True,False,0/1,MVRL63119,name:AYMAN TAWDROUS
 Aymtoto Pty Ltd,,,Company,,,1,1,0,,Unknown (no address in register),unknown,,False,False,0/1,MVRL60681,name:AYMTOTO
 Ayoob Abdulkhaleq Abdulameer Hamdan,,,Individual/Partnership,,,1,1,0,,Unknown (no address in register),unknown,,True,False,0/1,MVRL54629,name:AYOOB ABDULKHALEQ ABDULAMEER HAMDAN
@@ -12480,3 +12462,21 @@ A.P Automotive Repairs Pty Ltd,,133972942,Company,,,1,0,0,,Unknown (no address i
 AAA REPAIRS AND MODIFICATIONS PTY LTD,61653166673,653166673,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL60014,acn:653166673
 ADONIS AUTOMOTIVE SERVICES PTY LTD,85651982124,651982124,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL59611,acn:651982124
 AJM Mechanical Services Pty Ltd,64644018093,644018093,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL62328,acn:644018093
+Aleco Mechanical Pty Ltd,48644268397,644268397,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL58713,acn:644268397
+ALESSI MECHANICAL REPAIRS PTY LTD,57679626521,679626521,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL63551,acn:679626521
+ALL AUTO & MECHANICAL PTY LTD,83687066093,687066093,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL63037,acn:687066093
+All West Mechanical Pty Ltd,,668240873,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL61202,acn:668240873
+ALL YOUR REPAIRS AND MAINTENANCE NEEDS PTY LTD,46690163798,690163798,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL64341,acn:690163798
+ALR MECHANICAL SERVICES PTY LTD,,624216539,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL55418,acn:624216539
+Alvin Automotive Pty Ltd,,675787970,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL62297,acn:675787970
+AMCE SERVICES PTY LTD,67655545681,655545681,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL61870,acn:655545681
+AMG Mechanical Repairs Pty Ltd,75675549989,675549989,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL62028,acn:675549989
+ARROWSMITH AUTOMOTIVE PTY LTD,20626522727,626522727,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL59096,acn:626522727
+ASM REPAIRS PTY LTD,,646742378,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL61215,acn:646742378
+ATELIER AUTOMOTIVE PTY LTD,86653754851,653754851,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL59778,acn:653754851
+Auto Assist Pty Ltd,37168602631,168602631,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL55633,acn:168602631
+AUTO AUSTRALIA PTY LTD,63658817264,658817264,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL60194,acn:658817264
+Auto Day Care Pty Ltd,46169446388,169446388,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL51952,acn:169446388
+Auto Repair Guy Pty Ltd,96166747682,166747682,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL50530,acn:166747682
+AUTO SUPPORT PTY. LTD.,58162139399,162139399,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL61709,acn:162139399
+Axis Automotive Repair Pty Ltd,47674928913,674928913,Company,,,1,0,0,,Unknown (no address in register),service,,False,False,1/1,MVRL61912,acn:674928913
