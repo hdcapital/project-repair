@@ -1,13 +1,13 @@
 {
-  "calls_used_this_month": 6077,
+  "calls_used_this_month": 6277,
   "complete": false,
   "last_rate": 371.51,
   "quota_exhausted_until": null,
-  "remaining": 6539,
+  "remaining": 6339,
   "run": {
     "fetched": 827,
-    "seconds": 1444,
-    "skipped": 4973
+    "seconds": 1487,
+    "skipped": 5173
   },
-  "updated_at": "2026-10-07T10:10:44Z"
+  "updated_at": "2026-10-07T10:11:28Z"
 }
