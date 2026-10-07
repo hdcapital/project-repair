@@ -1,6 +1,11 @@
 name: enrich
 
 on:
+  # TEMPORARY bootstrap: registers the workflow with GitHub before it is on main
+  # (a branch-only workflow cannot be dispatched). Pushes on this branch run a
+  # 120 s proof; bot commit-backs don't re-trigger. Remove once merged.
+  push:
+    branches: [claude/fervent-cray-dwsyob]
   schedule:
     - cron: '7 * * * *'
   workflow_dispatch:
@@ -30,7 +35,7 @@ jobs:
       NSW_API_KEY: ${{ secrets.NSW_API_KEY }}
       NSW_API_SECRET: ${{ secrets.NSW_API_SECRET }}
       ABR_GUID: ${{ secrets.ABR_GUID }}
-      RUN_SECONDS: ${{ inputs.run_seconds || '3000' }}
+      RUN_SECONDS: ${{ inputs.run_seconds || (github.event_name == 'push' && '120') || '3000' }}
       DRY_RUN: ${{ inputs.dry_run || '0' }}
       MONTHLY_CALL_BUDGET: ${{ vars.MONTHLY_CALL_BUDGET || '0' }}
     steps:
