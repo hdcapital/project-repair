@@ -129,10 +129,18 @@ FAMILY_SEGMENT = {
 CLASS_SEGMENTS: dict[str, list[str]] = {
     "service": [r"MECHANIC", r"BRAKE", r"TRANSMISSION", r"EXHAUST", r"STEERING", r"SUSPENSION",
                 r"WHEEL ALIGN", r"RADIATOR", r"UNDERBODY", r"\bLPG\b", r"\bCNG\b", r"GAS",
-                r"ENGINE", r"DRIVE ?LINE", r"MOTOR VEHICLE REPAIR"],
+                r"ENGINE", r"DRIVE ?LINE"],
     "body": [r"\bBODY", r"PANEL", r"PAINT", r"TRIM", r"DENT"],
     "specialist": [r"ELECTRIC", r"TYRE", r"TIRE", r"GLAZ", r"WINDSCREEN", r"MOTOR ?CYCLE",
                    r"TRAILER", r"CARAVAN", r"DETAIL", r"AIR ?CON", r"HEAVY", r"RESTOR"],
+}
+
+# The register's licenceClasses entry is usually just the generic licence type
+# ("Motor Vehicle Repairer Licence"); such entries carry no segment signal and are ignored.
+GENERIC_CLASS_RE = re.compile(r"^MOTOR VEHICLE (REPAIRER'?S?|DEALER'?S?) LICEN[CS]E$")
+# Licence conditions that pin the segment (checked before name flags).
+CONDITION_SEGMENTS: dict[str, str] = {
+    r"MOBILE WORKSHOP|MOBILE BUSINESS|FROM A MOBILE": "mobile",
 }
 
 # Franchise / chain brands (label -> regex).
@@ -177,6 +185,7 @@ FRANCHISE_BRANDS: dict[str, str] = {
 _COMPILED: dict[str, list[re.Pattern]] = {k: [re.compile(p) for p in v] for k, v in PATTERNS.items()}
 _COMPILED_CLASSES = {k: [re.compile(p) for p in v] for k, v in CLASS_SEGMENTS.items()}
 _COMPILED_BRANDS = {k: re.compile(v) for k, v in FRANCHISE_BRANDS.items()}
+_COMPILED_CONDITIONS = {re.compile(k): v for k, v in CONDITION_SEGMENTS.items()}
 
 # =========================================================================== #
 # Paths / small helpers
@@ -338,13 +347,22 @@ def tier_for(cls: dict) -> int:
 
 
 def segment_from_classes(classes: list[str]) -> str:
-    text = " | ".join(classes).upper()
+    specific = [c for c in classes if c and not GENERIC_CLASS_RE.match(c.strip().upper())]
+    text = " | ".join(specific).upper()
     if not text.strip():
         return ""
     for seg in ("service", "body", "specialist"):
         if any(p.search(text) for p in _COMPILED_CLASSES[seg]):
             return seg
     return "other"
+
+
+def segment_from_conditions(conditions: list[str]) -> str:
+    text = " | ".join(conditions).upper()
+    for pat, seg in _COMPILED_CONDITIONS.items():
+        if pat.search(text):
+            return seg
+    return ""
 
 
 def segment_from_flags(cls: dict) -> str:
@@ -885,9 +903,17 @@ def flatten(rec: dict) -> dict:
     for p in _get(raw, "premises", "premisesList", default=[]) or []:
         if not isinstance(p, dict):
             continue
+        if str(_get(p, "endDate", default="") or "").strip():
+            continue  # closed premises
         pname = str(_get(p, "businessName", "premisesName", "name")).strip()
-        paddr = str(_get(p, "businessAddress", "address", "premisesAddress")).strip()
-        premises.append((pname, paddr))
+        paddr = re.sub(r"\s+", " ", str(_get(p, "businessAddress", "address", "premisesAddress"))).strip()
+        if pname or paddr:
+            premises.append((pname, paddr))
+    conditions = []
+    for c in _get(raw, "conditions", default=[]) or []:
+        txt = _get(c, "description", "condition", "text") if isinstance(c, dict) else str(c)
+        if txt:
+            conditions.append(str(txt).strip())
     biz = []
     for b in _get(raw, "businessNames", default=[]) or []:
         name = _get(b, "businessName", "name") if isinstance(b, dict) else str(b)
@@ -895,12 +921,10 @@ def flatten(rec: dict) -> dict:
             biz.append(str(name).strip())
     comp = _get(raw, "complianceActions", "compliance", default={})
     addr = str(_get(ld, "address", "licenceeAddress", "fullAddress")).strip()
+    premises_pcs = [postcode_from_premises(paddr) for _, paddr in premises if paddr]
     pc = str(_get(ld, "postcode", "postCode")).strip() or postcode_from_address(addr)
     if not pc:
-        for _, paddr in premises:
-            pc = postcode_from_address(paddr)
-            if pc:
-                break
+        pc = next((x for x in premises_pcs if x), "")
     return {
         "abn": re.sub(r"\s+", "", str(_get(ld, "licenceeABN", "abn"))),
         "acn": re.sub(r"\s+", "", str(_get(ld, "licenceeACN", "acn"))),
@@ -913,7 +937,10 @@ def flatten(rec: dict) -> dict:
         "n_premises": len(premises),
         "premises": "; ".join(f"{n} @ {a}".strip(" @") for n, a in premises),
         "premises_list": premises,
+        "premises_postcodes": premises_pcs,
         "premises_names": " | ".join(n for n, _ in premises),
+        "conditions": "; ".join(conditions),
+        "conditions_list": conditions,
         "business_names_full": "; ".join(biz),
         "public_warnings": str(_get(comp, "publicWarningsCount", "publicWarnings")),
         "disciplinary_actions": len(_get(comp, "disciplinaryActions", default=[]) or [])
@@ -939,22 +966,38 @@ def flatten_abr(rec: dict) -> dict:
     }
 
 
-_POSTCODES: dict | None = None
+_GEO: dict | None = None
 
 
-def nsw_postcodes() -> dict:
-    global _POSTCODES
-    if _POSTCODES is None:
+def build_localities(rows: list[dict]) -> dict[str, str]:
+    """NSW locality (upper) -> postcode.  Delivery-area rows outrank PO-box rows; ties -> lowest."""
+    scores: dict[str, Counter] = defaultdict(Counter)
+    for row in rows:
+        if (row.get("state") or "").strip().upper() != "NSW":
+            continue
+        loc = re.sub(r"\s+", " ", (row.get("locality") or "").strip().upper())
+        pc = (row.get("postcode") or "").strip().zfill(4)
+        if loc and pc.isdigit():
+            w = 2 if "DELIVERY" in (row.get("type") or "").upper() else 1
+            scores[loc][pc] += w
+    return {loc: sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))[0][0] for loc, c in scores.items()}
+
+
+def geo() -> dict:
+    """{"postcodes": postcode -> {region, sa4, lga}, "localities": LOCALITY -> postcode}"""
+    global _GEO
+    if _GEO is None:
         p = os.environ.get("POSTCODES_CSV", str(HERE / "australian_postcodes.csv"))
         if Path(p).exists():
-            _POSTCODES = build_nsw_postcodes(load_postcode_table(p, data_dir()))
+            rows = load_postcode_table(p, data_dir())
+            _GEO = {"postcodes": build_nsw_postcodes(rows), "localities": build_localities(rows)}
         else:
-            _POSTCODES = {}
-    return _POSTCODES
+            _GEO = {"postcodes": {}, "localities": {}}
+    return _GEO
 
 
 def region_for(pc: str, table: dict | None = None) -> tuple[str, str, str]:
-    table = nsw_postcodes() if table is None else table
+    table = geo()["postcodes"] if table is None else table
     pc = (pc or "").strip()
     e = table.get(pc)
     if e:
@@ -964,11 +1007,44 @@ def region_for(pc: str, table: dict | None = None) -> tuple[str, str, str]:
     return "Unknown (no address in register)", "", ""
 
 
+ADDRESS_NOISE_RE = re.compile(r"\b(NSW|N\.S\.W\.|AUSTRALIA)\b|[,.]", re.I)
+
+
+def postcode_from_premises(addr: str, localities: dict[str, str] | None = None) -> str:
+    """Premises addresses look like '11 Waltham Street ARTARMON' (no postcode).  Use an explicit
+    4-digit postcode if present, else the longest trailing word-run that is a known NSW locality."""
+    localities = geo()["localities"] if localities is None else localities
+    pc = postcode_from_address(addr)
+    if pc:
+        return pc
+    words = re.sub(r"\s+", " ", ADDRESS_NOISE_RE.sub(" ", addr or "")).strip().upper().split()
+    for n in (4, 3, 2, 1):
+        if len(words) >= n:
+            cand = " ".join(words[-n:])
+            if cand in localities:
+                return localities[cand]
+    return ""
+
+
+def entity_key(det: dict) -> str:
+    """Stable operator id from details: ACN first (a company's ABN is its ACN plus two check
+    digits, and the register often has one but not the other), else ABN, else ''."""
+    acn, abn = det.get("acn", ""), det.get("abn", "")
+    if acn:
+        return f"acn:{acn}"
+    if len(abn) == 11 and abn.isdigit():
+        return f"acn:{abn[2:]}"   # company-style ABN -> its ACN; sole-trader ABNs just use the tail
+    if abn:
+        return f"abn:{abn}"
+    return ""
+
+
 SUMMARY_FIELDS = ["licence_number", "licensee", "licence_name", "business_names", "licence_type",
                   "status", "expiry_date", "classes", "categories", "suburb", "postcode", "region",
                   "sa4", "lga", "licence_id"]
 ENRICH_FIELDS = ["abn", "acn", "address_full", "start_date", "licence_classes", "n_premises",
-                 "premises", "business_names_full", "public_warnings", "disciplinary_actions"]
+                 "premises", "premises_regions", "conditions", "business_names_full",
+                 "public_warnings", "disciplinary_actions"]
 LICENCE_FIELDS = SUMMARY_FIELDS + ENRICH_FIELDS + ["tier", "name_flags", "segment_rule",
                                                     "franchise_brand", "operator_key", "details_fetched"]
 
@@ -976,6 +1052,13 @@ LICENCE_FIELDS = SUMMARY_FIELDS + ENRICH_FIELDS + ["tier", "name_flags", "segmen
 def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict],
                     postcodes: dict | None = None) -> list[dict]:
     qmap = {q["licence_id"]: q for q in queue}
+    # Licences without details yet adopt the entity id seen on a fetched licence of the same
+    # licensee name, so an operator is not split into "abn:" and "name:" halves mid-fetch.
+    name_entity: dict[str, Counter] = defaultdict(Counter)
+    for r in seed:
+        eid = entity_key(flatten(details.get(r["licence_id"], {})))
+        if eid:
+            name_entity[norm_name(r["licensee"])][eid] += 1
     rows = []
     for r in seed:
         row = {k: r.get(k, "") for k in SUMMARY_FIELDS}
@@ -997,9 +1080,16 @@ def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict
         q = qmap.get(r["licence_id"])
         row["tier"] = q["tier"] if q else tier_for(cls)
         row["name_flags"] = cls["flags"]
-        row["segment_rule"] = segment_from_classes(det.get("classes_list", [])) or segment_from_flags(cls)
+        row["segment_rule"] = (segment_from_classes(det.get("classes_list", []))
+                               or segment_from_conditions(det.get("conditions_list", []))
+                               or segment_from_flags(cls))
+        row["conditions"] = det.get("conditions", "")
+        row["premises_regions"] = "; ".join(sorted({region_for(x, postcodes)[0]
+                                                    for x in det.get("premises_postcodes", []) if x}))
         row["franchise_brand"] = franchise_brand(name_text(text_row))
-        row["operator_key"] = f"abn:{det['abn']}" if det.get("abn") else f"name:{norm_name(r['licensee'])}"
+        nn = norm_name(r["licensee"])
+        eid = entity_key(det) or (name_entity[nn].most_common(1)[0][0] if name_entity.get(nn) else "")
+        row["operator_key"] = eid or f"name:{nn}"
         row["_premises_list"] = det.get("premises_list", [])
         row["_company"] = cls["company"]
         row["_dealer"] = "excl_dealer" in cls["exclusions"]
@@ -1007,7 +1097,7 @@ def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict
     return rows
 
 
-OPERATOR_FIELDS = ["operator", "abn", "entity_type", "entity_name", "gst", "n_licences",
+OPERATOR_FIELDS = ["operator", "abn", "acn", "entity_type", "entity_name", "gst", "n_licences",
                    "n_premises_total", "n_premises_known", "premises", "regions", "segment",
                    "franchise_brand", "is_sole_trader", "is_dealer_group", "details_coverage",
                    "licence_numbers", "operator_key"]
@@ -1019,7 +1109,8 @@ def build_operators(licences: list[dict], abr: dict[str, dict]) -> list[dict]:
         groups[row["operator_key"]].append(row)
     ops = []
     for key, rows in groups.items():
-        abn = key[4:] if key.startswith("abn:") else ""
+        abn = next((r["abn"] for r in rows if r["abn"]), "")
+        acn = next((r["acn"] for r in rows if r["acn"]), "") or (key[4:] if key.startswith("acn:") else "")
         abr_info = flatten_abr(abr.get(abn, {})) if abn else {}
         seen_addr: dict[str, str] = {}
         unknown_sites = 0
@@ -1033,12 +1124,15 @@ def build_operators(licences: list[dict], abr: dict[str, dict]) -> list[dict]:
         names = Counter(r["licensee"].strip() for r in rows)
         seg = Counter(r["segment_rule"] for r in rows).most_common(1)[0][0]
         brands = [r["franchise_brand"] for r in rows if r["franchise_brand"]]
-        regions = sorted({r["region"] for r in rows if r["region"]})
+        regions = sorted({r["region"] for r in rows if r["region"]}
+                         | {x for r in rows for x in r.get("premises_regions", "").split("; ") if x})
         fetched = sum(1 for r in rows if r["details_fetched"])
         ops.append({
             "operator": abr_info.get("entity_name") or names.most_common(1)[0][0],
             "abn": abn,
-            "entity_type": abr_info.get("entity_type") or ("Company" if rows[0]["_company"] else "Individual/Partnership"),
+            "acn": acn,
+            "entity_type": abr_info.get("entity_type") or
+                           ("Company" if rows[0]["_company"] or acn else "Individual/Partnership"),
             "entity_name": abr_info.get("entity_name", ""),
             "gst": abr_info.get("gst", ""),
             "n_licences": len(rows),
@@ -1048,7 +1142,7 @@ def build_operators(licences: list[dict], abr: dict[str, dict]) -> list[dict]:
             "regions": "; ".join(regions),
             "segment": seg,
             "franchise_brand": Counter(brands).most_common(1)[0][0] if brands else "",
-            "is_sole_trader": not rows[0]["_company"] and not abn and
+            "is_sole_trader": not rows[0]["_company"] and not acn and
                               abr_info.get("entity_type_code", "") in ("", "IND"),
             "is_dealer_group": any(r["_dealer"] for r in rows),
             "details_coverage": f"{fetched}/{len(rows)}",
@@ -1059,7 +1153,7 @@ def build_operators(licences: list[dict], abr: dict[str, dict]) -> list[dict]:
     return ops
 
 
-SHORTLIST_FIELDS = ["block", "operator", "abn", "entity_type", "n_licences", "n_premises_total",
+SHORTLIST_FIELDS = ["block", "operator", "abn", "acn", "entity_type", "n_licences", "n_premises_total",
                     "premises", "regions", "segment", "details_coverage", "licence_numbers"]
 
 

@@ -42,16 +42,30 @@ class FakeClock:
         self.t += s
 
 
-def detail_body(lid, abn="11222333444", premises=1, classes=("Mechanical repairer",), pc="2170"):
+def detail_body(lid, abn="11222333444", premises=1, classes=("Motor Vehicle Repairer Licence",),
+                suburb="LIVERPOOL", conditions=()):
+    """Shaped like the real /details response: postal address blank, premises carry a suburb
+    but no postcode, businessName null, classes usually just the generic licence type."""
     return {
-        "licenceDetail": {"licenceID": lid, "licenceeABN": abn, "licenceeACN": "",
-                          "address": f"{premises} Smith St, LIVERPOOL NSW {pc}", "startDate": "01/01/2015"},
-        "licenceClasses": [{"className": c, "isActive": "true"} for c in classes],
-        "premises": [{"businessName": f"Shop {i}", "businessAddress": f"{i} Main Rd, LIVERPOOL NSW {pc}"}
-                     for i in range(1, premises + 1)],
+        "licenceDetail": {"addressType": "Postal", "address": "", "licensee": "X", "licenceeABN": abn,
+                          "licenceeACN": (abn[2:] if len(abn) == 11 else f"ACN{abn}"), "startDate": "01/01/2015", "expiryDate": "01/01/2027"},
+        "licenceClasses": [{"className": c, "isActive": "True", "description": c} for c in classes],
+        "conditions": [{"description": c, "isActive": "True"} for c in conditions],
+        "premises": [{"type": "Fixed", "businessName": None, "businessAddress": f"{i} Main Rd {suburb}",
+                      "endDate": None} for i in range(1, premises + 1)]
+                    + [{"type": "Fixed", "businessName": None, "businessAddress": None, "endDate": None}],
         "businessNames": [{"businessName": "Acme Auto"}],
         "complianceActions": {"publicWarningsCount": 0, "disciplinaryActions": []},
     }
+
+
+POSTCODE_FIXTURE = """postcode,locality,state,type,sa4name,lgaregion
+2170,LIVERPOOL,NSW,Delivery Area,Sydney - South West,Liverpool
+2170,LIVERPOOL,NSW,Post Office Boxes,Sydney - South West,Liverpool
+2500,WOLLONGONG,NSW,Delivery Area,Illawarra,Wollongong
+2765,MARSDEN PARK,NSW,Delivery Area,Sydney - Blacktown,Blacktown
+3000,MELBOURNE,VIC,Delivery Area,Melbourne - Inner,Melbourne
+"""
 
 
 class StubHTTP:
@@ -95,8 +109,9 @@ class TempData(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.d = Path(self.tmp.name)
         os.environ["DATA_DIR"] = str(self.d)
-        os.environ["POSTCODES_CSV"] = str(self.d / "nope.csv")  # keep build offline/fast
-        pl._POSTCODES = None
+        (self.d / "postcodes.csv").write_text(POSTCODE_FIXTURE)   # tiny table keeps build fast
+        os.environ["POSTCODES_CSV"] = str(self.d / "postcodes.csv")
+        pl._GEO = None
         self.addCleanup(self.tmp.cleanup)
 
     def write_seed(self, rows):
@@ -360,33 +375,55 @@ class BuildTests(TempData):
             "ID-2": {"licence_id": "ID-2", "raw": detail_body("ID-2", abn="111", premises=1)},  # Shop 1 dup address
             "ID-5": {"licence_id": "ID-5", "raw": detail_body("ID-5", abn="555", premises=1,
                                                               classes=("Panel beater", "Vehicle painter"))},
+            "ID-3": {"licence_id": "ID-3", "raw": detail_body("ID-3", abn="333", premises=1, suburb="WOLLONGONG",
+                                                              conditions=("Restricted to carrying on a business "
+                                                                          "from a mobile workshop",))},
         }
         queue = pl.read_csv(self.d / "queue.csv")
-        lic = pl.enrich_licences(rows, queue, details, postcodes={})
+        lic = pl.enrich_licences(rows, queue, details)
         by = {r["licence_number"]: r for r in lic}
-        self.assertEqual(by["MVRL1"]["n_premises"], 2)
+        self.assertEqual(by["MVRL1"]["n_premises"], 2)                # the null-address premises is dropped
         self.assertEqual(by["MVRL1"]["abn"], "111")
+        self.assertEqual(by["MVRL1"]["acn"], "ACN111")
         self.assertTrue(by["MVRL1"]["details_fetched"])
-        self.assertFalse(by["MVRL3"]["details_fetched"])
-        self.assertEqual(by["MVRL1"]["segment_rule"], "service")      # from classes
-        self.assertEqual(by["MVRL5"]["segment_rule"], "body")         # classes beat the name
-        self.assertEqual(by["MVRL3"]["segment_rule"], "service")      # name only
-        self.assertEqual(by["MVRL1"]["postcode"], "2170")             # re-derived from details
-        ops = pl.build_operators(lic, {})
+        self.assertFalse(by["MVRL4"]["details_fetched"])
+        self.assertEqual(by["MVRL1"]["segment_rule"], "service")      # generic class -> name flags
+        self.assertEqual(by["MVRL5"]["segment_rule"], "body")         # specific classes beat the name
+        self.assertEqual(by["MVRL3"]["segment_rule"], "mobile")       # condition beats the name
+        self.assertEqual(by["MVRL4"]["segment_rule"], "service")      # name only
+        self.assertEqual(by["MVRL1"]["postcode"], "2170")             # suburb -> postcode from premises
+        self.assertEqual(by["MVRL1"]["region"], "Sydney")
+        self.assertEqual(by["MVRL3"]["region"], "Illawarra")
+        self.assertEqual(by["MVRL4"]["region"], "Sydney")             # seed region kept when no details
+        self.assertEqual(by["MVRL1"]["licence_classes"], "Motor Vehicle Repairer Licence")
+        self.assertEqual(by["MVRL1"]["acn"], "ACN111")
+        self.assertEqual(by["MVRL1"]["operator_key"], "acn:ACN111")        # ACN beats ABN
+        self.assertEqual(by["MVRL4"]["operator_key"], "acn:ACN333")        # unfetched licence adopts
+        ops = pl.build_operators(lic, {})                                   # its namesake's entity id
         byop = {o["operator_key"]: o for o in ops}
-        alpha = byop["abn:111"]
+        alpha = byop["acn:ACN111"]
         self.assertEqual(alpha["n_licences"], 2)
         self.assertEqual(alpha["n_premises_total"], 2)                # 3 premises, 2 distinct addresses
+        self.assertEqual(alpha["abn"], "111")
         self.assertEqual(alpha["segment"], "service")
-        beta = byop["name:BETA MECHANICAL"]
+        beta = byop["acn:ACN333"]
         self.assertEqual(beta["n_licences"], 2)
-        self.assertEqual(beta["n_premises_total"], 2)                 # unknown sites count 1 each
-        self.assertEqual(ops[0]["operator_key"] in ("abn:111", "name:BETA MECHANICAL"), True)
+        self.assertEqual(beta["n_premises_total"], 2)                 # 1 known + 1 unknown site
+        self.assertEqual(beta["segment"], "mobile")                   # tie -> first seen (MVRL3)
+        self.assertIn("Illawarra", beta["regions"])
+        self.assertNotIn("name:BETA MECHANICAL", byop)
         short = pl.build_shortlist(ops)
         blocks = {s["operator_key"]: s["block"] for s in short}
-        self.assertEqual(blocks["abn:111"], "multi_site")
-        self.assertEqual(blocks["name:BETA MECHANICAL"], "multi_site")
-        self.assertNotIn("abn:555", blocks)                           # body shop excluded
+        self.assertEqual(blocks["acn:ACN111"], "multi_site")
+        self.assertNotIn("acn:ACN555", blocks)                        # body shop excluded
+        self.assertNotIn("acn:ACN333", blocks)                        # mobile excluded
+
+    def test_entity_key(self):
+        self.assertEqual(pl.entity_key({"acn": "135710940", "abn": ""}), "acn:135710940")
+        self.assertEqual(pl.entity_key({"acn": "", "abn": "53000158725"}), "acn:000158725")
+        self.assertEqual(pl.entity_key({"acn": "000158725", "abn": "53000158725"}), "acn:000158725")
+        self.assertEqual(pl.entity_key({"acn": "", "abn": "12345"}), "abn:12345")
+        self.assertEqual(pl.entity_key({}), "")
 
     def test_segment_from_classes(self):
         self.assertEqual(pl.segment_from_classes(["Mechanical repairer", "Panel beater"]), "service")
@@ -394,6 +431,18 @@ class BuildTests(TempData):
         self.assertEqual(pl.segment_from_classes(["Auto electrician"]), "specialist")
         self.assertEqual(pl.segment_from_classes(["Tyre fitter"]), "specialist")
         self.assertEqual(pl.segment_from_classes([]), "")
+        self.assertEqual(pl.segment_from_classes(["Motor Vehicle Repairer Licence"]), "")   # generic
+        self.assertEqual(pl.segment_from_classes(["Motor Vehicle Repairer's Licence", "Tyre fitter"]),
+                         "specialist")
+
+    def test_postcode_from_premises(self):
+        loc = {"LIVERPOOL": "2170", "MARSDEN PARK": "2765", "PARK": "9999", "WOLLONGONG": "2500"}
+        self.assertEqual(pl.postcode_from_premises("11 Waltham Street LIVERPOOL", loc), "2170")
+        self.assertEqual(pl.postcode_from_premises("14 DARLING ST MARSDEN PARK", loc), "2765")  # longest wins
+        self.assertEqual(pl.postcode_from_premises("Cnr Bourke & Flinders Sts WOLLONGONG, NSW", loc), "2500")
+        self.assertEqual(pl.postcode_from_premises("1 Smith St LIVERPOOL NSW 2170", loc), "2170")
+        self.assertEqual(pl.postcode_from_premises("1 Smith St NOWHERE", loc), "")
+        self.assertEqual(pl.postcode_from_premises("", loc), "")
 
     def test_franchise_and_dealer_excluded_from_shortlist(self):
         rows = self.write_seed([
@@ -404,7 +453,7 @@ class BuildTests(TempData):
             seed_row(5, "Solo Service Centre Pty Ltd"),
             seed_row(6, "Jane Doe", business_names="Jane's Mechanical"),
         ])
-        lic = pl.enrich_licences(rows, pl.read_csv(self.d / "queue.csv"), {}, postcodes={})
+        lic = pl.enrich_licences(rows, pl.read_csv(self.d / "queue.csv"), {})
         ops = pl.build_operators(lic, {})
         short = pl.build_shortlist(ops)
         keys = {s["operator_key"]: s["block"] for s in short}
