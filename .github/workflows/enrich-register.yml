@@ -13,6 +13,10 @@ on:
         description: 'Set to 1 to skip API calls and pushes'
         default: '0'
         required: false
+      reset_quota:
+        description: 'Set to 1 after a quota increase to clear quota_exhausted_until and resume now'
+        default: '0'
+        required: false
 
 permissions:
   contents: write
@@ -29,9 +33,11 @@ jobs:
     env:
       NSW_API_KEY: ${{ secrets.NSW_API_KEY }}
       NSW_API_SECRET: ${{ secrets.NSW_API_SECRET }}
+      NSW_API_KEYS: ${{ secrets.NSW_API_KEYS }}
       ABR_GUID: ${{ secrets.ABR_GUID }}
       RUN_SECONDS: ${{ inputs.run_seconds || '3000' }}
       DRY_RUN: ${{ inputs.dry_run || '0' }}
+      RESET_QUOTA: ${{ inputs.reset_quota || '0' }}
       MONTHLY_CALL_BUDGET: ${{ vars.MONTHLY_CALL_BUDGET || '0' }}
     steps:
       - uses: actions/checkout@v4
@@ -65,8 +71,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if [ "$(python3 -c "import json;print(json.load(open('data/status.json')).get('complete'))")" = "True" ]; then
-            echo "queue empty -> disabling enrich.yml"
-            gh workflow disable enrich.yml --repo "$GITHUB_REPOSITORY"
+            wf="${GITHUB_WORKFLOW_REF#*/.github/workflows/}"; wf="${wf%@*}"
+            echo "queue empty -> disabling $wf"
+            gh workflow disable "$wf" --repo "$GITHUB_REPOSITORY"
           else
             echo "not complete; workflow stays enabled"
           fi

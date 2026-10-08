@@ -19,6 +19,7 @@ Environment (see .env.example)
   RUN_DEADLINE                   unix epoch; overrides RUN_SECONDS when set
   MONTHLY_CALL_BUDGET=0          0 = no artificial cap, otherwise stop at N calls/month
   DRY_RUN=1                      no API calls, no git pushes
+  RESET_QUOTA=1                  clear quota_exhausted_until first (after a quota increase)
   DATA_DIR=data                  where state lives
 
 Stdlib only, Python 3.10+.
@@ -388,6 +389,7 @@ def franchise_brand(text: str) -> str:
 DEFAULT_RPM = 60.0
 MIN_RPM = 2.0
 MAX_RPM = 600.0
+MAX_CONSECUTIVE_ERRORS = 10   # stop the run rather than burn the queue on a systemic 4xx
 
 
 def load_budget(path: Path) -> dict:
@@ -405,6 +407,50 @@ def load_budget(path: Path) -> dict:
 def quota_exhausted_now(budget: dict, ts: dt.datetime | None = None) -> bool:
     until = parse_iso(budget.get("quota_exhausted_until"))
     return bool(until and until > (ts or now_utc()))
+
+
+# ---- credentials: one api.nsw account or several, rotated as each one's quota runs out ---- #
+
+def key_id(key: str) -> str:
+    """Short, non-secret handle for a key, used in budget.json and logs."""
+    return f"{key[:4]}…{key[-4:]}" if len(key) > 8 else key
+
+
+def parse_credentials(env: dict | None = None) -> list[tuple[str, str]]:
+    """NSW_API_KEY/NSW_API_SECRET (one pair) plus NSW_API_KEYS: 'key:secret' pairs separated
+    by newlines or ';' (also accepts ',' or whitespace between key and secret).  Order kept,
+    duplicates dropped."""
+    env = os.environ if env is None else env
+    creds: list[tuple[str, str]] = []
+    k, s = (env.get("NSW_API_KEY") or "").strip(), (env.get("NSW_API_SECRET") or "").strip()
+    if k and s:
+        creds.append((k, s))
+    for chunk in re.split(r"[\n;]+", env.get("NSW_API_KEYS") or ""):
+        chunk = chunk.strip()
+        if not chunk or chunk.startswith("#"):
+            continue
+        parts = re.split(r"[:,\s]+", chunk, maxsplit=1)
+        if len(parts) == 2 and all(parts):
+            creds.append((parts[0].strip(), parts[1].strip()))
+    seen, out = set(), []
+    for c in creds:
+        if c[0] not in seen:
+            seen.add(c[0])
+            out.append(c)
+    return out
+
+
+def keys_exhausted(budget: dict, creds: list[tuple[str, str]], ts: dt.datetime | None = None) -> bool:
+    """True when nothing can be fetched: every configured key is known to be spent.
+    A key id that budget.json has never seen counts as fresh, so adding an account resumes
+    fetching on the next run.  Legacy state (no per-key info, one key) falls back to the
+    global quota_exhausted_until."""
+    if not quota_exhausted_now(budget, ts):
+        return False
+    known = {kid: st for kid, st in (budget.get("keys") or {}).items() if st.get("quota_exhausted_until")}
+    if not known:
+        return len(creds) <= 1
+    return all(quota_exhausted_now(known.get(key_id(k), {}), ts) for k, _ in creds)
 
 
 # =========================================================================== #
@@ -448,17 +494,73 @@ class AdaptiveClient:
     `http`, `sleep` and `clock` are injectable so tests can run without a network.
     """
 
-    def __init__(self, key: str, secret: str, rate: AdaptiveRate, *,
+    def __init__(self, creds: list[tuple[str, str]] | str, rate: AdaptiveRate | str, *args,
+                 key_state: dict | None = None,
                  http=http_get, sleep=time.sleep, clock=time.time, verbose=True):
-        self.key, self.secret, self.rate = key, secret, rate
+        if isinstance(creds, str):            # AdaptiveClient(key, secret, rate, ...)
+            creds, rate = [(creds, rate)], args[0]
+        self.creds: list[tuple[str, str]] = list(creds)
+        if not self.creds:
+            raise ValueError("no credentials")
+        self.rate = rate
+        self.key_state = key_state if key_state is not None else {}   # key_id -> {...}, persisted
         self.http, self.sleep, self.clock = http, sleep, clock
         self.verbose = verbose
         self.calls = 0              # every HTTP request made (incl. token + throttled ones)
         self.throttles = 0          # number of 429s seen
+        self.rotations = 0
         self._token = None
         self._token_time = 0.0
         self._last = 0.0
         self.hold_until = 0.0
+        self._auth_failed: set[int] = set()
+        self.idx = self._first_usable()
+
+    # -- credentials ------------------------------------------------------- #
+    @property
+    def key(self) -> str:
+        return self.creds[self.idx][0]
+
+    @property
+    def secret(self) -> str:
+        return self.creds[self.idx][1]
+
+    def _state(self, i: int) -> dict:
+        return self.key_state.setdefault(key_id(self.creds[i][0]), {})
+
+    def _usable(self, i: int) -> bool:
+        st = self.key_state.get(key_id(self.creds[i][0]), {})
+        return i not in self._auth_failed and not quota_exhausted_now(st)
+
+    def _first_usable(self) -> int:
+        for i in range(len(self.creds)):
+            if self._usable(i):
+                return i
+        raise QuotaExhausted(f"all {len(self.creds)} keys are spent for this month")
+
+    def _rotate(self, reason: str, detail: str = "") -> None:
+        """Mark the current key spent (or broken) and move to the next usable one."""
+        st = self._state(self.idx)
+        if reason == "quota":
+            st["quota_exhausted_until"] = iso(first_of_next_month())   # wall clock, not the rate clock
+            st["quota_reason"] = detail[:200]
+        else:
+            self._auth_failed.add(self.idx)
+            st["auth_failed_at"] = iso()
+        if self.verbose:
+            log(f"key {key_id(self.key)} {reason}: {detail[:120]}")
+        self._token = None
+        self.rotations += 1
+        nxt = next((i for i in range(len(self.creds)) if self._usable(i)), None)
+        if nxt is None:
+            spent = sum(1 for i in range(len(self.creds)) if quota_exhausted_now(self._state(i)))
+            if spent:
+                raise QuotaExhausted(f"all {len(self.creds)} keys exhausted "
+                                     f"({spent} quota, {len(self._auth_failed)} auth failures)")
+            raise RuntimeError(f"no working credentials ({len(self._auth_failed)} auth failures)")
+        self.idx = nxt
+        if self.verbose:
+            log(f"-> switching to key {key_id(self.key)} ({self.idx + 1}/{len(self.creds)})")
 
     # -- plumbing ---------------------------------------------------------- #
     def _wait(self) -> None:
@@ -469,21 +571,25 @@ class AdaptiveClient:
         self._last = self.clock()
 
     def token(self) -> str:
-        if self._token and self.clock() - self._token_time < 11 * 3600:
-            return self._token
-        basic = base64.b64encode(f"{self.key}:{self.secret}".encode()).decode()
-        self._wait()
-        r = self.http(TOKEN_URL, params={"grant_type": "client_credentials"},
-                      headers={"Authorization": f"Basic {basic}"}, timeout=30)
-        self.calls += 1
-        if r.status_code == 429:
-            raise QuotaExhausted(f"429 on token endpoint: {r.text[:200]}") \
-                if QUOTA_BODY_RE.search(r.text or "") else RuntimeError("429 on token endpoint")
-        if r.status_code != 200:
-            raise RuntimeError(f"Auth failed ({r.status_code}): {r.text[:300]}")
-        self._token = r.json()["access_token"]
-        self._token_time = self.clock()
-        return self._token
+        while True:
+            if self._token and self.clock() - self._token_time < 11 * 3600:
+                return self._token
+            basic = base64.b64encode(f"{self.key}:{self.secret}".encode()).decode()
+            self._wait()
+            r = self.http(TOKEN_URL, params={"grant_type": "client_credentials"},
+                          headers={"Authorization": f"Basic {basic}"}, timeout=30)
+            self.calls += 1
+            self._state(self.idx)["calls"] = self._state(self.idx).get("calls", 0) + 1
+            if r.status_code == 200:
+                self._token = r.json()["access_token"]
+                self._token_time = self.clock()
+                return self._token
+            if r.status_code >= 400 and QUOTA_BODY_RE.search(r.text or ""):
+                self._rotate("quota", f"HTTP {r.status_code} on token endpoint: {r.text}")
+                continue
+            if r.status_code == 429:
+                raise RuntimeError("429 on token endpoint")
+            self._rotate("auth", f"HTTP {r.status_code}: {r.text}")
 
     def get(self, url: str, params: dict) -> tuple[int, object]:
         """Return (status, parsed_body).  Raises QuotaExhausted when the month is spent.
@@ -504,12 +610,20 @@ class AdaptiveClient:
                 self.sleep(10 * server_errors)
                 continue
             self.calls += 1
+            self._state(self.idx)["calls"] = self._state(self.idx).get("calls", 0) + 1
             if r.status_code == 200:
                 self.rate.on_success()
                 try:
                     return 200, r.json()
                 except ValueError:
                     return 200, {}
+            if r.status_code >= 400 and QUOTA_BODY_RE.search(r.text or ""):
+                # api.nsw signals a spent monthly quota with HTTP 408 (not 429) and the body
+                # "Quota limit of 2500 per 1 month exceeded." -- treat any status the same way:
+                # mark this key spent, switch to the next one and retry the same request.
+                self._rotate("quota", f"HTTP {r.status_code}: {r.text or ''}")
+                throttle_streak = 0
+                continue
             if r.status_code == 401:
                 self._token = None
                 server_errors += 1
@@ -519,8 +633,6 @@ class AdaptiveClient:
             if r.status_code == 429:
                 self.throttles += 1
                 body = r.text or ""
-                if QUOTA_BODY_RE.search(body):
-                    raise QuotaExhausted(f"429 body mentions quota: {body[:200]}")
                 if throttle_streak >= len(THROTTLE_HOLDS):
                     raise QuotaExhausted(
                         f"429 persisted through {throttle_streak} backoffs "
@@ -656,6 +768,20 @@ def write_status(d: Path, *, remaining: int, budget: dict, extra: dict | None = 
     return status
 
 
+def is_quota_error(rec: dict) -> bool:
+    """A details.jsonl record that was rejected for quota (should be retried, not treated as done)."""
+    if not rec.get("error"):
+        return False
+    raw = rec.get("raw")
+    text = json.dumps(raw) if isinstance(raw, (dict, list)) else str(raw or "")
+    return bool(QUOTA_BODY_RE.search(text) or QUOTA_BODY_RE.search(str(rec.get("error", ""))))
+
+
+def fetched_ids(details: dict[str, dict]) -> set[str]:
+    """licence_ids that need no further fetching: successes and genuine per-licence errors."""
+    return {k for k, v in details.items() if not is_quota_error(v)}
+
+
 def ensure_queue(d: Path) -> list[dict]:
     q = d / "queue.csv"
     if not q.exists():
@@ -672,13 +798,36 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
     budget = load_budget(budget_path)
     queue = ensure_queue(d)
     details_path = d / "details.jsonl"
-    done = set(read_jsonl(details_path, "licence_id"))
+    done = fetched_ids(read_jsonl(details_path, "licence_id"))
     todo = [q for q in queue if q["licence_id"] not in done]
     log(f"queue {len(queue)}, fetched {len(done)}, remaining {len(todo)}")
 
-    if quota_exhausted_now(budget):
+    if env_flag("RESET_QUOTA") and budget.get("quota_exhausted_until"):
+        log(f"RESET_QUOTA set -> clearing quota_exhausted_until={budget['quota_exhausted_until']}")
+        budget["quota_exhausted_until"] = None
+        budget.pop("quota_reason", None)
+        write_json(budget_path, budget)
+    if client is not None:
+        # per-key quota state lives in budget.json; the client reads and updates it in place
+        for kid, st in (budget.get("keys") or {}).items():
+            client.key_state.setdefault(kid, {}).update({k: v for k, v in st.items()
+                                                         if k not in client.key_state.get(kid, {})})
+        budget["keys"] = client.key_state
+        paused = keys_exhausted(budget, client.creds)
+        if not paused:
+            try:
+                client.idx = client._first_usable()
+            except QuotaExhausted:
+                paused = True
+    else:
+        paused = quota_exhausted_now(budget)
+    if paused:
         log(f"quota exhausted until {budget['quota_exhausted_until']} -> nothing to do this run")
         return write_status(d, remaining=len(todo), budget=budget, extra={"reason": "quota_exhausted"})
+    if budget.get("quota_exhausted_until"):
+        log("a fresh key is available -> clearing the global quota pause")
+        budget["quota_exhausted_until"] = None
+        budget.pop("quota_reason", None)
     if not todo:
         log("queue empty -> complete")
         return write_status(d, remaining=0, budget=budget)
@@ -687,6 +836,7 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
         return write_status(d, remaining=len(todo), budget=budget, extra={"reason": "dry_run"})
 
     fetched = skipped = 0
+    consecutive_errors = 0
     since_checkpoint = 0
     reason = "deadline"
     t0 = clock()
@@ -721,14 +871,21 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
             if status == 200:
                 rec["raw"] = body
                 fetched += 1
+                consecutive_errors = 0
             else:
                 rec["error"] = f"HTTP {status}"
                 rec["raw"] = body if isinstance(body, dict) else {"body": str(body)[:300]}
                 skipped += 1
+                consecutive_errors += 1
                 log(f"{q['licence_number']} ({q['licence_id']}): HTTP {status} -> skipped")
                 if status >= 500 or status in (401, 599):
                     reason = f"http_{status}"
-                    break  # persistent server/auth trouble: let the next run retry
+                    break  # persistent server/auth trouble: let the next run retry (not recorded)
+                if consecutive_errors >= MAX_CONSECUTIVE_ERRORS:
+                    reason = f"http_{status}_x{consecutive_errors}"
+                    log(f"{consecutive_errors} consecutive HTTP errors -> stopping this run; "
+                        f"the last one is not recorded so it is retried")
+                    break
             append_jsonl(details_path, rec)
             remaining -= 1
             since_checkpoint += 1
@@ -772,19 +929,33 @@ def cmd_fetch_details(args) -> int:
     d = data_dir()
     dry = env_flag("DRY_RUN")
     budget = load_budget(d / "budget.json")
+    if env_flag("RESET_QUOTA") and budget.get("quota_exhausted_until"):
+        log(f"RESET_QUOTA set -> clearing quota_exhausted_until={budget['quota_exhausted_until']}")
+        budget["quota_exhausted_until"] = None
+        budget.pop("quota_reason", None)
+        write_json(d / "budget.json", budget)
     if quota_exhausted_now(budget):   # fast path: no credentials, no API, <20s
-        todo = len(ensure_queue(d)) - len(read_jsonl(d / "details.jsonl", "licence_id"))
+        todo = len(ensure_queue(d)) - len(fetched_ids(read_jsonl(d / "details.jsonl", "licence_id")))
         log(f"quota exhausted until {budget['quota_exhausted_until']}; exiting without touching the API")
         write_status(d, remaining=max(todo, 0), budget=budget, extra={"reason": "quota_exhausted"})
         return 0
     client = None
     if not dry:
-        key, secret = os.environ.get("NSW_API_KEY", ""), os.environ.get("NSW_API_SECRET", "")
-        if not key or not secret:
-            print("ERROR: NSW_API_KEY / NSW_API_SECRET not set (GitHub Secrets in Actions, .env locally)",
+        creds = parse_credentials()
+        if not creds:
+            print("ERROR: no api.nsw credentials: set NSW_API_KEY + NSW_API_SECRET, or NSW_API_KEYS "
+                  "with one 'key:secret' per line (GitHub Secrets in Actions, .env locally)",
                   file=sys.stderr)
             return 2
-        client = AdaptiveClient(key, secret, AdaptiveRate(budget.get("last_rate", DEFAULT_RPM)))
+        if keys_exhausted(budget, creds):
+            log(f"all {len(creds)} configured keys are spent until {budget['quota_exhausted_until']}; "
+                "exiting without touching the API")
+            todo = len(ensure_queue(d)) - len(fetched_ids(read_jsonl(d / "details.jsonl", "licence_id")))
+            write_status(d, remaining=max(todo, 0), budget=budget, extra={"reason": "quota_exhausted"})
+            return 0
+        log(f"{len(creds)} api.nsw key(s) configured: " + ", ".join(key_id(k) for k, _ in creds))
+        client = AdaptiveClient(creds, AdaptiveRate(budget.get("last_rate", DEFAULT_RPM)),
+                                key_state=budget.setdefault("keys", {}))
     checkpoint = (lambda msg: commit_and_push(msg)) if should_push() else None
     fetch_details(d, client, deadline=run_deadline(), checkpoint=checkpoint,
                   monthly_budget=env_int("MONTHLY_CALL_BUDGET", 0), dry_run=dry)
@@ -1194,6 +1365,9 @@ def build_summary(licences: list[dict], ops: list[dict], shortlist: list[dict], 
                   if remaining else "done"],
                  ["calls this month", budget.get("calls_used_this_month", 0)],
                  ["quota state", quota_state],
+                 ["api keys seen", "; ".join(
+                     f"{kid}: {'spent' if quota_exhausted_now(st) else 'ok'} ({st.get('calls', 0)} calls)"
+                     for kid, st in (budget.get("keys") or {}).items()) or "none recorded yet"],
                  ["complete", status.get("complete", False)],
                  ["last run reason", status.get("reason", "")],
              ]), ""]
@@ -1231,7 +1405,8 @@ def cmd_build(args) -> int:
     out = d / "out"
     seed = read_csv(d / "register_summary.csv")
     queue = ensure_queue(d)
-    details = read_jsonl(d / "details.jsonl", "licence_id")
+    details = {k: v for k, v in read_jsonl(d / "details.jsonl", "licence_id").items()
+               if not is_quota_error(v)}
     abr = read_jsonl(d / "abr.jsonl", "abn")
     budget = load_budget(d / "budget.json")
     status = read_json(d / "status.json", {})
@@ -1242,7 +1417,6 @@ def cmd_build(args) -> int:
     shortlist = build_shortlist(ops)
     write_csv(out / "shortlist.csv", shortlist, SHORTLIST_FIELDS)
     if not status:
-        fetched_ids = {k for k, v in details.items() if not v.get("error")}
         status = {"remaining": len([q for q in queue if q["licence_id"] not in details]),
                   "complete": all(q["licence_id"] in details for q in queue)}
     (out / "summary.md").write_text(build_summary(licences, ops, shortlist, status, budget, len(queue)),
