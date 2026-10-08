@@ -66,8 +66,10 @@ def log(msg: str) -> None:
 # discover: drive the browser once, capture the backend call
 # --------------------------------------------------------------------------- #
 
-def looks_like_details(body: str, licence_number: str) -> bool:
-    return licence_number in body and sum(m in body for m in MARKERS) >= 2
+def looks_like_details(body: str, licence_number: str, licence_id: str | None = None) -> bool:
+    """A response that carries this licence's data (by number or id) and licence-ish keys."""
+    mentions = licence_number in body or (bool(licence_id) and licence_id in body)
+    return mentions and (sum(m in body for m in MARKERS) >= 2 or has_detail_markers(body))
 
 
 def is_search_response(body: str) -> bool:
@@ -132,17 +134,18 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
     def on_response(resp):
         try:
             ct = resp.headers.get("content-type", "")
-            if "json" not in ct and "javascript" not in ct and "text" not in ct:
+            rtype = resp.request.resource_type
+            if rtype in ("image", "font", "stylesheet", "media"):
                 return
             body = resp.text()
         except Exception:
             return
-        if debug_dir and ("json" in ct or resp.request.resource_type in ("xhr", "fetch")):
+        if debug_dir and ("json" in ct or rtype in ("xhr", "fetch") or "/api" in resp.url):
             # every data-ish response, so the right call can be found by hand if the markers miss
             pl.append_jsonl(debug_dir / "responses.jsonl", {
-                "url": resp.url, "status": resp.status, "method": resp.request.method,
-                "content_type": ct, "post_data": resp.request.post_data, "body_head": body[:600]})
-        if looks_like_details(body, licence_number):
+                "url": resp.url, "status": resp.status, "method": resp.request.method, "type": rtype,
+                "content_type": ct, "post_data": resp.request.post_data, "body_head": body[:400]})
+        if looks_like_details(body, licence_number, licence_id):
             req = resp.request
             captured.append({
                 "url": req.url, "method": req.method,
@@ -177,9 +180,16 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
         box.fill(licence_number)
         box.press("Enter")
         settle(page)
+        # the results page fires its search XHR after navigation; wait for cards to render
+        try:
+            page.wait_for_selector(f".nsw-result-card, [class*='result-card'], a:has-text('{licence_number}')",
+                                   timeout=20_000)
+        except Exception:
+            log("no result card appeared within 20s")
+        page.wait_for_timeout(1500)
         snap(page, "after-search")
         results_url = page.url
-        log(f"after search: {results_url}")
+        log(f"after search: {results_url}; {len(captured)} licence response(s) captured so far")
 
         def have_details() -> bool:
             return any(has_detail_markers(c["body"]) and not is_search_response(c["body"]) for c in captured)
@@ -211,8 +221,10 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
                 try:
                     page.goto(url, timeout=timeout_s * 1000)
                     settle(page)
+                    page.wait_for_timeout(4000)
                     snap(page, "direct-url")
-                    log(f"direct url {url} -> {page.url}")
+                    log(f"direct url {url} -> {page.url}; title {page.title()!r}; "
+                        f"{len(captured)} licence response(s) captured so far")
                 except Exception as exc:
                     log(f"direct url {url} failed: {str(exc)[:120]}")
                 if have_details():
@@ -301,24 +313,8 @@ def todo_licences(limit: int = 0) -> list[dict]:
 
 
 def wrap_search_result(obj, licence_number: str, licence_id: str | None = None):
-    """Turn a search response into a details-shaped record for the licence.  The search row has
-    ABN/ACN, licensee and the registered address with postcode, which flatten() reads from
-    licenceDetail; the address doubles as the one known premises."""
-    rows = obj.get("results") if isinstance(obj, dict) else obj
-    if not isinstance(rows, list):
-        return None
-    for r in rows:
-        if not isinstance(r, dict):
-            continue
-        if r.get("licenceNumber") == licence_number or (licence_id and r.get("licenceId") == licence_id):
-            addr = r.get("address") or ""
-            return {"licenceDetail": dict(r, licenceeABN=r.get("ABN", ""), licenceeACN=r.get("ACN", ""),
-                                          startDate=r.get("granted", ""), expiryDate=r.get("expires", "")),
-                    "premises": [{"type": "Registered address", "businessName": None,
-                                  "businessAddress": addr, "endDate": None}] if addr else [],
-                    "licenceClasses": [], "conditions": [], "businessNames": [],
-                    "_site": "search"}
-    return None
+    """Search response -> details-shaped record for the licence (shared with pipeline.flatten)."""
+    return pl.normalise_site_search(obj, licence_number, licence_id or "")
 
 
 def parse_body(body: str, licence_number: str, mode: str = "details", licence_id: str | None = None):
@@ -327,7 +323,10 @@ def parse_body(body: str, licence_number: str, mode: str = "details", licence_id
         obj = json.loads(body)
     except json.JSONDecodeError:
         return None
-    if mode == "search":
+    rows = obj.get("results") if isinstance(obj, dict) else None
+    search_shaped = (isinstance(rows, list) and rows and isinstance(rows[0], dict)
+                     and "licenceNumber" in rows[0] and "licenceDetail" not in rows[0])
+    if mode == "search" or search_shaped:
         return wrap_search_result(obj, licence_number, licence_id)
     if isinstance(obj, dict):
         if "licenceDetail" in obj or "licenceDetails" in obj:

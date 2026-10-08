@@ -1066,11 +1066,41 @@ def postcode_from_address(addr: str) -> str:
     return m[-1] if m else ""
 
 
+def normalise_site_search(raw, licence_number: str = "", licence_id: str = ""):
+    """The licence-check website's search response ({"pagingInfo", "results": [...]}) carries ABN,
+    ACN, licensee and the registered address with postcode per row.  Reshape the row for this
+    licence into the details layout flatten() reads; the address doubles as the one known site."""
+    rows = raw.get("results") if isinstance(raw, dict) else raw
+    if not isinstance(rows, list):
+        return None
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        if (licence_number and r.get("licenceNumber") == licence_number) or \
+                (licence_id and r.get("licenceId") == licence_id) or \
+                (not licence_number and not licence_id and len(rows) == 1):
+            addr = r.get("address") or ""
+            return {"licenceDetail": dict(r, licenceeABN=r.get("ABN", ""), licenceeACN=r.get("ACN", ""),
+                                          startDate=r.get("granted", ""), expiryDate=r.get("expires", "")),
+                    "premises": [{"type": "Registered address", "businessName": None,
+                                  "businessAddress": addr, "endDate": None}] if addr else [],
+                    "licenceClasses": [], "conditions": [],
+                    "businessNames": [{"businessName": b} for b in (r.get("businessNameList") or [])],
+                    "_site": "search"}
+    return None
+
+
 def flatten(rec: dict) -> dict:
     """Flatten one details.jsonl record into the enrichment columns."""
     raw = rec.get("raw") if isinstance(rec.get("raw"), dict) else {}
     if rec.get("error") or not raw:
         return {}
+    rows = raw.get("results")
+    if isinstance(rows, list) and rows and isinstance(rows[0], dict) and "licenceNumber" in rows[0] \
+            and "licenceDetail" not in rows[0] and not _get(raw, "licenceDetail", "licenceDetails", default=None):
+        raw = normalise_site_search(raw, rec.get("licence_number", ""), rec.get("licence_id", "")) or {}
+        if not raw:
+            return {}
     ld = _get(raw, "licenceDetail", "licenceDetails", "licence", default={})
     classes = []
     for c in _get(raw, "licenceClasses", "classes", default=[]) or []:

@@ -54,8 +54,25 @@ jobs:
         id: discover
         continue-on-error: true
         run: |
+          set -o pipefail
           mkdir -p site_debug
           python3 scrape_site.py discover "$LICENCE" --debug-dir site_debug 2>&1 | tee site_debug/discover.log
+
+      - name: Every data response the browser saw (for reading in this log)
+        if: always()
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          p = "site_debug/responses.jsonl"
+          if not os.path.exists(p):
+              print("no responses.jsonl"); raise SystemExit
+          for line in open(p):
+              r = json.loads(line)
+              print(f"{r['status']} {r['method']} {r.get('type','')} {r['url'][:140]}")
+              if r.get("post_data"): print("   post:", r["post_data"][:200])
+              print("   body:", r["body_head"][:300].replace("\n", " "))
+          EOF
+          ls -la site_debug
 
       - name: Fetch a batch by direct replay (details endpoint if found, else search)
         id: fetch
