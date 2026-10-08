@@ -73,22 +73,50 @@ class SearchWrapTests(unittest.TestCase):
         self.assertIsNone(ss.parse_body(json.dumps({"results": []}), "MVRL24145", mode="search"))
 
     def test_component_data_details_shape_is_normalised(self):
-        raw = {"componentData": dict(SEARCH_ROW, premises=[
-            {"type": "Fixed", "businessName": None, "address": "11 Waltham Street ARTARMON NSW 2064"},
-            {"type": "Fixed", "address": {"addressLine1": "43 Hotham Pde", "suburb": "ARTARMON",
-                                          "state": "NSW", "postcode": "2064"}}],
-            conditions=[{"description": "Restricted to carrying on a business from a mobile workshop"}],
-            businessNameList=["Acme Auto"])}
-        flat = pl.flatten({"raw": raw, "licence_number": "MVRL24145", "licence_id": "1-XT3-1089"})
-        self.assertEqual(flat["abn"], "53000158725")
-        self.assertEqual(flat["acn"], "000158725")
+        """Shaped like the real .../licence/search/details/<type>/<id> response."""
+        cd = {"licenceId": "1-XT3-1522", "licenceNumber": "MVRL25148",
+              "licenceType": "Motor Vehicle Repairers Licence", "status": "Current",
+              "granted": "2001-06-05T00:00:00", "expires": "2027-06-05T00:00:00",
+              "licensee": "Gladetron Pty Ltd", "licenseeType": "Organisation",
+              "suburb": "CHATSWOOD", "state": "NSW", "postcode": "2067", "addressType": "Postal",
+              "ACN": "051890736", "formattedACN": "051 890 736",
+              "classes": [{"id": "", "name": "Motor Vehicle Repairer Licence", "code": "OFT-MV",
+                           "isActive": True}],
+              "associatedRoles": [
+                  {"name": "Licensee", "parties": [{"name": "Gladetron Pty Ltd", "role": "Licensee"}]},
+                  {"name": "Director", "parties": [{"name": "James Shih", "role": "Director"}]}],
+              "compliances": [],
+              "complianceSummary": [{"type": "Disciplinary Action", "count": 1},
+                                    {"type": "Public Warning", "count": 0}],
+              "locations": [{"type": "Fixed", "premises": [
+                  {"address": "7/171 Gibbes St CHATSWOOD", "suburb": "CHATSWOOD", "state": "NSW",
+                   "postcode": "2067", "type": "Fixed"},
+                  {"address": "2 Smith St WOLLONGONG", "suburb": "WOLLONGONG", "state": "NSW",
+                   "postcode": "2500", "type": "Fixed"}]}],
+              "history": [
+                  {"eventType": "Licence Renewed", "descriptions": [{"short": "1 Year"}]},
+                  {"eventType": "Class Approved", "descriptions": [{"short": "Motor Vehicle Repairer Licence"}]},
+                  {"eventType": "Class Lapsed", "descriptions": [{"short": "Motor Mechanic Fixed Workshop"}]},
+                  {"eventType": "Class Lapsed", "descriptions": [{"short": "Panel Beater"}]}]}
+        raw = {"componentData": cd}
+        flat = pl.flatten({"raw": raw, "licence_number": "MVRL25148", "licence_id": "1-XT3-1522"})
+        self.assertEqual(flat["abn"], "")
+        self.assertEqual(flat["acn"], "051890736")
+        self.assertEqual(pl.entity_key(flat), "acn:051890736")
         self.assertEqual(flat["n_premises"], 2)
-        self.assertIn("43 Hotham Pde ARTARMON NSW 2064", flat["premises"])
-        self.assertEqual(flat["details_postcode"], "2064")
-        self.assertEqual(flat["business_names_full"], "Acme Auto")
-        self.assertIn("mobile workshop", flat["conditions"])
-        self.assertEqual(pl.segment_from_conditions(flat["conditions_list"]), "mobile")
-        self.assertEqual(ss.parse_body(json.dumps(raw), "MVRL24145"), raw)   # stored as-is
+        self.assertIn("7/171 Gibbes St CHATSWOOD NSW 2067", flat["premises"])
+        self.assertEqual(flat["premises_postcodes"], ["2067", "2500"])
+        self.assertEqual(flat["details_postcode"], "2067")                 # premises beats postal
+        self.assertEqual(flat["licence_classes"], "Motor Vehicle Repairer Licence")
+        self.assertEqual(flat["historical_classes"], "Motor Mechanic Fixed Workshop; Panel Beater")
+        self.assertEqual(flat["directors"], "James Shih")
+        self.assertEqual(flat["disciplinary_actions"], "1")
+        self.assertEqual(flat["public_warnings"], "0")
+        self.assertEqual(flat["start_date"], "2001-06-05T00:00:00")
+        # the generic current class says nothing; the lapsed class history does
+        self.assertEqual(pl.segment_from_classes(flat["classes_list"]), "")
+        self.assertEqual(pl.segment_from_classes(flat["historical_classes_list"]), "service")
+        self.assertEqual(ss.parse_body(json.dumps(raw), "MVRL25148"), raw)   # stored as-is
 
     def test_response_classification(self):
         search = json.dumps({"pagingInfo": {}, "results": [SEARCH_ROW]})
@@ -187,6 +215,24 @@ class FetchHttpTests(TempData):
                                                                             licenceNumber="MVRL1")]}, "MVRL1")})
         self.assertEqual([q["licence_id"] for q in ss.todo_licences(0, "search")], ["ID-2"])
         self.assertEqual([q["licence_id"] for q in ss.todo_licences(0, "details")], ["ID-1", "ID-2"])
+
+    def test_deadline_and_checkpoints(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(30)])
+        t = [1000.0]
+
+        def clock():
+            return t[0]
+
+        def call(c, lid, num):
+            t[0] += 1.0
+            return 200, json.dumps(detail_body(lid))
+
+        commits = []
+        res = ss.fetch_http(self.CFG, rate=1000, limit=0, call=call, sleep=lambda s: None,
+                            deadline=1012.5, checkpoint_every=5, checkpoint=commits.append, clock=clock)
+        self.assertEqual(res["ok"], 13)                                   # stopped by the deadline
+        self.assertEqual(len(commits), 2)                                  # after 5 and 10
+        self.assertIn("5 this run", commits[0])
 
     def test_limit(self):
         self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(10)])

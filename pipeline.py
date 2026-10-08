@@ -1111,41 +1111,70 @@ def normalise_site_details(raw: dict):
                 return v
         return None
 
-    prem = pick("premises", "premisesList", "businessPremises", "premisesAddresses", "addresses",
-                "locations", "sites") or []
-    if isinstance(prem, dict):
-        prem = [prem]
+    # premises: "locations": [{"type": "Fixed", "premises": [{"address", "suburb", "state",
+    # "postcode", "startDate", "type"}]}] (plus a few flatter spellings, just in case)
+    prem_items: list = []
+    for loc in pick("locations", "sites") or []:
+        if isinstance(loc, dict):
+            inner = loc.get("premises") or loc.get("addresses") or []
+            prem_items += [dict(p, _loctype=loc.get("type")) for p in inner if isinstance(p, dict)]
+    for p in pick("premises", "premisesList", "businessPremises", "premisesAddresses", "addresses") or []:
+        prem_items.append(p)
     premises = []
-    for p in prem:
+    for p in prem_items:
         if isinstance(p, dict):
             addr = _get(p, "businessAddress", "fullAddress", "premisesAddress", "addressLine", "address",
                         default=None)
             if not addr:
                 addr = " ".join(str(_get(p, k)) for k in ("addressLine1", "addressLine2", "street",
                                                           "suburb", "state", "postcode") if _get(p, k))
-            premises.append({"type": _get(p, "type", "premisesType"),
+            addr = _addr_text(addr)
+            pc = str(_get(p, "postcode", "postCode")).strip()
+            if pc and pc not in addr:           # keep the postcode on the address so regions resolve
+                addr = f"{addr} {_get(p, 'state') or 'NSW'} {pc}".strip()
+            premises.append({"type": _get(p, "type", "premisesType") or p.get("_loctype") or "",
                              "businessName": _get(p, "businessName", "tradingName") or None,
-                             "businessAddress": _addr_text(addr),
+                             "businessAddress": addr,
                              "endDate": _get(p, "endDate", "ceasedDate", default=None) or None})
         elif isinstance(p, str) and p.strip():
             premises.append({"type": "", "businessName": None, "businessAddress": p.strip(), "endDate": None})
     ld = dict(cd)
-    ld.setdefault("licenceeABN", _get(cd, "ABN", "abn"))
-    ld.setdefault("licenceeACN", _get(cd, "ACN", "acn"))
+    ld.setdefault("licenceeABN", re.sub(r"\s+", "", str(_get(cd, "ABN", "abn", "formattedABN"))))
+    ld.setdefault("licenceeACN", re.sub(r"\s+", "", str(_get(cd, "ACN", "acn", "formattedACN"))))
     ld.setdefault("startDate", _get(cd, "granted", "startDate", "grantedDate"))
     ld.setdefault("expiryDate", _get(cd, "expires", "expiryDate", "expiresDate"))
     classes = pick("licenceClasses", "classes", "licenceClass", "categories") or []
     conds = pick("conditions", "licenceConditions") or []
     biz = pick("businessNames", "businessNameList", "tradingNames") or []
-    comp = pick("complianceActions", "compliance", "disciplinaryActions") or {}
+    # class history: the pre-2014 repair classes ("Motor Mechanic Fixed Workshop", "Panel Beater"...)
+    # survive only as Class Approved / Class Lapsed events, and they say what the shop does
+    hist_classes: list[str] = []
+    for ev in pick("history") or []:
+        if isinstance(ev, dict) and "class" in str(ev.get("eventType", "")).lower():
+            for dsc in ev.get("descriptions") or []:
+                name = (dsc.get("short") if isinstance(dsc, dict) else str(dsc)) or ""
+                if name and name not in hist_classes and not GENERIC_CLASS_RE.match(name.strip().upper()):
+                    hist_classes.append(name)
+    directors = []
+    for role in pick("associatedRoles") or []:
+        if isinstance(role, dict) and str(role.get("name", "")).lower() in ("director", "partner", "trustee"):
+            directors += [p.get("name") for p in role.get("parties") or [] if isinstance(p, dict) and p.get("name")]
+    summary = {str(s.get("type")): s.get("count") for s in (pick("complianceSummary") or [])
+               if isinstance(s, dict)}
+    comp = pick("complianceActions", "compliance") or {}
     if isinstance(comp, list):
         comp = {"disciplinaryActions": comp}
+    comp = dict(comp)
+    comp.setdefault("publicWarningsCount", summary.get("Public Warning", ""))
+    comp.setdefault("disciplinaryActions", summary.get("Disciplinary Action", ""))
     return {"licenceDetail": ld,
             "premises": premises,
             "licenceClasses": classes if isinstance(classes, list) else [classes],
+            "historicalClasses": hist_classes,
             "conditions": conds if isinstance(conds, list) else [conds],
             "businessNames": [b if isinstance(b, dict) else {"businessName": str(b)} for b in biz],
             "complianceActions": comp,
+            "associatedParties": [{"name": n, "role": "Director"} for n in directors],
             "_site": "details"}
 
 
@@ -1193,10 +1222,16 @@ def flatten(rec: dict) -> dict:
     comp = _get(raw, "complianceActions", "compliance", default={})
     addr = str(_get(ld, "address", "licenceeAddress", "fullAddress")).strip()
     premises_pcs = [postcode_from_premises(paddr) for _, paddr in premises if paddr]
-    pc = str(_get(ld, "postcode", "postCode")).strip() or postcode_from_address(addr)
-    if not pc:
-        pc = next((x for x in premises_pcs if x), "")
+    # the shop's postcode beats the licensee's postal one
+    pc = next((x for x in premises_pcs if x), "") or str(_get(ld, "postcode", "postCode")).strip() \
+        or postcode_from_address(addr)
+    hist = [str(h).strip() for h in (_get(raw, "historicalClasses", default=[]) or []) if h]
+    directors = [str(_get(p, "name")) for p in (_get(raw, "associatedParties", default=[]) or [])
+                 if isinstance(p, dict) and str(_get(p, "role")).lower() == "director" and _get(p, "name")]
     return {
+        "historical_classes": "; ".join(hist),
+        "historical_classes_list": hist,
+        "directors": "; ".join(directors),
         "abn": re.sub(r"\s+", "", str(_get(ld, "licenceeABN", "abn"))),
         "acn": re.sub(r"\s+", "", str(_get(ld, "licenceeACN", "acn"))),
         "address_full": addr,
@@ -1313,9 +1348,9 @@ def entity_key(det: dict) -> str:
 SUMMARY_FIELDS = ["licence_number", "licensee", "licence_name", "business_names", "licence_type",
                   "status", "expiry_date", "classes", "categories", "suburb", "postcode", "region",
                   "sa4", "lga", "licence_id"]
-ENRICH_FIELDS = ["abn", "acn", "address_full", "start_date", "licence_classes", "n_premises",
-                 "premises", "premises_regions", "conditions", "business_names_full",
-                 "public_warnings", "disciplinary_actions"]
+ENRICH_FIELDS = ["abn", "acn", "address_full", "start_date", "licence_classes", "historical_classes",
+                 "n_premises", "premises", "premises_regions", "conditions", "business_names_full",
+                 "directors", "public_warnings", "disciplinary_actions"]
 LICENCE_FIELDS = SUMMARY_FIELDS + ENRICH_FIELDS + ["tier", "name_flags", "segment_rule",
                                                     "franchise_brand", "operator_key", "details_fetched"]
 
@@ -1352,6 +1387,7 @@ def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict
         row["tier"] = q["tier"] if q else tier_for(cls)
         row["name_flags"] = cls["flags"]
         row["segment_rule"] = (segment_from_classes(det.get("classes_list", []))
+                               or segment_from_classes(det.get("historical_classes_list", []))
                                or segment_from_conditions(det.get("conditions_list", []))
                                or segment_from_flags(cls))
         row["conditions"] = det.get("conditions", "")

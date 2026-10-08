@@ -421,13 +421,19 @@ def parse_body(body: str, licence_number: str, mode: str = "details", licence_id
     return None
 
 
-def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sleep) -> dict:
+def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sleep, *,
+               deadline: float | None = None, checkpoint_every: int = 0, checkpoint=None,
+               clock=time.time) -> dict:
     d = pl.data_dir()
     todo = todo_licences(limit, cfg.get("mode", "details"))
     log(f"site fetch: {len(todo)} licences to do at {rate}/s")
     ok = errors = consecutive = 0
-    t0 = time.time()
+    since_checkpoint = 0
+    t0 = clock()
     for n, q in enumerate(todo, 1):
+        if deadline and clock() >= deadline:
+            log(f"run time is up after {n - 1} licences")
+            break
         status, body = call(cfg, q["licence_id"], q["licence_number"])
         rec = {"licence_id": q["licence_id"], "licence_number": q["licence_number"],
                "fetched_at": pl.iso(), "source": f"site-{cfg.get('mode', 'details')}"}
@@ -437,7 +443,11 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
             rec["raw"] = payload
             ok += 1
             consecutive = 0
+            since_checkpoint += 1
             pl.append_jsonl(out_path(), rec)
+            if checkpoint and checkpoint_every and since_checkpoint >= checkpoint_every:
+                checkpoint(f"site-scrape: checkpoint {ok} this run, {len(todo) - n} to go")
+                since_checkpoint = 0
         else:
             errors += 1
             consecutive += 1
@@ -452,7 +462,7 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
                 break
         if n % 100 == 0:
             log(f"{n}/{len(todo)} done, {ok} ok, {errors} errors, "
-                f"{n / max(time.time() - t0, 1):.2f}/s")
+                f"{n / max(clock() - t0, 1):.2f}/s")
         sleep(max(0.0, (1.0 / rate) * random.uniform(0.7, 1.3)))
     log(f"site fetch done: {ok} ok, {errors} errors")
     return {"ok": ok, "errors": errors}
@@ -542,6 +552,10 @@ def main(argv=None) -> int:
     f.add_argument("--headed", action="store_true")
     f.add_argument("--mode", choices=("auto", "details", "search"), default="auto",
                    help="which discovered endpoint to replay (auto = details if found, else search)")
+    f.add_argument("--run-seconds", type=int, default=0,
+                   help="stop after this many seconds (0 = no limit; RUN_DEADLINE env overrides)")
+    f.add_argument("--checkpoint", type=int, default=0,
+                   help="commit and push data/ every N fetched records (GitHub Actions only)")
     args = ap.parse_args(argv)
     if args.cmd == "discover":
         discover(args.licence_number, headed=args.headed,
@@ -562,7 +576,14 @@ def main(argv=None) -> int:
     if args.browser:
         fetch_browser(cfg, args.rate, args.limit, headed=args.headed)
     else:
-        fetch_http(cfg, args.rate, args.limit)
+        deadline = None
+        if os.environ.get("RUN_DEADLINE", "").strip():
+            deadline = float(os.environ["RUN_DEADLINE"])
+        elif args.run_seconds:
+            deadline = time.time() + args.run_seconds
+        checkpoint = (lambda msg: pl.commit_and_push(msg)) if (args.checkpoint and pl.should_push()) else None
+        fetch_http(cfg, args.rate, args.limit, deadline=deadline,
+                   checkpoint_every=args.checkpoint, checkpoint=checkpoint)
     return 0
 
 
