@@ -1,12 +1,14 @@
 {
-  "calls_used_this_month": 4304,
+  "calls_used_this_month": 5000,
   "keys": {
     "HF2T\u2026NH5H": {
       "auth_failed_at": "2026-10-08T05:22:58Z",
       "calls": 1
     },
     "au4v\u2026YpF7": {
-      "calls": 1801
+      "calls": 2497,
+      "quota_exhausted_until": "2026-11-01T00:00:00Z",
+      "quota_reason": "HTTP 408:                             \n              {\n                  \"message\":\"Quota limit of 2500 per 1 month exceeded.\"                  \n               } \n            "
     },
     "m6q4\u2026jFos": {
       "calls": 2,
@@ -16,6 +18,7 @@
   },
   "last_rate": 600.0,
   "month": "2026-10",
-  "quota_exhausted_until": null,
-  "updated_at": "2026-10-08T05:31:54Z"
+  "quota_exhausted_until": "2026-11-01T00:00:00Z",
+  "quota_reason": "all 3 keys exhausted (2 quota, 1 auth failures)",
+  "updated_at": "2026-10-08T05:35:28Z"
 }

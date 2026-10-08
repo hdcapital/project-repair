@@ -1,45 +1,45 @@
 # NSW motor-repairer enrichment — summary
 
-_As of 2026-10-08T05:31:54Z_
+_As of 2026-10-08T05:35:28Z_
 
 ## Fetch progress
 
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 3101 |
-| remaining | 9712 |
+| details fetched | 3596 |
+| remaining | 9017 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.3 h of run time (~0.3 hourly runs) |
-| calls this month | 4304 |
-| quota state | ok |
-| api keys seen | HF2T…NH5H: ok (1 calls); au4v…YpF7: ok (1801 calls); m6q4…jFos: spent (2 calls) |
+| calls this month | 5000 |
+| quota state | paused until 2026-11-01T00:00:00Z |
+| api keys seen | HF2T…NH5H: ok (1 calls); au4v…YpF7: spent (2497 calls); m6q4…jFos: spent (2 calls) |
 | complete | False |
-| last run reason |  |
+| last run reason | quota_exhausted |
 
 ## Licences by region × segment
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 506 | 133 | 29 | 114 | 1694 | 803 | 1372 | 4651 |
-| Unknown (no address in register) | 53 | 17 | 45 | 37 | 281 | 353 | 2562 | 3348 |
-| Newcastle | 37 | 22 | 6 | 23 | 185 | 136 | 161 | 570 |
+| Sydney | 506 | 133 | 29 | 115 | 1694 | 803 | 1369 | 4649 |
+| Unknown (no address in register) | 53 | 17 | 49 | 37 | 281 | 353 | 2558 | 3348 |
+| Newcastle | 37 | 22 | 7 | 23 | 185 | 136 | 160 | 570 |
 | New England / North West | 37 | 18 | 3 | 11 | 144 | 114 | 165 | 492 |
-| Riverina | 21 | 16 | 2 | 13 | 137 | 110 | 179 | 478 |
+| Riverina | 21 | 16 | 2 | 13 | 137 | 110 | 180 | 479 |
 | Northern Rivers | 25 | 12 | 3 | 8 | 127 | 83 | 120 | 378 |
-| Mid North Coast | 23 | 6 | 2 | 9 | 112 | 89 | 121 | 362 |
+| Mid North Coast | 23 | 6 | 2 | 9 | 112 | 89 | 124 | 365 |
 | Central West | 20 | 13 | 1 | 10 | 79 | 85 | 144 | 352 |
-| Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 103 | 77 | 104 | 320 |
-| Illawarra | 27 | 5 | 1 | 5 | 110 | 68 | 99 | 315 |
-| Far West / Orana | 17 | 6 | 1 | 13 | 79 | 79 | 104 | 299 |
-| Hunter | 15 | 15 | 1 | 7 | 78 | 71 | 90 | 277 |
-| Capital Region | 14 | 10 | 1 | 12 | 80 | 51 | 71 | 239 |
+| Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 103 | 78 | 102 | 319 |
+| Illawarra | 27 | 5 | 1 | 5 | 110 | 68 | 98 | 314 |
+| Far West / Orana | 17 | 6 | 1 | 13 | 79 | 79 | 105 | 300 |
+| Hunter | 15 | 15 | 1 | 7 | 78 | 71 | 89 | 276 |
+| Capital Region | 14 | 10 | 1 | 12 | 80 | 51 | 70 | 238 |
 | Murray | 3 | 3 | 1 | 8 | 75 | 35 | 57 | 182 |
 | Coffs Harbour - Grafton | 16 | 1 | 2 | 5 | 43 | 43 | 71 | 181 |
 | Central Coast | 8 | 2 | 3 | 3 | 57 | 29 | 36 | 138 |
-| Outside NSW postcode table | 1 | 0 | 0 | 0 | 17 | 3 | 8 | 29 |
+| Outside NSW postcode table | 1 | 0 | 0 | 0 | 17 | 3 | 9 | 30 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 |
-| **total** | 846 | 283 | 105 | 283 | 3402 | 2229 | 5465 | 12613 |
+| **total** | 846 | 283 | 110 | 284 | 3402 | 2230 | 5458 | 12613 |
 
 ## Queue tiers
 
@@ -61,6 +61,8 @@ _As of 2026-10-08T05:31:54Z_
 | Peter Warren Automotive Pty Ltd | 67000293621 | service | 1 | 11 | Sydney |  |
 | S M A Motors Pty Ltd | 53000158725 | dealer | 7 | 10 | Sydney |  |
 | Express Lube Pty Ltd |  | service | 2 | 9 | Central Coast; Hunter; Newcastle; Sydney |  |
+| Motorserve Pty Ltd |  | unknown | 1 | 9 | Central West; Far West / Orana; Illawarra; Newcastle; Sydney |  |
+| OzCar Pty Ltd | 98052221299 | unknown | 1 | 9 | Capital Region; Central West; Far West / Orana; New England / North West; Newcastle; Southern Highlands / Shoalhaven; Sydney |  |
 | Australian Automotive Group Pty Ltd |  | dealer | 8 | 8 | Riverina; Sydney; Unknown (no address in register) |  |
 | ARB Corporation Ltd |  | unknown | 1 | 8 | Central West; Mid North Coast; Murray; Sydney |  |
 | VEHICLE REPAIRHUB PTY LIMITED | 12632384224 | service | 1 | 8 | Sydney |  |
@@ -74,6 +76,7 @@ _As of 2026-10-08T05:31:54Z_
 | Action Smart Group Pty Ltd |  | unknown | 1 | 6 | Mid North Coast; Newcastle; Sydney |  |
 | CDC NSW Hunter Valley Pty Ltd |  | unknown | 1 | 6 | Newcastle; Sydney |  |
 | Double R Pty Ltd |  | unknown | 1 | 6 | Hunter; New England / North West |  |
+| Manning Valley Motor Holdings Pty Ltd | 36606386636 | unknown | 1 | 6 | Mid North Coast; Newcastle |  |
 | Wollongong City Motors Pty Ltd |  | service | 2 | 5 | Illawarra; Southern Highlands / Shoalhaven |  |
 | Abalner Pty Ltd |  | unknown | 1 | 5 | Illawarra; Sydney |  |
 | Australian Native Landscapes Pty Limited | 42001749980 | unknown | 1 | 5 | Central West; Mid North Coast; Newcastle; Sydney |  |
@@ -90,6 +93,7 @@ _As of 2026-10-08T05:31:54Z_
 | CDC NSW Region 4 Pty Ltd |  | unknown | 1 | 4 | Sydney |  |
 | Clintons Motors Pty Ltd | 92008444844 | service | 1 | 4 | Sydney |  |
 | Moro & Sons Automotive Pty Ltd |  | service | 1 | 4 | Sydney |  |
+| Palmira Holdings Group Pty Ltd | 12672810589 | unknown | 1 | 4 | Southern Highlands / Shoalhaven |  |
 | Alweal Pty. Limited | 55061127008 | body | 3 | 3 | Hunter; Newcastle |  |
 | Aussie Dent King Pty Ltd |  | body | 3 | 3 | Northern Rivers; Unknown (no address in register) |  |
 | Cessnock Automotive Sales Pty Ltd |  | dealer | 3 | 3 | Hunter; Newcastle |  |
@@ -101,10 +105,6 @@ _As of 2026-10-08T05:31:54Z_
 | Tynan Motors Pty Ltd |  | service | 3 | 3 | Illawarra; Sydney |  |
 | South East Automotive Pty Ltd |  | service | 2 | 3 | Sydney |  |
 | Spice Enterprises Pty Ltd |  | unknown | 2 | 3 | Central West |  |
-| T&M Holdings Pty Limited |  | unknown | 2 | 3 | Riverina; Sydney |  |
-| The Brown & Hurley Group Pty Ltd | 66010732966 | unknown | 2 | 3 | Coffs Harbour - Grafton; New England / North West; Northern Rivers |  |
-| AACPK Investments Pty Ltd |  | unknown | 1 | 3 | New England / North West |  |
-| AAVET SOLUTIONS PTY. LTD. | 82609153344 | unknown | 1 | 3 | Newcastle |  |
 
 ## Shortlist
 
