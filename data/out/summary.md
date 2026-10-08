@@ -7,7 +7,7 @@ _As of 2026-10-08T05:35:28Z_
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 4196 |
+| details fetched | 4903 |
 | remaining | 9017 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.3 h of run time (~0.3 hourly runs) |
@@ -21,25 +21,25 @@ _As of 2026-10-08T05:35:28Z_
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 526 | 133 | 29 | 116 | 1764 | 803 | 1281 | 4652 |
-| Unknown (no address in register) | 56 | 17 | 49 | 37 | 293 | 356 | 2539 | 3347 |
-| Newcastle | 38 | 22 | 7 | 23 | 193 | 136 | 151 | 570 |
+| Sydney | 530 | 133 | 29 | 116 | 1759 | 804 | 1281 | 4652 |
+| Unknown (no address in register) | 56 | 17 | 49 | 37 | 291 | 356 | 2539 | 3345 |
+| Newcastle | 38 | 22 | 7 | 24 | 192 | 136 | 151 | 570 |
 | New England / North West | 37 | 18 | 3 | 11 | 156 | 114 | 152 | 491 |
 | Riverina | 22 | 16 | 2 | 13 | 150 | 110 | 167 | 480 |
 | Northern Rivers | 26 | 12 | 3 | 8 | 132 | 83 | 114 | 378 |
 | Mid North Coast | 23 | 6 | 2 | 9 | 116 | 89 | 119 | 364 |
-| Central West | 20 | 13 | 1 | 10 | 87 | 85 | 134 | 350 |
-| Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 107 | 78 | 100 | 321 |
+| Central West | 20 | 13 | 1 | 10 | 88 | 85 | 134 | 351 |
+| Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 108 | 78 | 100 | 322 |
 | Illawarra | 27 | 5 | 1 | 5 | 112 | 68 | 95 | 313 |
 | Far West / Orana | 17 | 6 | 1 | 13 | 84 | 79 | 102 | 302 |
-| Hunter | 15 | 15 | 1 | 7 | 82 | 71 | 85 | 276 |
+| Hunter | 15 | 15 | 1 | 7 | 81 | 72 | 85 | 276 |
 | Capital Region | 14 | 10 | 1 | 12 | 81 | 51 | 68 | 237 |
-| Coffs Harbour - Grafton | 16 | 1 | 2 | 5 | 45 | 43 | 69 | 181 |
-| Murray | 3 | 3 | 1 | 8 | 76 | 35 | 55 | 181 |
+| Coffs Harbour - Grafton | 17 | 1 | 2 | 5 | 44 | 43 | 69 | 181 |
+| Murray | 3 | 3 | 1 | 8 | 75 | 36 | 55 | 181 |
 | Central Coast | 8 | 2 | 3 | 3 | 59 | 29 | 34 | 138 |
 | Outside NSW postcode table | 2 | 0 | 0 | 0 | 18 | 3 | 7 | 30 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 |
-| **total** | 873 | 283 | 110 | 285 | 3556 | 2233 | 5273 | 12613 |
+| **total** | 878 | 283 | 110 | 286 | 3547 | 2236 | 5273 | 12613 |
 
 ## Queue tiers
 
@@ -108,5 +108,5 @@ _As of 2026-10-08T05:35:28Z_
 
 ## Shortlist
 
-- independent multi-site service operators: **135**
+- independent multi-site service operators: **138**
 - single-site service companies (widen later): **2238**
