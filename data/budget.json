@@ -1,7 +1,8 @@
 {
-  "calls_used_this_month": 12616,
+  "calls_used_this_month": 2500,
   "last_rate": 371.51,
   "month": "2026-10",
-  "quota_exhausted_until": null,
+  "quota_exhausted_until": "2026-11-01T00:00:00Z",
+  "quota_reason": "HTTP 408: Quota limit of 2500 per 1 month exceeded. (detected after the fact; run 3 on 2026-10-07)",
   "updated_at": "2026-10-07T10:34:28Z"
 }

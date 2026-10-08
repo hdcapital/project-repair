@@ -503,3 +503,72 @@ class BuildTests(TempData):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# --------------------------------------------------------------------------- #
+# Lessons from the first full run: api.nsw signals a spent quota with HTTP 408
+# --------------------------------------------------------------------------- #
+class QuotaRegressionTests(TempData):
+    QUOTA_408 = (408, {"message": "Quota limit of 2500 per 1 month exceeded."})
+
+    def test_408_quota_body_is_exhaustion(self):
+        clock = FakeClock()
+        c = make_client(StubHTTP(script=[self.QUOTA_408]), clock)
+        with self.assertRaises(pl.QuotaExhausted):
+            c.details("L1")
+
+    def test_quota_408_mid_run_pauses_and_records_nothing_for_the_rest(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(50)])
+        clock = FakeClock()
+        http = StubHTTP(script=[(200, detail_body("ID-0")), (200, detail_body("ID-1"))] + [self.QUOTA_408] * 48)
+        st = pl.fetch_details(self.d, make_client(http, clock), deadline=clock.t + 10_000, clock=clock)
+        self.assertEqual(st["reason"], "quota_exhausted")
+        self.assertEqual(st["remaining"], 48)
+        self.assertFalse(st["complete"])
+        recs = pl.read_jsonl(self.d / "details.jsonl", "licence_id")
+        self.assertEqual(len(recs), 2)                               # nothing recorded as an error
+        self.assertEqual(len(http.script), 47)                        # exactly one rejected call made
+        budget = json.loads((self.d / "budget.json").read_text())
+        self.assertTrue(pl.quota_exhausted_now(budget))
+
+    def test_consecutive_errors_stop_the_run(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(100)])
+        clock = FakeClock()
+        http = StubHTTP(script=[(403, {"message": "forbidden"})] * 100)
+        st = pl.fetch_details(self.d, make_client(http, clock), deadline=clock.t + 10_000, clock=clock)
+        self.assertTrue(st["reason"].startswith("http_403_x"))
+        self.assertFalse(st["complete"])
+        recs = pl.read_jsonl(self.d / "details.jsonl", "licence_id")
+        self.assertEqual(len(recs), pl.MAX_CONSECUTIVE_ERRORS - 1)   # the last one is retried
+        self.assertEqual(st["remaining"], 100 - (pl.MAX_CONSECUTIVE_ERRORS - 1))
+
+    def test_quota_rejected_records_are_retried_not_done(self):
+        rows = self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(3)])
+        pl.append_jsonl(self.d / "details.jsonl", {"licence_id": "ID-0", "raw": detail_body("ID-0")})
+        pl.append_jsonl(self.d / "details.jsonl", {"licence_id": "ID-1", "error": "HTTP 408",
+                                                   "raw": {"message": "Quota limit of 2500 per 1 month exceeded."}})
+        pl.append_jsonl(self.d / "details.jsonl", {"licence_id": "ID-2", "error": "HTTP 404", "raw": {}})
+        details = pl.read_jsonl(self.d / "details.jsonl", "licence_id")
+        self.assertEqual(pl.fetched_ids(details), {"ID-0", "ID-2"})
+        clock = FakeClock()
+        http = StubHTTP()
+        st = pl.fetch_details(self.d, make_client(http, clock), deadline=clock.t + 1000, clock=clock)
+        self.assertEqual([p["licenceid"] for u, p in http.calls if u == pl.DETAILS_URL], ["ID-1"])
+        self.assertTrue(st["complete"])
+        # build treats the quota-rejected record as not fetched
+        pl.cmd_build(None)
+        lic = {r["licence_number"]: r for r in pl.read_csv(self.d / "out" / "licences_enriched.csv")}
+        self.assertEqual(lic["MVRL1"]["details_fetched"], "True")   # refetched above
+        self.assertEqual(lic["MVRL2"]["details_fetched"], "False")  # genuine 404 stays unfetched
+
+    def test_reset_quota_clears_the_pause(self):
+        self.write_seed([seed_row(0, "Shop Pty Ltd")])
+        future = pl.iso(pl.now_utc() + dt.timedelta(days=3))
+        pl.write_json(self.d / "budget.json", {"month": pl.now_utc().strftime("%Y-%m"),
+                                               "quota_exhausted_until": future, "last_rate": 90})
+        os.environ["RESET_QUOTA"] = "1"
+        self.addCleanup(os.environ.pop, "RESET_QUOTA", None)
+        clock = FakeClock()
+        st = pl.fetch_details(self.d, make_client(StubHTTP(), clock), deadline=clock.t + 100, clock=clock)
+        self.assertTrue(st["complete"])
+        self.assertIsNone(json.loads((self.d / "budget.json").read_text())["quota_exhausted_until"])

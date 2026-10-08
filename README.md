@@ -29,13 +29,23 @@ Locally you can also copy `.env.example` to `.env`, fill in the keys, and run
 - **Cron `7 * * * *`**, `timeout-minutes: 55`, one run at a time (`concurrency: enrich`).
   Each run: unit tests → `fetch-details` for up to `RUN_SECONDS` (3000 s) → `fetch-abr` (rest of the
   time, if `ABR_GUID` set) → `build` → commit & push `data/` → disable the workflow if the queue is empty.
+  The workflow file is `.github/workflows/enrich-register.yml` (the original `enrich.yml` was
+  self-disabled by a false "complete" and GitHub keeps that state per file path).
 - **Adaptive rate**: starts at 60 req/min (or the last good rate in `data/budget.json`), +20 % after every
   100 consecutive successes, halves on any 429 and holds 60 s / 120 s / 180 s.
-- **Quota exhaustion**: a 429 that survives those three holds (≥ 5 min), or any 429 body mentioning
-  *quota* / *limit exceeded*, is treated as the month being spent. `budget.json` gets
-  `quota_exhausted_until` = first of next month (UTC); every hourly run until then exits in a few
-  seconds without touching the API, and nothing is committed. The workflow is **not** disabled, so it
-  resumes by itself next month. Hitting `MONTHLY_CALL_BUDGET` behaves the same way.
+- **Quota exhaustion**: api.nsw answers a spent monthly quota with **HTTP 408** and the body
+  `Quota limit of 2500 per 1 month exceeded.` Any error status whose body mentions *quota* /
+  *limit exceeded*, or a 429 that survives the three holds (≥ 5 min), is treated as the month being
+  spent. `budget.json` gets `quota_exhausted_until` = first of next month (UTC); every hourly run until
+  then exits in a few seconds without touching the API, and nothing is committed. The workflow is
+  **not** disabled, so it resumes by itself next month. Hitting `MONTHLY_CALL_BUDGET` behaves the same
+  way. The 2,500/month quota is shared with every other call made with the same key (the
+  `nsw_repairers.py` sweep counts against it too).
+- **Got a quota increase mid-month?** Actions → **enrich** → *Run workflow* with `reset_quota=1`;
+  that clears `quota_exhausted_until` and fetching resumes immediately. Without a per-minute
+  throttle the client ramps past 350 req/min, so the remaining queue finishes in a single run.
+- **Systemic errors**: 10 consecutive non-quota HTTP errors stop the run (the last one is not recorded,
+  so it is retried) rather than burning through the queue.
 - **Checkpoints**: every 200 fetches the run flushes `details.jsonl`, commits as `github-actions[bot]`,
   `git pull --rebase`, pushes. A killed run loses at most 200 fetches' worth of work.
 - **Per-licence 4xx** (other than 429) is recorded in `details.jsonl` with an `error` field so it is
@@ -82,7 +92,7 @@ dicts at the top of `pipeline.py`.
 2. To re-fetch everything, delete `data/details.jsonl` (and `data/abr.jsonl`); to only pick up new
    licences, leave them in place — the queue skips anything already fetched.
 3. `python pipeline.py prioritise`, commit, push.
-4. Actions → **enrich** → *Enable workflow* (or `gh workflow enable enrich.yml`), then *Run workflow*.
+4. Actions → **enrich** → *Enable workflow* (or `gh workflow enable enrich-register.yml`), then *Run workflow*.
 
 ## Tests
 
@@ -90,6 +100,7 @@ dicts at the top of `pipeline.py`.
 python -m unittest discover -s tests -v
 ```
 
-Covers adaptive rate up/down, 429-throttle vs quota-exhausted detection, resume after a partial run,
-checkpoint commits every 200, JSONL dedupe, ABN grouping, premises counting, the complete → status.json
-path, the fast exit when `quota_exhausted_until` is in the future, and the offline build.
+Covers adaptive rate up/down, 429-throttle vs quota-exhausted detection (incl. the HTTP 408 quota
+body), the consecutive-error guard, resume after a partial run, checkpoint commits every 200, JSONL
+dedupe, ACN/ABN grouping, premises counting, suburb → postcode, the complete → status.json path, the
+fast exit when `quota_exhausted_until` is in the future, `reset_quota`, and the offline build.

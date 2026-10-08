@@ -19,6 +19,7 @@ Environment (see .env.example)
   RUN_DEADLINE                   unix epoch; overrides RUN_SECONDS when set
   MONTHLY_CALL_BUDGET=0          0 = no artificial cap, otherwise stop at N calls/month
   DRY_RUN=1                      no API calls, no git pushes
+  RESET_QUOTA=1                  clear quota_exhausted_until first (after a quota increase)
   DATA_DIR=data                  where state lives
 
 Stdlib only, Python 3.10+.
@@ -388,6 +389,7 @@ def franchise_brand(text: str) -> str:
 DEFAULT_RPM = 60.0
 MIN_RPM = 2.0
 MAX_RPM = 600.0
+MAX_CONSECUTIVE_ERRORS = 10   # stop the run rather than burn the queue on a systemic 4xx
 
 
 def load_budget(path: Path) -> dict:
@@ -476,9 +478,10 @@ class AdaptiveClient:
         r = self.http(TOKEN_URL, params={"grant_type": "client_credentials"},
                       headers={"Authorization": f"Basic {basic}"}, timeout=30)
         self.calls += 1
+        if r.status_code >= 400 and QUOTA_BODY_RE.search(r.text or ""):
+            raise QuotaExhausted(f"HTTP {r.status_code} on token endpoint: {r.text[:200]}")
         if r.status_code == 429:
-            raise QuotaExhausted(f"429 on token endpoint: {r.text[:200]}") \
-                if QUOTA_BODY_RE.search(r.text or "") else RuntimeError("429 on token endpoint")
+            raise RuntimeError("429 on token endpoint")
         if r.status_code != 200:
             raise RuntimeError(f"Auth failed ({r.status_code}): {r.text[:300]}")
         self._token = r.json()["access_token"]
@@ -510,6 +513,10 @@ class AdaptiveClient:
                     return 200, r.json()
                 except ValueError:
                     return 200, {}
+            if r.status_code >= 400 and QUOTA_BODY_RE.search(r.text or ""):
+                # api.nsw signals a spent monthly quota with HTTP 408 (not 429) and the body
+                # "Quota limit of 2500 per 1 month exceeded." -- treat any status the same way.
+                raise QuotaExhausted(f"HTTP {r.status_code} body mentions quota: {(r.text or '')[:200]}")
             if r.status_code == 401:
                 self._token = None
                 server_errors += 1
@@ -519,8 +526,6 @@ class AdaptiveClient:
             if r.status_code == 429:
                 self.throttles += 1
                 body = r.text or ""
-                if QUOTA_BODY_RE.search(body):
-                    raise QuotaExhausted(f"429 body mentions quota: {body[:200]}")
                 if throttle_streak >= len(THROTTLE_HOLDS):
                     raise QuotaExhausted(
                         f"429 persisted through {throttle_streak} backoffs "
@@ -656,6 +661,20 @@ def write_status(d: Path, *, remaining: int, budget: dict, extra: dict | None = 
     return status
 
 
+def is_quota_error(rec: dict) -> bool:
+    """A details.jsonl record that was rejected for quota (should be retried, not treated as done)."""
+    if not rec.get("error"):
+        return False
+    raw = rec.get("raw")
+    text = json.dumps(raw) if isinstance(raw, (dict, list)) else str(raw or "")
+    return bool(QUOTA_BODY_RE.search(text) or QUOTA_BODY_RE.search(str(rec.get("error", ""))))
+
+
+def fetched_ids(details: dict[str, dict]) -> set[str]:
+    """licence_ids that need no further fetching: successes and genuine per-licence errors."""
+    return {k for k, v in details.items() if not is_quota_error(v)}
+
+
 def ensure_queue(d: Path) -> list[dict]:
     q = d / "queue.csv"
     if not q.exists():
@@ -672,10 +691,15 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
     budget = load_budget(budget_path)
     queue = ensure_queue(d)
     details_path = d / "details.jsonl"
-    done = set(read_jsonl(details_path, "licence_id"))
+    done = fetched_ids(read_jsonl(details_path, "licence_id"))
     todo = [q for q in queue if q["licence_id"] not in done]
     log(f"queue {len(queue)}, fetched {len(done)}, remaining {len(todo)}")
 
+    if env_flag("RESET_QUOTA") and budget.get("quota_exhausted_until"):
+        log(f"RESET_QUOTA set -> clearing quota_exhausted_until={budget['quota_exhausted_until']}")
+        budget["quota_exhausted_until"] = None
+        budget.pop("quota_reason", None)
+        write_json(budget_path, budget)
     if quota_exhausted_now(budget):
         log(f"quota exhausted until {budget['quota_exhausted_until']} -> nothing to do this run")
         return write_status(d, remaining=len(todo), budget=budget, extra={"reason": "quota_exhausted"})
@@ -687,6 +711,7 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
         return write_status(d, remaining=len(todo), budget=budget, extra={"reason": "dry_run"})
 
     fetched = skipped = 0
+    consecutive_errors = 0
     since_checkpoint = 0
     reason = "deadline"
     t0 = clock()
@@ -721,14 +746,21 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
             if status == 200:
                 rec["raw"] = body
                 fetched += 1
+                consecutive_errors = 0
             else:
                 rec["error"] = f"HTTP {status}"
                 rec["raw"] = body if isinstance(body, dict) else {"body": str(body)[:300]}
                 skipped += 1
+                consecutive_errors += 1
                 log(f"{q['licence_number']} ({q['licence_id']}): HTTP {status} -> skipped")
                 if status >= 500 or status in (401, 599):
                     reason = f"http_{status}"
-                    break  # persistent server/auth trouble: let the next run retry
+                    break  # persistent server/auth trouble: let the next run retry (not recorded)
+                if consecutive_errors >= MAX_CONSECUTIVE_ERRORS:
+                    reason = f"http_{status}_x{consecutive_errors}"
+                    log(f"{consecutive_errors} consecutive HTTP errors -> stopping this run; "
+                        f"the last one is not recorded so it is retried")
+                    break
             append_jsonl(details_path, rec)
             remaining -= 1
             since_checkpoint += 1
@@ -772,8 +804,13 @@ def cmd_fetch_details(args) -> int:
     d = data_dir()
     dry = env_flag("DRY_RUN")
     budget = load_budget(d / "budget.json")
+    if env_flag("RESET_QUOTA") and budget.get("quota_exhausted_until"):
+        log(f"RESET_QUOTA set -> clearing quota_exhausted_until={budget['quota_exhausted_until']}")
+        budget["quota_exhausted_until"] = None
+        budget.pop("quota_reason", None)
+        write_json(d / "budget.json", budget)
     if quota_exhausted_now(budget):   # fast path: no credentials, no API, <20s
-        todo = len(ensure_queue(d)) - len(read_jsonl(d / "details.jsonl", "licence_id"))
+        todo = len(ensure_queue(d)) - len(fetched_ids(read_jsonl(d / "details.jsonl", "licence_id")))
         log(f"quota exhausted until {budget['quota_exhausted_until']}; exiting without touching the API")
         write_status(d, remaining=max(todo, 0), budget=budget, extra={"reason": "quota_exhausted"})
         return 0
@@ -1231,7 +1268,8 @@ def cmd_build(args) -> int:
     out = d / "out"
     seed = read_csv(d / "register_summary.csv")
     queue = ensure_queue(d)
-    details = read_jsonl(d / "details.jsonl", "licence_id")
+    details = {k: v for k, v in read_jsonl(d / "details.jsonl", "licence_id").items()
+               if not is_quota_error(v)}
     abr = read_jsonl(d / "abr.jsonl", "abn")
     budget = load_budget(d / "budget.json")
     status = read_json(d / "status.json", {})
@@ -1242,7 +1280,6 @@ def cmd_build(args) -> int:
     shortlist = build_shortlist(ops)
     write_csv(out / "shortlist.csv", shortlist, SHORTLIST_FIELDS)
     if not status:
-        fetched_ids = {k for k, v in details.items() if not v.get("error")}
         status = {"remaining": len([q for q in queue if q["licence_id"] not in details]),
                   "complete": all(q["licence_id"] in details for q in queue)}
     (out / "summary.md").write_text(build_summary(licences, ops, shortlist, status, budget, len(queue)),

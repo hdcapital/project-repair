@@ -8,13 +8,13 @@ _As of 2026-10-07T10:34:28Z_
 |---|---|
 | licences in queue | 12613 |
 | details fetched | 1101 |
-| remaining | 0 |
+| remaining | 11512 |
 | last good rate | 372 req/min |
-| ETA at that rate | done |
-| calls this month | 12616 |
-| quota state | ok |
-| complete | True |
-| last run reason | complete |
+| ETA at that rate | 0.5 h of run time (~0.6 hourly runs) |
+| calls this month | 2500 |
+| quota state | paused until 2026-11-01T00:00:00Z |
+| complete | False |
+| last run reason | quota_exhausted |
 
 ## Licences by region × segment
 
