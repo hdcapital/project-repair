@@ -160,6 +160,16 @@ class FetchHttpTests(TempData):
         self.assertEqual(list(recs), ["ID-0"])                               # only the 404 is recorded
         self.assertEqual(recs["ID-0"]["error"], "HTTP 404")
 
+    def test_details_mode_upgrades_search_only_records(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(3)])
+        pl.append_jsonl(self.d / "details.jsonl", {"licence_id": "ID-0", "raw": detail_body("ID-0")})
+        pl.append_jsonl(self.d / "details_site.jsonl",
+                        {"licence_id": "ID-1", "source": "site-search",
+                         "raw": pl.normalise_site_search({"results": [dict(SEARCH_ROW, licenceId="ID-1",
+                                                                            licenceNumber="MVRL1")]}, "MVRL1")})
+        self.assertEqual([q["licence_id"] for q in ss.todo_licences(0, "search")], ["ID-2"])
+        self.assertEqual([q["licence_id"] for q in ss.todo_licences(0, "details")], ["ID-1", "ID-2"])
+
     def test_limit(self):
         self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(10)])
         res = ss.fetch_http(self.CFG, rate=1000, limit=3,

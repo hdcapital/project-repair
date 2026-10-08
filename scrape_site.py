@@ -229,6 +229,30 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
                     log(f"direct url {url} failed: {str(exc)[:120]}")
                 if have_details():
                     break
+        if not have_details():
+            # Probe the backend directly from the browser context (cookies and all).  The site's
+            # details page calls .../licence/search/details/{licenceId}; a bad id 404s with
+            # 'Entity "Licence" (...) was not found', which is how this pattern was found.
+            api = f"{SITE}/publicregisterapi/api/v1"
+            for url in (f"{api}/licence/search/details/{licence_id}", f"{api}/licence/details/{licence_id}",
+                        f"{api}/licence/{licence_id}", f"{api}/licence/search/details/{licence_number}"):
+                if not licence_id and "{licence_id}" in url:
+                    continue
+                try:
+                    r = page.request.get(url, headers={"accept": "application/json, text/plain, */*",
+                                                       "referer": f"{SITE}/details/{licence_id or licence_number}"})
+                    body = r.text()
+                    log(f"probe {url} -> HTTP {r.status}, {len(body)} bytes: {body[:160]!r}")
+                    if r.status == 200 and has_detail_markers(body):
+                        captured.append({"url": url, "method": "GET",
+                                         "headers": {"accept": "application/json, text/plain, */*",
+                                                     "user-agent": UA,
+                                                     "referer": f"{SITE}/details/{licence_id or licence_number}"},
+                                         "post_data": None, "status": 200, "body": body})
+                        log("probe hit: details endpoint found")
+                        break
+                except Exception as exc:
+                    log(f"probe {url} failed: {str(exc)[:120]}")
         final_url = page.url
         browser.close()
 
@@ -304,10 +328,21 @@ def out_path() -> Path:
     return pl.data_dir() / OUT_FILE
 
 
-def todo_licences(limit: int = 0) -> list[dict]:
+def is_search_record(rec: dict) -> bool:
+    raw = rec.get("raw") if isinstance(rec.get("raw"), dict) else {}
+    return raw.get("_site") == "search" or rec.get("source") == "site-search" or \
+        (isinstance(raw.get("results"), list) and "licenceDetail" not in raw)
+
+
+def todo_licences(limit: int = 0, mode: str = "details") -> list[dict]:
+    """Licences still to fetch.  In details mode, records that only came from the search
+    endpoint (no premises) count as not done, so they get upgraded."""
     d = pl.data_dir()
     queue = pl.ensure_queue(d)
-    done = pl.fetched_ids(pl.load_details(d))
+    details = pl.load_details(d)
+    done = pl.fetched_ids(details)
+    if mode == "details":
+        done = {k for k in done if not is_search_record(details[k])}
     todo = [q for q in queue if q["licence_id"] not in done]
     return todo[:limit] if limit else todo
 
@@ -346,7 +381,7 @@ def parse_body(body: str, licence_number: str, mode: str = "details", licence_id
 
 def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sleep) -> dict:
     d = pl.data_dir()
-    todo = todo_licences(limit)
+    todo = todo_licences(limit, cfg.get("mode", "details"))
     log(f"site fetch: {len(todo)} licences to do at {rate}/s")
     ok = errors = consecutive = 0
     t0 = time.time()
