@@ -21,25 +21,25 @@ _As of 2026-10-08T05:31:54Z_
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 503 | 133 | 29 | 113 | 1682 | 803 | 1388 | 4651 |
+| Sydney | 506 | 133 | 29 | 114 | 1694 | 803 | 1372 | 4651 |
 | Unknown (no address in register) | 53 | 17 | 45 | 37 | 281 | 353 | 2562 | 3348 |
-| Newcastle | 37 | 22 | 6 | 23 | 182 | 136 | 164 | 570 |
-| New England / North West | 37 | 18 | 3 | 11 | 141 | 114 | 168 | 492 |
-| Riverina | 21 | 16 | 2 | 13 | 134 | 110 | 182 | 478 |
+| Newcastle | 37 | 22 | 6 | 23 | 185 | 136 | 161 | 570 |
+| New England / North West | 37 | 18 | 3 | 11 | 144 | 114 | 165 | 492 |
+| Riverina | 21 | 16 | 2 | 13 | 137 | 110 | 179 | 478 |
 | Northern Rivers | 25 | 12 | 3 | 8 | 127 | 83 | 120 | 378 |
-| Mid North Coast | 23 | 6 | 2 | 9 | 111 | 89 | 122 | 362 |
+| Mid North Coast | 23 | 6 | 2 | 9 | 112 | 89 | 121 | 362 |
 | Central West | 20 | 13 | 1 | 10 | 79 | 85 | 144 | 352 |
-| Southern Highlands / Shoalhaven | 22 | 4 | 4 | 5 | 103 | 77 | 105 | 320 |
+| Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 103 | 77 | 104 | 320 |
 | Illawarra | 27 | 5 | 1 | 5 | 110 | 68 | 99 | 315 |
 | Far West / Orana | 17 | 6 | 1 | 13 | 79 | 79 | 104 | 299 |
 | Hunter | 15 | 15 | 1 | 7 | 78 | 71 | 90 | 277 |
-| Capital Region | 14 | 10 | 1 | 12 | 79 | 51 | 72 | 239 |
+| Capital Region | 14 | 10 | 1 | 12 | 80 | 51 | 71 | 239 |
 | Murray | 3 | 3 | 1 | 8 | 75 | 35 | 57 | 182 |
 | Coffs Harbour - Grafton | 16 | 1 | 2 | 5 | 43 | 43 | 71 | 181 |
 | Central Coast | 8 | 2 | 3 | 3 | 57 | 29 | 36 | 138 |
 | Outside NSW postcode table | 1 | 0 | 0 | 0 | 17 | 3 | 8 | 29 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 |
-| **total** | 842 | 283 | 105 | 282 | 3379 | 2229 | 5493 | 12613 |
+| **total** | 846 | 283 | 105 | 283 | 3402 | 2229 | 5465 | 12613 |
 
 ## Queue tiers
 
@@ -108,5 +108,5 @@ _As of 2026-10-08T05:31:54Z_
 
 ## Shortlist
 
-- independent multi-site service operators: **111**
-- single-site service companies (widen later): **2084**
+- independent multi-site service operators: **114**
+- single-site service companies (widen later): **2104**

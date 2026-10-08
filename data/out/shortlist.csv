@@ -17,6 +17,7 @@ multi_site,Basha Auto Salon Pty Ltd,,155133341,Company,1,3,88 FALCONER ST WEST R
 multi_site,BEARS AUTO SOLUTIONS PTY LTD,69675483851,675483851,Company,1,3,55 MONTAGUE ST NORTH WOLLONGONG; 85 PRINCES HWY FAIRY MEADOW; 65 BAYLDON RD QUEANBEYAN WEST,Capital Region; Illawarra,service,1/1,MVRL62341
 multi_site,Geoff King Motors Pty Ltd,,000130843,Company,1,3,Cnr Bent Street & Ryan Street GRAFTON; Pacific Highway MACKSVILLE; U 1 211 Pacific Hwy COFFS HARBOUR,Coffs Harbour - Grafton; Mid North Coast; New England / North West,service,1/1,MVRL3265
 multi_site,Grand Motors Group NSW Pty Ltd,,129161888,Company,1,3,2 Anella Avenue CASTLE HILL; 29 Brumby St SEVEN HILLS; 306-308 Church St GRANVILLE,Sydney,service,1/1,MVRL46671
+multi_site,Hado Pty Ltd,,001373726,Company,1,3,8-14 Oakes Road GRIFFITH NSW 2680; 270-272 Hammond Avenue WAGGA WAGGA NSW 2650; 80 Hoskins St TEMORA NSW 2666,Riverina,service,1/1,MVRL8713
 multi_site,Jet Vehicle Management Pty Limited,,605395686,Company,1,3,U 15 30-32 Beaconsfield St ALEXANDRIA; 1044 VICTORIA RD WEST RYDE; 12 MARSDEN ARTARMON,Sydney,service,1/1,MVRL53039
 multi_site,John Davis Motors Pty Ltd,,140643643,Company,1,3,344-348 SUMMER ST ORANGE; 38 Bathurst Rd ORANGE; 52-56 Lachlan St FORBES,Central West,service,1/1,MVRL49953
 multi_site,Kaizen Motors Pty Ltd,67603805278,603805278,Company,1,3,824 Bourke St WATERLOO; 36-38 Parramatta Rd GLEBE; 3-5 MOORE ST BANKSMEADOW,Sydney,service,1/1,MVRL51539
@@ -68,8 +69,10 @@ multi_site,Edgecliff Automotive Pty Ltd,,160587682,Company,1,2,104 Manning Rd WO
 multi_site,ERINA SERVICE CENTRE PTY LTD,83601555159,601555159,Company,1,2,211 The Entrance Rd ERINA; UNIT 4 24 BARRALONG RD ERINA,Sydney,service,1/1,MVRL55917
 multi_site,Euro Masters Mechanical Repairs Pty Ltd,,642043829,Company,1,2,12 WHITAKER ST YENNORA; 22 JUSTIN ST SMITHFIELD,Sydney,service,1/1,MVRL58000
 multi_site,GDL Automotive Services Pty Ltd,,161363131,Company,1,2,U 2 27 King Road HORNSBY; U 3 13 Ponderosa Pde WARRIEWOOD,Sydney,service,1/1,MVRL50511
+multi_site,Goulburn Motor Investments Pty Ltd,,136785601,Company,1,2,32-42 Bradley St Goulburn NSW 2580; 126 Hume St GOULBURN NSW 2580,Sydney,service,1/1,MVRL46703
 multi_site,Grafton Automotive Pty Ltd,37118133118,118133118,Company,1,2,U 2 45 Lawson Cres COFFS HARBOUR; U 1 37 Lawson Cres COFFS HARBOUR,Coffs Harbour - Grafton,service,1/1,MVRL42284
 multi_site,Graham Betts Motors Pty Ltd,,001605303,Company,1,2,125-127 Bridge Street URALLA; 103 Rusden Street ARMIDALE,New England / North West,service,1/1,MVRL37921
+multi_site,Greljo Pty Ltd,,166565242,Company,1,2,136 Manning River Dr TAREE SOUTH NSW 2430; 144-146 MANNING ST TUNCURRY NSW 2428,Mid North Coast,service,1/1,MVRL50483
 multi_site,Gurkhas Auto Repairs Pty Ltd,,671072558,Company,1,2,124-126 GEORGE ST HORNSBY; Unit 12 5 WARNERS BAY,Newcastle; Sydney,service,1/1,MVRL61682
 multi_site,GURU AUTO CARE PTY LTD,,642883663,Company,1,2,45 YANKO RD WEST PYMBLE; 598 OLD NORTHERN RD DURAL,Sydney,service,1/1,MVRL58603
 multi_site,JENGO SERVICES PTY LTD,,630438514,Company,1,2,U 3 23 Southern Cross Drive BALLINA; 3 38 Southern Cross DRIVE BALLINA,Northern Rivers,service,1/1,MVRL56069
@@ -762,10 +765,15 @@ single_site_company,Funant Motors Pty Ltd,,144474411,Company,1,1,13/30-32 Barcoo
 single_site_company,Furitech Automotive Pty Ltd,66153083571,153083571,Company,1,1,UNIT 1 128 OLD PITTWATER RD BROOKVALE,Sydney,service,1/1,MVRL61223
 single_site_company,FYG Automotive Pty Ltd,,154429311,Company,1,1,40-42 MAIN ST WEST WYALONG,Central West,service,1/1,MVRL49837
 single_site_company,Fymoral International Pty Ltd,,627298328,Company,1,1,403 Forest Rd PENSHURST,Sydney,service,1/1,MVRL55482
+single_site_company,Fynroad Pty Ltd,,002859912,Company,1,1,251 Hume Hwy GREENACRE NSW 2190,Sydney,service,1/1,MVRL38587
 single_site_company,FZA AUTOMOTIVE PTY LTD,12696893553,696893553,Company,1,1,37 PEISLEY ST ORANGE,Central West,service,1/1,MVRL64094
 single_site_company,G & B Auto Pty Ltd,30621374838,621374838,Company,1,1,2 Macquarie St COWRA,Central West,service,1/1,MVRL54695
+single_site_company,G & D Osborne Pty Ltd,,112048281,Company,1,1,4/188 Pacific Highway TUGGERAH NSW 2259,Newcastle,service,1/1,MVRL41337
 single_site_company,G & E AUTOS PTY LTD,56675440409,675440409,Company,1,1,98 OAK RD KIRRAWEE,Sydney,service,1/1,MVRL62230
+single_site_company,G & M Cochrane & Sons Pty Ltd,,064139304,Company,1,1,1A Dobney Avenue WAGGA WAGGA NSW 2650,Riverina,service,1/1,MVRL3266
+single_site_company,G & O Industries Pty Ltd,,002004739,Company,1,1,5 SMOOTHY PL ARNDELL PARK NSW 2148,Sydney,service,1/1,MVRL8035
 single_site_company,G & S AUTOMOTIVE SOLUTIONS PTY LTD,53659647917,659647917,Company,1,1,217 SEVEN HILLS RD BAULKHAM HILLS,Sydney,service,1/1,MVRL60880
+single_site_company,G D Pye Pty Ltd,,068860328,Company,1,1,24 Ascot Road KENTHURST NSW 2156,Sydney,service,1/1,MVRL41439
 single_site_company,G Force Automotive Pty Ltd,,140724456,Company,1,1,Unit 15 23-25 Bluett Dr SMEATON GRANGE,Sydney,service,1/1,MVRL47198
 single_site_company,G Force Automotive Services Pty Ltd,65616884372,616884372,Company,1,1,U 3 9 Maxwell Place NARELLAN,Sydney,service,1/1,MVRL53969
 single_site_company,G H Mechanical Repairs Pty Ltd,,082197804,Company,1,1,866 Punchbowl Rd PUNCHBOWL,Sydney,service,1/1,MVRL45826
@@ -785,6 +793,8 @@ single_site_company,Gav Fines Automotive Pty Ltd,,604386594,Company,1,1,4a Netti
 single_site_company,GB Car Care Pty Ltd,,097068329,Company,1,1,79 Hunter St HORNSBY,Sydney,service,1/1,MVRL54302
 single_site_company,GDR Automotive Services Pty Ltd,,067824677,Company,1,1,105 EASTERN RD TURRAMURRA,Sydney,service,1/1,MVRL62232
 single_site_company,Gear Exchange Services Pty Ltd,,000987931,Company,1,1,1/10 Long Street SMITHFIELD,Sydney,service,1/1,MVRL11930
+single_site_company,Gedara Pty Ltd,,077037980,Company,1,1,132-140 Maitland Rd ISLINGTON NSW 2296,Newcastle,service,1/1,MVRL32489
+single_site_company,Geeves Enterprises Pty Ltd,,144772181,Company,1,1,111 Denison St CAMPERDOWN NSW 2050,Sydney,service,1/1,MVRL50824
 single_site_company,Gem Auto Services Pty Ltd,,131832981,Company,1,1,71 BURROWS RD ALEXANDRIA,Sydney,service,1/1,MVRL46014
 single_site_company,Gemstar Automotive Pty Ltd,,118741745,Company,1,1,30 Ilma Street BANKSTOWN,Sydney,service,1/1,MVRL42433
 single_site_company,GENERAL MOTORS AUSTRALIA AND NEW ZEALAND PTY LTD,84006893232,006893232,Company,1,1,"Unit 14, Harcourts Estate, 809-821 Botany Road ROSEBERY",Sydney,service,1/1,MVRL62481
@@ -792,6 +802,7 @@ single_site_company,GENUINE CAR SERVICE PTY LTD,,637986344,Company,1,1,710 Penna
 single_site_company,Gerlos Holdings Pty Ltd,,002684022,Company,1,1,13 Ada Avenue BROOKVALE,Sydney,service,1/1,MVRL9676
 single_site_company,German Auto Care Pty. Ltd.,47168242279,168242279,Company,1,1,156 George St HORNSBY,Sydney,service,1/1,MVRL59844
 single_site_company,Germano Automotives Pty Ltd,,606526587,Company,1,1,38 Lane Cove Rd TOP RYDE,Sydney,service,1/1,MVRL52083
+single_site_company,Germanos Bros Pty Ltd,,054311590,Company,1,1,87 CHURCH ST RYDE NSW 2112,Sydney,service,1/1,MVRL31063
 single_site_company,Gerritsen Automotive Services Pty Ltd,,122002064,Company,1,1,52 Forge Street BLACKTOWN,Sydney,service,1/1,MVRL43444
 single_site_company,GERRY WUBBELS AUTOMOTIVE PTY LTD,47001404851,001404851,Company,1,1,17-19 Pacific Highway GATESHEAD,Newcastle,service,1/1,MVRL6340
 single_site_company,Get Movin Services Pty Ltd,31668570778,668570778,Company,1,1,32 PRINCES HWY ARNCLIFFE,Sydney,service,1/1,MVRL61613
@@ -806,16 +817,20 @@ single_site_company,Gillard Investments Pty Ltd,,056380191,Company,1,1,Lot 23 16
 single_site_company,Giveitago Pty Ltd,,169229887,Company,1,1,11-13 Angus Ave KANDOS,Central West,service,1/1,MVRL50970
 single_site_company,GJ REYNOLDS AUTOMOTIVE PTY LTD,36645804860,645804860,Company,1,1,1 CARLTON ST RIVERSTONE,Sydney,service,1/1,MVRL58532
 single_site_company,GK Automotive Repairs Pty Ltd,,002856395,Company,1,1,Unit 2 47 Third Avenue BLACKTOWN,Sydney,service,1/1,MVRL35186
+single_site_company,Gladetron Pty Ltd,,051890736,Company,1,1,7/171 Gibbes St CHATSWOOD NSW 2067,Sydney,service,1/1,MVRL25148
 single_site_company,Glendenning Auto Pty Ltd,64617175578,617175578,Company,1,1,U 3 23 Kurrajong Rd NORTH ST MARYS,Sydney,service,1/1,MVRL54227
 single_site_company,Global Automotive Services Pty Ltd,,168812039,Company,1,1,14 7 Lyn Parade PRESTONS,Sydney,service,1/1,MVRL51036
 single_site_company,Global Automotive Transmission Services Pty Ltd,,088534061,Company,1,1,1 Passefield Street LIVERPOOL,Sydney,service,1/1,MVRL57201
 single_site_company,Glow Automotive Pty Ltd,,001693081,Company,1,1,474 CANTERBURY RD CAMPSIE,Sydney,service,1/1,MVRL62841
+single_site_company,Glowbex Pty Ltd,,105267598,Company,1,1,162 Eldridge Road CONDELL PARK NSW 2200,Sydney,service,1/1,MVRL16643
+single_site_company,Glowjade Pty Ltd,,003400548,Company,1,1,306 Frome St MOREE NSW 2400,New England / North West,service,1/1,MVRL50285
 single_site_company,Go-Pro Automotive (NSW) Pty Ltd,,146984198,Company,1,1,Unit 1 240 Parramatta Rd BURWOOD,Sydney,service,1/1,MVRL48786
 single_site_company,Go2gas Pty Ltd,88151893855,151893855,Company,1,1,854 KNIGHT RD NORTH ALBURY,Murray,service,1/1,MVRL61425
 single_site_company,Gold Line Mechanical Auto Repairs Pty Ltd,23624935146,624935146,Company,1,1,79 LARRA ST YENNORA,Sydney,service,1/1,MVRL55100
 single_site_company,Golden Auto Care Pty Ltd,34642102681,642102681,Company,1,1,5 FIRST AV UNANDERRA,Illawarra,service,1/1,MVRL62098
 single_site_company,Goldview Motors Pty Ltd,,001569437,Company,1,1,54 ROSS ST NORTH PARRAMATTA,Sydney,service,1/1,MVRL39947
 single_site_company,GOODING AUTOMOTIVE PTY LTD,,630558735,Company,1,1,UNIT 1 3 OZONE ST CHINDERAH,Northern Rivers,service,1/1,MVRL60620
+single_site_company,Goodspanner Pty Ltd,,117648996,Company,1,1,192 HARBORD RD BROOKVALE NSW 2100,Sydney,service,1/1,MVRL42396
 single_site_company,GOODWINS AUTOMOTIVE PTY LTD,82649922734,649922734,Company,1,1,210 WOLLOMBI RD CESSNOCK,Hunter,service,1/1,MVRL59149
 single_site_company,Gordon Fernies Automotive Services Pty Ltd,,001992614,Company,1,1,1 63 Blaxland Road CAMPBELLTOWN,Sydney,service,1/1,MVRL64141
 single_site_company,GORILLA SUPPORT SERVICES PTY LTD,57639114775,639114775,Company,1,1,7 MAGPIE ST MCDOUGALLS HILL,Sydney,service,1/1,MVRL58681
@@ -827,7 +842,9 @@ single_site_company,Goulburn Automotive Centre Pty Ltd,,600391044,Company,1,1,9A
 single_site_company,Govind and Jerry Automotive Pty Ltd,,089128647,Company,1,1,23-24/11 Romford Rd KINGS PARK,Sydney,service,1/1,MVRL35014
 single_site_company,GP & SM Pty Ltd,,124492048,Company,1,1,UNIT 14 21 MARIGOLD ST REVESBY,Sydney,service,1/1,MVRL55869
 single_site_company,Grace Mechanic Pty Ltd,,132667148,Company,1,1,5/27 Hope St ERMINGTON,Sydney,service,1/1,MVRL49060
+single_site_company,Gramcal Nominess Pty Ltd,,160958449,Company,1,1,90-92 Turea Street BLACKSMITHS NSW 2281,Newcastle,service,1/1,MVRL49867
 single_site_company,Granada Co Pty Ltd,15646097181,646097181,Company,1,1,UNIT 4 3 GANTRY PL BRAEMAR,Southern Highlands / Shoalhaven,service,1/1,MVRL60555
+single_site_company,Granbasi Pty Ltd,,124850193,Company,1,1,100 Finlay Rd GOULBURN NSW 2580,Sydney,service,1/1,MVRL44143
 single_site_company,Grand Turismo Garage Pty Ltd,,616532873,Company,1,1,Fy 7 12 Abbott Rd SEVEN HILLS,Sydney,service,1/1,MVRL55148
 single_site_company,GRANGE AUTO WORKS PTY LTD,90686380870,686380870,Company,1,1,UNIT 14 23-25 BLUETT DR SMEATON GRANGE,Sydney,service,1/1,MVRL63096
 single_site_company,Graul's Mechanical Pty Ltd,,168970634,Company,1,1,7 RESOLUTION DR UNANDERRA,Illawarra,service,1/1,MVRL51052
@@ -838,6 +855,7 @@ single_site_company,Green Tree Group Pty Ltd,65638233904,638233904,Company,1,1,U
 single_site_company,Greenaways Gearboxes Pty Ltd,,088391280,Company,1,1,61 MARCIA ST COFFS HARBOUR,Coffs Harbour - Grafton,service,1/1,MVRL29948
 single_site_company,Greening & Co Pty Ltd,78681537815,681537815,Company,1,1,47-49 BEGA ST BEGA,Capital Region,service,1/1,MVRL63129
 single_site_company,GREGORIOU HOLDINGS PTY LTD,,648232419,Company,1,1,6 STANLEY ST PEAKHURST,Sydney,service,1/1,MVRL60117
+single_site_company,Gregory & Vicky Evans Family Pty Ltd,,074437460,Company,1,1,Unit B2 303 The Horsley Drive FAIRFIELD NSW 2165,Sydney,service,1/1,MVRL29666
 single_site_company,GRESFORD GARAGE AND RURAL PTY LTD,70630005471,630005471,Company,1,1,26 Durham Rd EAST GRESFORD,Hunter,service,1/1,MVRL55932
 single_site_company,GRM Motors Pty Ltd,,065029192,Company,1,1,Unit 1 & Unit 2 4 Metters Place WETHERILL PARK,Sydney,service,1/1,MVRL30141
 single_site_company,GRO Enterprises Pty Ltd,99130942353,130942353,Company,1,1,19-25 BARNES ST TAMINDA,New England / North West,service,1/1,MVRL52080
@@ -849,6 +867,7 @@ single_site_company,GTK Automotive Pty Ltd,48615283719,615283719,Company,1,1,67-
 single_site_company,GTO GARAGE PTY LTD,,640203881,Company,1,1,72 ARUNDEL ST FOREST LODGE,Sydney,service,1/1,MVRL57694
 single_site_company,Gunnedah Auto Care & Exhaust Specialist Pty Ltd,,121826944,Company,1,1,26 Barber St GUNNEDAH,New England / North West,service,1/1,MVRL48183
 single_site_company,GUNNING SERVICE CENTRE PTY LTD,39639949027,639949027,Company,1,1,75 YASS ST GUNNING,Capital Region,service,1/1,MVRL57846
+single_site_company,Gunrad Industries Pty Ltd,,144702410,Company,1,1,19 Quia Road GUNNEDAH NSW 2380,New England / North West,service,1/1,MVRL47965
 single_site_company,GW Automotive Pty Ltd,,126056853,Company,1,1,U 30 1-5 Thew Pde CROMER,Sydney,service,1/1,MVRL45156
 single_site_company,H & H Chandra Pty Ltd,,002303988,Company,1,1,68 MARION ST LEICHHARDT,Sydney,service,1/1,MVRL59989
 single_site_company,H & S Brown Family Holdings Pty Ltd,49668045083,668045083,Company,1,1,170 MAYBE ST BOMBALA,Capital Region,service,1/1,MVRL61861
@@ -856,16 +875,20 @@ single_site_company,H G Brougham Pty Ltd,60613519145,613519145,Company,1,1,U 2 6
 single_site_company,H G Motors Pty Ltd,,093668083,Company,1,1,533 Mowbray Rd W LANE COVE NORTH,Sydney,service,1/1,MVRL54716
 single_site_company,H R Sari Pty Ltd,,152737203,Company,1,1,Unit 2 242-248 Hume Highway LANSVALE,Sydney,service,1/1,MVRL54114
 single_site_company,HAAC PTY LTD,43671353085,671353085,Company,1,1,43 ROXY LANE KYOGLE,Northern Rivers,service,1/1,MVRL61548
+single_site_company,Habib Bros Pty Ltd,,087184978,Company,1,1,Unit B 125 Fourth Avenue AUSTRAL NSW 2179,Sydney,service,1/1,MVRL6151
 single_site_company,Hahn Automotive Services Pty Ltd,,002467085,Company,1,1,161-165 Botany Road WATERLOO,Sydney,service,1/1,MVRL56955
 single_site_company,Hallak Enterprises Pty Ltd,,130987178,Company,1,1,393 North Rocks Rd CARLINGFORD,Sydney,service,1/1,MVRL45635
+single_site_company,Hammond Conversions Pty Ltd,11079211724,079211724,Company,1,1,127 Mt Darragh Rd PAMBULA NSW 2549,Capital Region,service,1/1,MVRL31493
 single_site_company,Hankook Automotive Mechanical Silverwater Pty Ltd,22613069499,613069499,Company,1,1,47 BRODIE ST RYDALMERE,Sydney,service,1/1,MVRL57106
 single_site_company,Hannath Automotive Pty Ltd,83682688928,682688928,Company,1,1,4-6/28 Arthur Kaine Dr PAMBULA,Capital Region,service,1/1,MVRL62652
+single_site_company,Hans Oversnow Pty Ltd,,001661641,Company,1,1,Lot 10 Lee St JINDABYNE NSW 2627,Riverina,service,1/1,MVRL50782
 single_site_company,Harjeet Mechanical Pty Ltd,,666205287,Company,1,1,UNIT 3 54 WELLINGTON ST RIVERSTONE,Sydney,service,1/1,MVRL61036
 single_site_company,HARLEQUIN ENTERPRISES PTY. LTD.,50093986380,093986380,Company,1,1,UNIT 3 6-8 CRANBROOK RD BATEMANS BAY,Southern Highlands / Shoalhaven,service,1/1,MVRL57999
 single_site_company,Harold Park Repairs Pty Ltd,,109596769,Company,1,1,208 Parramatta Rd CAMPERDOWN,Sydney,service,1/1,MVRL52976
 single_site_company,HARPER AUTOMOTIVE PTY LTD,,626674262,Company,1,1,U 6 3 Ozone St CHINDERAH,Northern Rivers,service,1/1,MVRL55442
 single_site_company,Harts Automotive Pty Ltd,,126220120,Company,1,1,60 Gipps Street KIAMA,Southern Highlands / Shoalhaven,service,1/1,MVRL44264
 single_site_company,HARVEST AUTO PTY LTD,40688794041,688794041,Company,1,1,51 HUNTER ST HORNSBY,Sydney,service,1/1,MVRL64131
+single_site_company,Harvey Black Group Pty Ltd,,069343460,Company,1,1,Newell Highway MOREE NSW 2400,New England / North West,service,1/1,MVRL40343
 single_site_company,Harvey's Service Centre Pty Ltd,,000108092,Company,1,1,"120 High Street HILLSTON, 2675",Riverina,service,1/1,MVRL1384
 single_site_company,Haydens Mechanical Repairs Pty Ltd,,114676596,Company,1,1,14 Anson St TAMINDA TAMWORTH,New England / North West,service,1/1,MVRL23589
 single_site_company,HAYES AUTO HOLDINGS PTY LTD,66671462981,671462981,Company,1,1,HAYES TOYOTA 30-40 PROSPERO ST SOUTH MURWILLUMBAH,Northern Rivers,service,1/1,MVRL61752

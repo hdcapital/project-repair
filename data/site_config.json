@@ -11,7 +11,7 @@
     "post_data_template": null,
     "url_template": "https://verify.licence.nsw.gov.au/publicregisterapi/api/v1/licence/search/details/Motor%20Vehicle%20Repairers%20Licence/{licence_id}"
   },
-  "discovered_at": "2026-10-08T06:15:15Z",
+  "discovered_at": "2026-10-08T10:40:50Z",
   "discovered_with": "MVRL24145",
   "final_page_url": "https://verify.licence.nsw.gov.au/details/Motor/1-XT3-1089",
   "search": {
