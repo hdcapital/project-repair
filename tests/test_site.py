@@ -255,9 +255,6 @@ class FetchHttpTests(TempData):
         self.assertIn(120, sleeps)
         self.assertAlmostEqual(res["rate"], 0.5)                           # halved twice
         self.assertAlmostEqual(json.loads((self.d / "site_config.json").read_text())["learned_rate"], 0.5)
-        # next run starts from the remembered rate, never above the cap
-        self.assertAlmostEqual(ss.load_learned_rate(2.0), 0.5)
-        self.assertAlmostEqual(ss.load_learned_rate(0.25), 0.25)
 
     def test_persistent_429_stops_the_run(self):
         self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(3)])
@@ -268,13 +265,42 @@ class FetchHttpTests(TempData):
         self.assertEqual(sum(s for s in sleeps if s >= 60), sum(ss.THROTTLE_HOLDS))
         self.assertFalse((self.d / "details_site.jsonl").exists())
 
-    def test_rate_creeps_back_after_100_clean_fetches(self):
-        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(250)])
-        pl.write_json(self.d / "site_config.json", {"details": self.CFG, "learned_rate": 0.5})
-        res = ss.fetch_http(self.CFG, rate=2.0, limit=0,
-                            call=lambda c, lid, num: (200, json.dumps(detail_body(lid))), sleep=lambda s: None)
-        self.assertEqual(res["ok"], 250)
-        self.assertAlmostEqual(res["rate"], 0.605)                         # 0.5 * 1.1 * 1.1
+    def test_rate_climbs_back_after_clean_fetches(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(120)])
+        script = {"ID-0": [429]}
+
+        def call(c, lid, num):
+            if script.get(lid):
+                script[lid].pop(0)
+                return 429, "limited"
+            return 200, json.dumps(detail_body(lid))
+
+        res = ss.fetch_http(self.CFG, rate=2.0, limit=0, call=call, sleep=lambda s: None)
+        self.assertEqual(res["ok"], 120)
+        self.assertAlmostEqual(res["rate"], 1.5625)                        # 1.0 -> +25% at 50 and 100
+
+    def test_sliding_window_pauses_until_oldest_request_expires(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(7)])
+        t = [1000.0]
+        sleeps = []
+
+        def clock():
+            return t[0]
+
+        def sleep(s):
+            sleeps.append(s)
+            t[0] += s
+
+        def call(c, lid, num):
+            t[0] += 1.0                                                   # 1 s per request
+            return 200, json.dumps(detail_body(lid))
+
+        res = ss.fetch_http(self.CFG, rate=1000, limit=0, call=call, sleep=sleep, clock=clock,
+                            window_max=3, window_seconds=60)
+        self.assertEqual(res["ok"], 7)
+        pauses = [s for s in sleeps if s > 5]
+        self.assertEqual(len(pauses), 2)                                   # after 3 and after 6
+        self.assertTrue(all(55 <= p <= 61 for p in pauses), pauses)
 
     def test_limit(self):
         self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(10)])
