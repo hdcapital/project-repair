@@ -1,19 +1,19 @@
 # NSW motor-repairer enrichment — summary
 
-_As of 2026-10-08T05:35:28Z_
+_As of 2026-10-08T13:17:55Z_
 
 ## Fetch progress
 
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 4903 |
-| remaining | 9017 |
+| details fetched | 5203 |
+| remaining | 7410 |
 | last good rate | 600 req/min |
-| ETA at that rate | 0.3 h of run time (~0.3 hourly runs) |
-| calls this month | 5000 |
+| ETA at that rate | 0.2 h of run time (~0.2 hourly runs) |
+| calls this month | 5001 |
 | quota state | paused until 2026-11-01T00:00:00Z |
-| api keys seen | HF2T…NH5H: ok (1 calls); au4v…YpF7: spent (2497 calls); m6q4…jFos: spent (2 calls) |
+| api keys seen | HF2T…NH5H: ok (2 calls); au4v…YpF7: spent (2497 calls); m6q4…jFos: spent (2 calls) |
 | complete | False |
 | last run reason | quota_exhausted |
 
@@ -21,8 +21,8 @@ _As of 2026-10-08T05:35:28Z_
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 530 | 133 | 29 | 116 | 1759 | 804 | 1281 | 4652 |
-| Unknown (no address in register) | 56 | 17 | 49 | 37 | 291 | 356 | 2539 | 3345 |
+| Sydney | 532 | 133 | 29 | 116 | 1760 | 804 | 1281 | 4655 |
+| Unknown (no address in register) | 56 | 17 | 49 | 37 | 289 | 356 | 2539 | 3343 |
 | Newcastle | 38 | 22 | 7 | 24 | 192 | 136 | 151 | 570 |
 | New England / North West | 37 | 18 | 3 | 11 | 156 | 114 | 152 | 491 |
 | Riverina | 22 | 16 | 2 | 13 | 150 | 110 | 167 | 480 |
@@ -31,15 +31,15 @@ _As of 2026-10-08T05:35:28Z_
 | Central West | 20 | 13 | 1 | 10 | 88 | 85 | 134 | 351 |
 | Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 108 | 78 | 100 | 322 |
 | Illawarra | 27 | 5 | 1 | 5 | 112 | 68 | 95 | 313 |
-| Far West / Orana | 17 | 6 | 1 | 13 | 84 | 79 | 102 | 302 |
+| Far West / Orana | 17 | 6 | 1 | 13 | 83 | 80 | 102 | 302 |
 | Hunter | 15 | 15 | 1 | 7 | 81 | 72 | 85 | 276 |
 | Capital Region | 14 | 10 | 1 | 12 | 81 | 51 | 68 | 237 |
 | Coffs Harbour - Grafton | 17 | 1 | 2 | 5 | 44 | 43 | 69 | 181 |
 | Murray | 3 | 3 | 1 | 8 | 75 | 36 | 55 | 181 |
-| Central Coast | 8 | 2 | 3 | 3 | 59 | 29 | 34 | 138 |
+| Central Coast | 8 | 2 | 3 | 3 | 58 | 29 | 34 | 137 |
 | Outside NSW postcode table | 2 | 0 | 0 | 0 | 18 | 3 | 7 | 30 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 |
-| **total** | 878 | 283 | 110 | 286 | 3547 | 2236 | 5273 | 12613 |
+| **total** | 880 | 283 | 110 | 286 | 3544 | 2237 | 5273 | 12613 |
 
 ## Queue tiers
 
@@ -108,5 +108,5 @@ _As of 2026-10-08T05:35:28Z_
 
 ## Shortlist
 
-- independent multi-site service operators: **138**
+- independent multi-site service operators: **140**
 - single-site service companies (widen later): **2238**
