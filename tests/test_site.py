@@ -251,8 +251,8 @@ class FetchHttpTests(TempData):
         self.assertEqual(res["ok"], 4)
         self.assertEqual(res["errors"], 0)                                 # 429 is not an error
         self.assertEqual(calls, ["ID-0", "ID-1", "ID-1", "ID-1", "ID-2", "ID-3"])
-        self.assertIn(60, sleeps)
-        self.assertIn(120, sleeps)
+        self.assertIn(ss.THROTTLE_HOLDS[0], sleeps)
+        self.assertIn(ss.THROTTLE_HOLDS[1], sleeps)
         self.assertAlmostEqual(res["rate"], 0.5)                           # halved twice
         self.assertAlmostEqual(json.loads((self.d / "site_config.json").read_text())["learned_rate"], 0.5)
 

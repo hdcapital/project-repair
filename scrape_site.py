@@ -421,11 +421,12 @@ def parse_body(body: str, licence_number: str, mode: str = "details", licence_id
     return None
 
 
-THROTTLE_HOLDS = (60, 120, 240, 480, 600, 600)   # seconds to wait after the 1st, 2nd, ... 429 in a row
+THROTTLE_HOLDS = (300, 600, 600, 600, 600)       # seconds to wait after the 1st, 2nd, ... 429 in a row
 MIN_RATE = 0.2                                      # requests/second floor after repeated 429s
-# Cloudflare on verify.licence.nsw.gov.au blocks (HTTP 429, error 1015) after roughly 250-290
-# requests inside ~10 minutes from one IP, for about 15 minutes.  Stay under that window.
-WINDOW_MAX = 230
+# Cloudflare on verify.licence.nsw.gov.au blocks (HTTP 429, error 1015) for 10-15 minutes once
+# one IP has made roughly 250-300 requests in a 10-15 minute stretch; stretches at ~0.25/s ran
+# for 20+ minutes without complaint.  180 per 10 minutes (0.3/s) stays under that.
+WINDOW_MAX = 180
 WINDOW_SECONDS = 600
 
 

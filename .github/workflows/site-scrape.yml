@@ -12,8 +12,8 @@ on:
         default: '3000'
         required: false
       rate:
-        description: 'Requests per second (the 230-per-10-minute window is the real limit)'
-        default: '1'
+        description: 'Requests per second cap (the 180-per-10-minute window is the real limit)'
+        default: '0.5'
         required: false
       limit:
         description: 'Stop after N licences (0 = all)'
@@ -34,7 +34,7 @@ jobs:
     timeout-minutes: 55
     env:
       RUN_SECONDS: ${{ inputs.run_seconds || '3000' }}
-      RATE: ${{ inputs.rate || '1' }}
+      RATE: ${{ inputs.rate || '0.5' }}
       LIMIT: ${{ inputs.limit || '0' }}
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
       - name: Fetch details from the site (resumable, checkpoint commits)
         run: |
           [ -f data/site_config.json ] || { echo "data/site_config.json missing: run site-scrape-test (discover) first"; exit 1; }
-          python3 scrape_site.py fetch --mode details --rate "$RATE" --limit "$LIMIT" --run-seconds "$RUN_SECONDS" --checkpoint 300 --window-max 230 --window-seconds 600
+          python3 scrape_site.py fetch --mode details --rate "$RATE" --limit "$LIMIT" --run-seconds "$RUN_SECONDS" --checkpoint 300 --window-max 180 --window-seconds 600
 
       - name: Build
         if: always()
