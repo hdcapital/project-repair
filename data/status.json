@@ -5,10 +5,5 @@
   "quota_exhausted_until": "2026-11-01T00:00:00Z",
   "reason": "quota_exhausted",
   "remaining": 11512,
-  "run": {
-    "fetched": 827,
-    "seconds": 2867,
-    "skipped": 11512
-  },
-  "updated_at": "2026-10-07T10:34:28Z"
+  "updated_at": "2026-10-08T05:19:15Z"
 }

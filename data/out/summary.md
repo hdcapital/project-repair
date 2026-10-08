@@ -1,6 +1,6 @@
 # NSW motor-repairer enrichment — summary
 
-_As of 2026-10-07T10:34:28Z_
+_As of 2026-10-08T05:19:15Z_
 
 ## Fetch progress
 
