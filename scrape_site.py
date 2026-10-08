@@ -421,20 +421,71 @@ def parse_body(body: str, licence_number: str, mode: str = "details", licence_id
     return None
 
 
+THROTTLE_HOLDS = (60, 120, 240, 480, 600, 600)   # seconds to wait after the 1st, 2nd, ... 429 in a row
+MIN_RATE = 0.1                                      # requests/second floor after repeated 429s
+
+
+def load_learned_rate(default: float) -> float:
+    st = pl.read_json(config_path(), {})
+    try:
+        r = float(st.get("learned_rate") or 0)
+    except (TypeError, ValueError):
+        r = 0
+    return min(default, r) if r > 0 else default
+
+
+def save_learned_rate(rate: float) -> None:
+    p = config_path()
+    if p.exists():
+        st = pl.read_json(p, {})
+        if abs(float(st.get("learned_rate") or 0) - rate) > 1e-6:
+            st["learned_rate"] = round(rate, 3)
+            pl.write_json(p, st)
+
+
 def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sleep, *,
                deadline: float | None = None, checkpoint_every: int = 0, checkpoint=None,
                clock=time.time) -> dict:
+    """Fetch every licence still to do.  The site sits behind Cloudflare rate limiting (HTTP 429,
+    error 1015): a 429 is not a per-licence error -- wait (60 s, 120 s, 240 s, ...), halve the
+    rate, and retry the same licence; after 100 clean fetches the rate creeps back up (+10 %), never
+    above --rate.  The last good rate is remembered in site_config.json for the next run."""
     d = pl.data_dir()
     todo = todo_licences(limit, cfg.get("mode", "details"))
-    log(f"site fetch: {len(todo)} licences to do at {rate}/s")
-    ok = errors = consecutive = 0
-    since_checkpoint = 0
+    rate_now = load_learned_rate(rate)
+    log(f"site fetch: {len(todo)} licences to do at {rate_now:.2f}/s (cap {rate}/s)")
+    ok = errors = consecutive = throttles = 0
+    since_checkpoint = clean_streak = 0
     t0 = clock()
-    for n, q in enumerate(todo, 1):
-        if deadline and clock() >= deadline:
-            log(f"run time is up after {n - 1} licences")
+    n = 0
+    stop = False
+    for q in todo:
+        if stop:
             break
-        status, body = call(cfg, q["licence_id"], q["licence_number"])
+        while True:                                   # retried on 429 until it goes through
+            if deadline and clock() >= deadline:
+                log(f"run time is up after {n} licences")
+                stop = True
+                break
+            status, body = call(cfg, q["licence_id"], q["licence_number"])
+            if status == 429:
+                if throttles >= len(THROTTLE_HOLDS):
+                    log(f"still rate limited after {throttles} holds -> stopping this run")
+                    stop = True
+                    break
+                hold = THROTTLE_HOLDS[throttles]
+                throttles += 1
+                rate_now = max(MIN_RATE, rate_now / 2)
+                clean_streak = 0
+                log(f"{q['licence_number']}: HTTP 429 (rate limited) -> holding {hold}s, "
+                    f"rate now {rate_now:.2f}/s")
+                save_learned_rate(rate_now)
+                sleep(hold)
+                continue
+            break
+        if stop:
+            break
+        n += 1
         rec = {"licence_id": q["licence_id"], "licence_number": q["licence_number"],
                "fetched_at": pl.iso(), "source": f"site-{cfg.get('mode', 'details')}"}
         payload = (parse_body(body, q["licence_number"], cfg.get("mode", "details"), q["licence_id"])
@@ -443,8 +494,13 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
             rec["raw"] = payload
             ok += 1
             consecutive = 0
+            throttles = 0
+            clean_streak += 1
             since_checkpoint += 1
             pl.append_jsonl(out_path(), rec)
+            if clean_streak % 100 == 0 and rate_now < rate:
+                rate_now = min(rate, rate_now * 1.1)
+                save_learned_rate(rate_now)
             if checkpoint and checkpoint_every and since_checkpoint >= checkpoint_every:
                 checkpoint(f"site-scrape: checkpoint {ok} this run, {len(todo) - n} to go")
                 since_checkpoint = 0
@@ -462,10 +518,11 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
                 break
         if n % 100 == 0:
             log(f"{n}/{len(todo)} done, {ok} ok, {errors} errors, "
-                f"{n / max(clock() - t0, 1):.2f}/s")
-        sleep(max(0.0, (1.0 / rate) * random.uniform(0.7, 1.3)))
-    log(f"site fetch done: {ok} ok, {errors} errors")
-    return {"ok": ok, "errors": errors}
+                f"{n / max(clock() - t0, 1):.2f}/s actual, target {rate_now:.2f}/s")
+        sleep(max(0.0, (1.0 / rate_now) * random.uniform(0.7, 1.3)))
+    save_learned_rate(rate_now)
+    log(f"site fetch done: {ok} ok, {errors} errors, rate {rate_now:.2f}/s")
+    return {"ok": ok, "errors": errors, "rate": rate_now}
 
 
 def fetch_browser(cfg: dict, rate: float, limit: int, headed: bool = False) -> dict:

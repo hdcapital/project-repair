@@ -167,7 +167,7 @@ class FetchHttpTests(TempData):
             return 200, json.dumps({"data": detail_body(lid)})
 
         res = ss.fetch_http(self.CFG, rate=1000, limit=0, call=call, sleep=lambda s: None)
-        self.assertEqual(res, {"ok": 4, "errors": 0})
+        self.assertEqual((res["ok"], res["errors"]), (4, 0))
         self.assertEqual(calls, ["ID-1", "ID-2", "ID-3", "ID-4"])          # ID-0 skipped
         site = pl.read_jsonl(self.d / "details_site.jsonl", "licence_id")
         self.assertEqual(sorted(site), ["ID-1", "ID-2", "ID-3", "ID-4"])    # api file untouched
@@ -233,6 +233,48 @@ class FetchHttpTests(TempData):
         self.assertEqual(res["ok"], 13)                                   # stopped by the deadline
         self.assertEqual(len(commits), 2)                                  # after 5 and 10
         self.assertIn("5 this run", commits[0])
+
+    def test_429_backs_off_halves_rate_and_retries_same_licence(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(4)])
+        pl.write_json(self.d / "site_config.json", {"details": self.CFG})
+        script = {"ID-1": [429, 429]}                     # two rate-limit answers, then fine
+        calls, sleeps = [], []
+
+        def call(c, lid, num):
+            calls.append(lid)
+            if script.get(lid):
+                script[lid].pop(0)
+                return 429, '{"type":"https://developers.cloudflare.com/.../error-1015/"}'
+            return 200, json.dumps(detail_body(lid))
+
+        res = ss.fetch_http(self.CFG, rate=2.0, limit=0, call=call, sleep=sleeps.append)
+        self.assertEqual(res["ok"], 4)
+        self.assertEqual(res["errors"], 0)                                 # 429 is not an error
+        self.assertEqual(calls, ["ID-0", "ID-1", "ID-1", "ID-1", "ID-2", "ID-3"])
+        self.assertIn(60, sleeps)
+        self.assertIn(120, sleeps)
+        self.assertAlmostEqual(res["rate"], 0.5)                           # halved twice
+        self.assertAlmostEqual(json.loads((self.d / "site_config.json").read_text())["learned_rate"], 0.5)
+        # next run starts from the remembered rate, never above the cap
+        self.assertAlmostEqual(ss.load_learned_rate(2.0), 0.5)
+        self.assertAlmostEqual(ss.load_learned_rate(0.25), 0.25)
+
+    def test_persistent_429_stops_the_run(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(3)])
+        sleeps = []
+        res = ss.fetch_http(self.CFG, rate=2.0, limit=0, call=lambda c, lid, num: (429, "limited"),
+                            sleep=sleeps.append)
+        self.assertEqual(res["ok"], 0)
+        self.assertEqual(sum(s for s in sleeps if s >= 60), sum(ss.THROTTLE_HOLDS))
+        self.assertFalse((self.d / "details_site.jsonl").exists())
+
+    def test_rate_creeps_back_after_100_clean_fetches(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(250)])
+        pl.write_json(self.d / "site_config.json", {"details": self.CFG, "learned_rate": 0.5})
+        res = ss.fetch_http(self.CFG, rate=2.0, limit=0,
+                            call=lambda c, lid, num: (200, json.dumps(detail_body(lid))), sleep=lambda s: None)
+        self.assertEqual(res["ok"], 250)
+        self.assertAlmostEqual(res["rate"], 0.605)                         # 0.5 * 1.1 * 1.1
 
     def test_limit(self):
         self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(10)])
