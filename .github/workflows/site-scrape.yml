@@ -55,7 +55,8 @@ jobs:
 
       - name: Commit and push data/
         if: always()
-        run: python3 pipeline.py commit -m "site-scrape: run ${{ github.run_number }}"
+        run: |
+          python3 pipeline.py commit -m "site-scrape run ${{ github.run_number }}"
 
       - name: Disable this workflow when nothing is left to fetch
         if: always()
