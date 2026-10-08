@@ -934,25 +934,21 @@ def cmd_fetch_details(args) -> int:
         budget["quota_exhausted_until"] = None
         budget.pop("quota_reason", None)
         write_json(d / "budget.json", budget)
-    if quota_exhausted_now(budget):   # fast path: no credentials, no API, <20s
+    creds = parse_credentials() if not dry else []
+    # fast path: every configured key is spent (or, with no key info, the month is) -> no API, <20s
+    if keys_exhausted(budget, creds) if creds else quota_exhausted_now(budget):
         todo = len(ensure_queue(d)) - len(fetched_ids(read_jsonl(d / "details.jsonl", "licence_id")))
-        log(f"quota exhausted until {budget['quota_exhausted_until']}; exiting without touching the API")
+        log(f"all {len(creds)} configured key(s) spent; quota exhausted until "
+            f"{budget['quota_exhausted_until']}; exiting without touching the API")
         write_status(d, remaining=max(todo, 0), budget=budget, extra={"reason": "quota_exhausted"})
         return 0
     client = None
     if not dry:
-        creds = parse_credentials()
         if not creds:
             print("ERROR: no api.nsw credentials: set NSW_API_KEY + NSW_API_SECRET, or NSW_API_KEYS "
                   "with one 'key:secret' per line (GitHub Secrets in Actions, .env locally)",
                   file=sys.stderr)
             return 2
-        if keys_exhausted(budget, creds):
-            log(f"all {len(creds)} configured keys are spent until {budget['quota_exhausted_until']}; "
-                "exiting without touching the API")
-            todo = len(ensure_queue(d)) - len(fetched_ids(read_jsonl(d / "details.jsonl", "licence_id")))
-            write_status(d, remaining=max(todo, 0), budget=budget, extra={"reason": "quota_exhausted"})
-            return 0
         log(f"{len(creds)} api.nsw key(s) configured: " + ", ".join(key_id(k) for k, _ in creds))
         client = AdaptiveClient(creds, AdaptiveRate(budget.get("last_rate", DEFAULT_RPM)),
                                 key_state=budget.setdefault("keys", {}))

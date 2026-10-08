@@ -160,5 +160,36 @@ class RotationTests(TempData):
         self.assertEqual(json.loads((self.d / "status.json").read_text())["reason"], "quota_exhausted")
 
 
+    def test_cli_with_legacy_pause_and_extra_keys_fetches(self):
+        """Regression: budget.json from the single-key era (global pause, no per-key info) must not
+        block a run that has more keys configured than the pause knows about."""
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(3)])
+        pl.write_json(self.d / "budget.json", {"month": pl.now_utc().strftime("%Y-%m"),
+                                               "quota_exhausted_until": pl.iso(pl.first_of_next_month()),
+                                               "last_rate": 300})
+        os.environ["NSW_API_KEY"], os.environ["NSW_API_SECRET"] = "OLD", "o"
+        os.environ["NSW_API_KEYS"] = "NEW1:n1\nNEW2:n2"
+        for k in ("NSW_API_KEY", "NSW_API_SECRET", "NSW_API_KEYS"):
+            self.addCleanup(os.environ.pop, k, None)
+        http = KeyedHTTP({"OLD": 0, "NEW1": 2, "NEW2": 9})
+        clock = FakeClock()
+        real = pl.AdaptiveClient.__init__
+
+        def patched(self_, creds, rate, *a, **kw):   # inject the stub transport into the CLI path
+            kw.update(http=http, sleep=clock.sleep, clock=clock, verbose=False)
+            real(self_, creds, rate, *a, **kw)
+
+        pl.AdaptiveClient.__init__ = patched
+        self.addCleanup(setattr, pl.AdaptiveClient, "__init__", real)
+        self.assertEqual(pl.cmd_fetch_details(None), 0)
+        st = json.loads((self.d / "status.json").read_text())
+        self.assertTrue(st["complete"])
+        keys_used = [k for k, kind, _ in http.calls if kind == "details"]
+        self.assertEqual(keys_used, ["OLD", "NEW1", "NEW1", "NEW1", "NEW2"])   # 1 rejected probe on OLD
+        budget = json.loads((self.d / "budget.json").read_text())
+        self.assertTrue(pl.quota_exhausted_now(budget["keys"][pl.key_id("OLD")]))
+        self.assertIsNone(budget["quota_exhausted_until"])
+
+
 if __name__ == "__main__":
     unittest.main()
