@@ -14,6 +14,7 @@
   "discovered_at": "2026-10-08T10:40:50Z",
   "discovered_with": "MVRL24145",
   "final_page_url": "https://verify.licence.nsw.gov.au/details/Motor/1-XT3-1089",
+  "learned_rate": 0.11,
   "search": {
     "headers": {
       "accept": "application/json, text/plain, */*",

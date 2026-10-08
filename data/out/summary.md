@@ -7,7 +7,7 @@ _As of 2026-10-08T05:35:28Z_
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 3783 |
+| details fetched | 4196 |
 | remaining | 9017 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.3 h of run time (~0.3 hourly runs) |
@@ -21,25 +21,25 @@ _As of 2026-10-08T05:35:28Z_
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 512 | 133 | 29 | 115 | 1723 | 803 | 1336 | 4651 |
-| Unknown (no address in register) | 54 | 17 | 49 | 37 | 285 | 354 | 2552 | 3348 |
-| Newcastle | 37 | 22 | 7 | 23 | 189 | 136 | 156 | 570 |
-| New England / North West | 37 | 18 | 3 | 11 | 151 | 114 | 158 | 492 |
-| Riverina | 21 | 16 | 2 | 13 | 143 | 110 | 175 | 480 |
-| Northern Rivers | 25 | 12 | 3 | 8 | 130 | 83 | 117 | 378 |
-| Mid North Coast | 23 | 6 | 2 | 9 | 114 | 89 | 121 | 364 |
-| Central West | 20 | 13 | 1 | 10 | 83 | 85 | 138 | 350 |
-| Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 104 | 78 | 101 | 319 |
-| Illawarra | 27 | 5 | 1 | 5 | 110 | 68 | 98 | 314 |
-| Far West / Orana | 17 | 6 | 1 | 13 | 82 | 79 | 104 | 302 |
-| Hunter | 15 | 15 | 1 | 7 | 79 | 71 | 87 | 275 |
-| Capital Region | 14 | 10 | 1 | 12 | 81 | 51 | 69 | 238 |
-| Coffs Harbour - Grafton | 16 | 1 | 2 | 5 | 43 | 43 | 71 | 181 |
+| Sydney | 526 | 133 | 29 | 116 | 1764 | 803 | 1281 | 4652 |
+| Unknown (no address in register) | 56 | 17 | 49 | 37 | 293 | 356 | 2539 | 3347 |
+| Newcastle | 38 | 22 | 7 | 23 | 193 | 136 | 151 | 570 |
+| New England / North West | 37 | 18 | 3 | 11 | 156 | 114 | 152 | 491 |
+| Riverina | 22 | 16 | 2 | 13 | 150 | 110 | 167 | 480 |
+| Northern Rivers | 26 | 12 | 3 | 8 | 132 | 83 | 114 | 378 |
+| Mid North Coast | 23 | 6 | 2 | 9 | 116 | 89 | 119 | 364 |
+| Central West | 20 | 13 | 1 | 10 | 87 | 85 | 134 | 350 |
+| Southern Highlands / Shoalhaven | 23 | 4 | 4 | 5 | 107 | 78 | 100 | 321 |
+| Illawarra | 27 | 5 | 1 | 5 | 112 | 68 | 95 | 313 |
+| Far West / Orana | 17 | 6 | 1 | 13 | 84 | 79 | 102 | 302 |
+| Hunter | 15 | 15 | 1 | 7 | 82 | 71 | 85 | 276 |
+| Capital Region | 14 | 10 | 1 | 12 | 81 | 51 | 68 | 237 |
+| Coffs Harbour - Grafton | 16 | 1 | 2 | 5 | 45 | 43 | 69 | 181 |
 | Murray | 3 | 3 | 1 | 8 | 76 | 35 | 55 | 181 |
-| Central Coast | 8 | 2 | 3 | 3 | 57 | 29 | 36 | 138 |
+| Central Coast | 8 | 2 | 3 | 3 | 59 | 29 | 34 | 138 |
 | Outside NSW postcode table | 2 | 0 | 0 | 0 | 18 | 3 | 7 | 30 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 |
-| **total** | 854 | 283 | 110 | 284 | 3469 | 2231 | 5382 | 12613 |
+| **total** | 873 | 283 | 110 | 285 | 3556 | 2233 | 5273 | 12613 |
 
 ## Queue tiers
 
@@ -57,6 +57,7 @@ _As of 2026-10-08T05:35:28Z_
 |---|---|---|---|---|---|---|
 | Bob Jane Corporation Pty Ltd |  | unknown | 1 | 18 | Central West; Illawarra; Newcastle; Northern Rivers; Riverina; Southern Highlands / Shoalhaven; Sydney | Bob Jane |
 | Capital Smart Repairs Australia Pty Ltd |  | service | 1 | 17 | Capital Region; Newcastle; Sydney |  |
+| Westrac Pty Ltd |  | service | 1 | 12 | Central West; Far West / Orana; Hunter; Illawarra; Murray; New England / North West; Newcastle; Riverina; Sydney |  |
 | AMA Group Solutions Pty Ltd | 25124094739 | unknown | 1 | 11 | Illawarra; Murray; Newcastle; Riverina; Sydney |  |
 | Peter Warren Automotive Pty Ltd | 67000293621 | service | 1 | 11 | Sydney |  |
 | S M A Motors Pty Ltd | 53000158725 | dealer | 7 | 10 | Sydney |  |
@@ -99,14 +100,13 @@ _As of 2026-10-08T05:35:28Z_
 | Italian Automobiles Group Pty Ltd |  | service | 1 | 4 | Sydney |  |
 | Moro & Sons Automotive Pty Ltd |  | service | 1 | 4 | Sydney |  |
 | Palmira Holdings Group Pty Ltd | 12672810589 | unknown | 1 | 4 | Southern Highlands / Shoalhaven |  |
+| TOTAL AG SOLUTIONS PTY LTD |  | unknown | 1 | 4 | Central West; Riverina |  |
+| White/King Wollongong Pty Ltd |  | service | 1 | 4 | Illawarra; Southern Highlands / Shoalhaven |  |
 | Alweal Pty. Limited | 55061127008 | body | 3 | 3 | Hunter; Newcastle |  |
 | Aussie Dent King Pty Ltd |  | body | 3 | 3 | Northern Rivers; Unknown (no address in register) |  |
 | Cessnock Automotive Sales Pty Ltd |  | dealer | 3 | 3 | Hunter; Newcastle |  |
-| Hunter Regional Tyres Pty Ltd |  | specialist | 3 | 3 | Newcastle; Sydney | Bridgestone |
-| Inland Truck Centres Pty Ltd |  | specialist | 3 | 3 | Central West; Far West / Orana; Outside NSW postcode table |  |
-| Lesilo Pty Ltd |  | specialist | 3 | 3 | Hunter; Mid North Coast; Sydney |  |
 
 ## Shortlist
 
-- independent multi-site service operators: **129**
-- single-site service companies (widen later): **2156**
+- independent multi-site service operators: **135**
+- single-site service companies (widen later): **2238**
