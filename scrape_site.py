@@ -422,7 +422,11 @@ def parse_body(body: str, licence_number: str, mode: str = "details", licence_id
 
 
 THROTTLE_HOLDS = (60, 120, 240, 480, 600, 600)   # seconds to wait after the 1st, 2nd, ... 429 in a row
-MIN_RATE = 0.1                                      # requests/second floor after repeated 429s
+MIN_RATE = 0.2                                      # requests/second floor after repeated 429s
+# Cloudflare on verify.licence.nsw.gov.au blocks (HTTP 429, error 1015) after roughly 250-290
+# requests inside ~10 minutes from one IP, for about 15 minutes.  Stay under that window.
+WINDOW_MAX = 230
+WINDOW_SECONDS = 600
 
 
 def load_learned_rate(default: float) -> float:
@@ -445,20 +449,39 @@ def save_learned_rate(rate: float) -> None:
 
 def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sleep, *,
                deadline: float | None = None, checkpoint_every: int = 0, checkpoint=None,
-               clock=time.time) -> dict:
-    """Fetch every licence still to do.  The site sits behind Cloudflare rate limiting (HTTP 429,
-    error 1015): a 429 is not a per-licence error -- wait (60 s, 120 s, 240 s, ...), halve the
-    rate, and retry the same licence; after 100 clean fetches the rate creeps back up (+10 %), never
-    above --rate.  The last good rate is remembered in site_config.json for the next run."""
+               clock=time.time, window_max: int = WINDOW_MAX, window_seconds: int = WINDOW_SECONDS) -> dict:
+    """Fetch every licence still to do, politely.
+
+    Pacing: at most --rate requests/second AND at most `window_max` requests in any
+    `window_seconds` (a sliding window, which is how Cloudflare counts).  A 429 is not a
+    per-licence error: wait (60 s, 120 s, 240 s, ...), halve the rate, and retry the same
+    licence; 50 clean fetches later the rate climbs back (+25 %), never above --rate.  Each
+    run starts at --rate again (fresh runner, fresh IP); the last rate is saved for reporting."""
+    from collections import deque
     d = pl.data_dir()
     todo = todo_licences(limit, cfg.get("mode", "details"))
-    rate_now = load_learned_rate(rate)
-    log(f"site fetch: {len(todo)} licences to do at {rate_now:.2f}/s (cap {rate}/s)")
+    rate_now = rate
+    log(f"site fetch: {len(todo)} licences to do at {rate_now:.2f}/s, max {window_max} per "
+        f"{window_seconds}s")
     ok = errors = consecutive = throttles = 0
     since_checkpoint = clean_streak = 0
     t0 = clock()
     n = 0
     stop = False
+    window: deque = deque()
+
+    def pace():
+        """Block until a request may go out without exceeding the window."""
+        now = clock()
+        while window and window[0] <= now - window_seconds:
+            window.popleft()
+        if len(window) >= window_max:
+            wait = window[0] + window_seconds - now + 0.5
+            log(f"window full ({window_max} in {window_seconds}s) -> pausing {wait:.0f}s")
+            sleep(wait)
+            while window and window[0] <= clock() - window_seconds:
+                window.popleft()
+
     for q in todo:
         if stop:
             break
@@ -467,6 +490,8 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
                 log(f"run time is up after {n} licences")
                 stop = True
                 break
+            pace()
+            window.append(clock())
             status, body = call(cfg, q["licence_id"], q["licence_number"])
             if status == 429:
                 if throttles >= len(THROTTLE_HOLDS):
@@ -498,8 +523,8 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
             clean_streak += 1
             since_checkpoint += 1
             pl.append_jsonl(out_path(), rec)
-            if clean_streak % 100 == 0 and rate_now < rate:
-                rate_now = min(rate, rate_now * 1.1)
+            if clean_streak % 50 == 0 and rate_now < rate:
+                rate_now = min(rate, rate_now * 1.25)
                 save_learned_rate(rate_now)
             if checkpoint and checkpoint_every and since_checkpoint >= checkpoint_every:
                 checkpoint(f"site-scrape: checkpoint {ok} this run, {len(todo) - n} to go")
@@ -613,6 +638,10 @@ def main(argv=None) -> int:
                    help="stop after this many seconds (0 = no limit; RUN_DEADLINE env overrides)")
     f.add_argument("--checkpoint", type=int, default=0,
                    help="commit and push data/ every N fetched records (GitHub Actions only)")
+    f.add_argument("--window-max", type=int, default=WINDOW_MAX,
+                   help=f"at most this many requests per --window-seconds (default {WINDOW_MAX})")
+    f.add_argument("--window-seconds", type=int, default=WINDOW_SECONDS,
+                   help=f"sliding window length in seconds (default {WINDOW_SECONDS})")
     args = ap.parse_args(argv)
     if args.cmd == "discover":
         discover(args.licence_number, headed=args.headed,
@@ -640,7 +669,8 @@ def main(argv=None) -> int:
             deadline = time.time() + args.run_seconds
         checkpoint = (lambda msg: pl.commit_and_push(msg)) if (args.checkpoint and pl.should_push()) else None
         fetch_http(cfg, args.rate, args.limit, deadline=deadline,
-                   checkpoint_every=args.checkpoint, checkpoint=checkpoint)
+                   checkpoint_every=args.checkpoint, checkpoint=checkpoint,
+                   window_max=args.window_max, window_seconds=args.window_seconds)
     return 0
 
 
