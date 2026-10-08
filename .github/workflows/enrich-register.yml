@@ -1,8 +1,8 @@
 name: enrich
 
+# The api.nsw path is retired: site-scrape.yml gets the same details (and more) from the public
+# licence-check website with no quota.  No schedule; run by hand only if ever needed again.
 on:
-  schedule:
-    - cron: '7 * * * *'
   workflow_dispatch:
     inputs:
       run_seconds:
