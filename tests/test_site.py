@@ -47,8 +47,69 @@ class ParseBodyTests(unittest.TestCase):
         self.assertIsNone(ss.parse_body(json.dumps({"message": "nothing"}), "MVRL1"))
 
 
+SEARCH_ROW = {"licenceId": "1-XT3-1089", "licenceNumber": "MVRL24145",
+              "licenceType": "Motor Vehicle Repairers Licence", "status": "Current",
+              "granted": "1990-08-03", "expires": "2027-08-03", "licensee": "S M A Motors Pty Ltd",
+              "licenseeType": "Organisation", "suburb": "ARTARMON", "state": "NSW", "postcode": "2064",
+              "address": "43 HOTHAM PDE ARTARMON NSW 2064", "latitude": -33.81, "longitude": 151.18,
+              "ABN": "53000158725", "ACN": "000158725"}
+
+
+class SearchWrapTests(unittest.TestCase):
+    def test_search_row_becomes_details_record_the_flattener_understands(self):
+        body = json.dumps({"pagingInfo": {"totalRecords": 1}, "results": [SEARCH_ROW]})
+        rec = ss.parse_body(body, "MVRL24145", mode="search", licence_id="1-XT3-1089")
+        self.assertEqual(rec["_site"], "search")
+        flat = pl.flatten({"raw": rec})
+        self.assertEqual(flat["abn"], "53000158725")
+        self.assertEqual(flat["acn"], "000158725")
+        self.assertEqual(flat["details_postcode"], "2064")
+        self.assertEqual(flat["n_premises"], 1)
+        self.assertEqual(flat["start_date"], "1990-08-03")
+        self.assertEqual(flat["details_expiry_date"], "2027-08-03")
+        self.assertEqual(pl.entity_key(flat), "acn:000158725")
+        # wrong licence in the results -> nothing
+        self.assertIsNone(ss.parse_body(body, "MVRL1", mode="search"))
+        self.assertIsNone(ss.parse_body(json.dumps({"results": []}), "MVRL24145", mode="search"))
+
+    def test_response_classification(self):
+        search = json.dumps({"pagingInfo": {}, "results": [SEARCH_ROW]})
+        self.assertTrue(ss.is_search_response(search))
+        self.assertFalse(ss.has_detail_markers(search))
+        details = json.dumps(detail_body("1-XT3-1089"))
+        self.assertFalse(ss.is_search_response(details))
+        self.assertTrue(ss.has_detail_markers(details))
+
+    def test_endpoint_config_strips_tracing_headers(self):
+        c = {"url": "https://x/api/search", "method": "POST", "post_data": '{"search":"MVRL24145"}',
+             "headers": {"accept": "application/json", "newrelic": "abc", "traceparent": "00-x",
+                         "x-correlation-id": "gh-1", "user-agent": "ua"}}
+        e = ss.endpoint_config(c, "MVRL24145", "1-XT3-1089", "https://x/results", "search")
+        self.assertEqual(set(e["headers"]), {"accept", "user-agent"})
+        self.assertEqual(e["post_data_template"], '{"search":"{licence_number}"}')
+        self.assertEqual(e["mode"], "search")
+
+
 class FetchHttpTests(TempData):
-    CFG = {"url_template": "https://x/api/{licence_id}", "method": "GET", "headers": {}}
+    CFG = {"url_template": "https://x/api/{licence_id}", "method": "GET", "headers": {}, "mode": "details"}
+
+    def test_fetch_in_search_mode(self):
+        self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(2)])
+        cfg = {"url_template": "https://x/api/search", "method": "POST", "headers": {}, "mode": "search",
+               "post_data_template": '{"search":"{licence_number}"}'}
+
+        def call(c, lid, num):
+            row = dict(SEARCH_ROW, licenceId=lid, licenceNumber=num)
+            return 200, json.dumps({"pagingInfo": {"totalRecords": 1}, "results": [row]})
+
+        res = ss.fetch_http(cfg, rate=1000, limit=0, call=call, sleep=lambda s: None)
+        self.assertEqual(res["ok"], 2)
+        recs = pl.read_jsonl(self.d / "details_site.jsonl", "licence_id")
+        self.assertEqual(recs["ID-1"]["source"], "site-search")
+        pl.cmd_build(None)
+        lic = {r["licence_number"]: r for r in pl.read_csv(self.d / "out" / "licences_enriched.csv")}
+        self.assertEqual(lic["MVRL1"]["abn"], "53000158725")
+        self.assertEqual(lic["MVRL1"]["postcode"], "2064")
 
     def test_fetch_resumes_and_writes_pipeline_records(self):
         rows = self.write_seed([seed_row(i, f"Shop {i} Pty Ltd") for i in range(5)])
@@ -66,7 +127,7 @@ class FetchHttpTests(TempData):
         self.assertEqual(sorted(site), ["ID-1", "ID-2", "ID-3", "ID-4"])    # api file untouched
         recs = pl.load_details(self.d)
         self.assertEqual(len(recs), 5)
-        self.assertEqual(recs["ID-3"]["source"], "site")
+        self.assertEqual(recs["ID-3"]["source"], "site-details")
         self.assertIn("licenceDetail", recs["ID-3"]["raw"])
         # the normal build consumes them unchanged
         pl.cmd_build(None)

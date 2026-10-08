@@ -50,23 +50,27 @@ jobs:
           python3 -m pip install --quiet playwright
           python3 -m playwright install --with-deps chromium
 
-      - name: Discover the site's backend call
+      - name: Discover the site's backend calls
         id: discover
         continue-on-error: true
-        run: python3 scrape_site.py discover "$LICENCE" --debug-dir site_debug 2>&1 | tee site_debug/discover.log
+        run: |
+          mkdir -p site_debug
+          python3 scrape_site.py discover "$LICENCE" --debug-dir site_debug 2>&1 | tee site_debug/discover.log
 
-      - name: Fetch a batch by direct replay
+      - name: Fetch a batch by direct replay (details endpoint if found, else search)
         id: fetch
-        if: steps.discover.outcome == 'success'
-        continue-on-error: true
-        run: python3 scrape_site.py fetch --rate "$RATE" --limit "$LIMIT" 2>&1 | tee site_debug/fetch.log
-
-      - name: Fetch a smaller batch via the browser (fallback)
-        if: steps.discover.outcome == 'success'
         continue-on-error: true
         run: |
-          n=$( [ -f data/details_site.jsonl ] && grep -c '"source":"site"' data/details_site.jsonl || echo 0 )
-          if [ "$n" -lt 1 ]; then
+          mkdir -p site_debug
+          [ -f data/site_config.json ] || { echo "no site_config.json"; exit 1; }
+          python3 scrape_site.py fetch --rate "$RATE" --limit "$LIMIT" 2>&1 | tee site_debug/fetch.log
+
+      - name: Fetch a smaller batch via the browser (fallback)
+        continue-on-error: true
+        run: |
+          mkdir -p site_debug
+          n=$( [ -f data/details_site.jsonl ] && grep -c '"source":"site' data/details_site.jsonl || echo 0 )
+          if [ -f data/site_config.json ] && [ "$n" -lt 1 ]; then
             python3 scrape_site.py fetch --browser --rate "$RATE" --limit 10 2>&1 | tee site_debug/fetch-browser.log
           else
             echo "direct replay fetched $n records; skipping the browser fallback"

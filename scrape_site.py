@@ -48,7 +48,9 @@ import pipeline as pl  # noqa: E402
 SITE = "https://verify.licence.nsw.gov.au"
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
       "Chrome/124.0 Safari/537.36")
-MARKERS = ("licenceDetail", "licenceNumber", "licensee")   # a response with these is the details payload
+MARKERS = ("licenceDetail", "licenceNumber", "licensee")   # a response with these carries licence data
+DETAIL_MARKERS = ("premises", "licenceDetail", "conditions", "associatedParties", "licenceClasses")
+TRACE_HEADERS = ("newrelic", "traceparent", "tracestate", "x-correlation-id", "x-request-id")
 MAX_CONSECUTIVE_ERRORS = 10
 
 
@@ -66,6 +68,26 @@ def log(msg: str) -> None:
 
 def looks_like_details(body: str, licence_number: str) -> bool:
     return licence_number in body and sum(m in body for m in MARKERS) >= 2
+
+
+def is_search_response(body: str) -> bool:
+    return '"pagingInfo"' in body or '"totalRecords"' in body
+
+
+def has_detail_markers(body: str) -> bool:
+    return sum(m in body for m in DETAIL_MARKERS) >= 2
+
+
+def endpoint_config(c: dict, licence_number: str, licence_id: str | None, page_url: str, mode: str) -> dict:
+    return {
+        "mode": mode,
+        "page_url": page_url,
+        "method": c["method"],
+        "url_template": template_from(c["url"], licence_number, licence_id),
+        "post_data_template": (template_from(c["post_data"], licence_number, licence_id)
+                               if c["post_data"] else None),
+        "headers": {k: v for k, v in c["headers"].items() if k.lower() not in TRACE_HEADERS},
+    }
 
 
 def template_from(url: str, licence_number: str, licence_id: str | None) -> str:
@@ -156,27 +178,44 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
         box.press("Enter")
         settle(page)
         snap(page, "after-search")
-        log(f"after search: {page.url}")
-        if not captured:
-            # results list -> click the row for our licence
+        results_url = page.url
+        log(f"after search: {results_url}")
+
+        def have_details() -> bool:
+            return any(has_detail_markers(c["body"]) and not is_search_response(c["body"]) for c in captured)
+
+        # results list -> open the licence's own page (the card, its link, or its title)
+        for sel in (f"a:has-text('{licence_number}')", ".nsw-result-card a", ".nsw-result-card__title a",
+                    "a[href*='details']", ".nsw-result-card", f"text={licence_number}"):
+            if have_details():
+                break
+            loc = page.locator(sel)
+            if not loc.count():
+                continue
             try:
-                page.get_by_text(licence_number, exact=False).first.click(timeout=10_000)
+                loc.first.click(timeout=8_000, force=sel.startswith(("text=", ".nsw-result-card")))
+                try:
+                    page.wait_for_url(lambda u: u != results_url, timeout=15_000)
+                except Exception:
+                    pass
                 settle(page)
                 snap(page, "after-click")
-                log(f"after click: {page.url}")
+                log(f"clicked {sel!r} -> {page.url}")
             except Exception as exc:
-                log(f"could not click a result for {licence_number}: {str(exc)[:200]}")
-        if not captured:
+                log(f"click {sel!r} failed: {str(exc)[:160]}")
+        if not have_details():
             # some builds expose the details page directly
-            for url in (f"{SITE}/details/Motor%20Dealers%20and%20Repairers/{licence_id or licence_number}",
-                        f"{SITE}/details/{licence_id or licence_number}"):
+            for url in (f"{SITE}/details/{licence_id or licence_number}",
+                        f"{SITE}/licence/{licence_id or licence_number}",
+                        f"{SITE}/details/Motor/{licence_id or licence_number}"):
                 try:
                     page.goto(url, timeout=timeout_s * 1000)
                     settle(page)
                     snap(page, "direct-url")
+                    log(f"direct url {url} -> {page.url}")
                 except Exception as exc:
                     log(f"direct url {url} failed: {str(exc)[:120]}")
-                if captured:
+                if have_details():
                     break
         final_url = page.url
         browser.close()
@@ -185,31 +224,35 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
         sys.exit("no backend response carrying the licence details was seen; check the screenshots "
                  "and responses.jsonl in the debug dir, and send me the request that returns the "
                  "licence JSON")
-    best = max(captured, key=lambda c: len(c["body"]))
-    try:
-        sample = json.loads(best["body"])
-    except json.JSONDecodeError:
-        sample = {"_text": best["body"][:2000]}
+    details = [c for c in captured if has_detail_markers(c["body"]) and not is_search_response(c["body"])]
+    searches = [c for c in captured if is_search_response(c["body"])]
+    best_d = max(details, key=lambda c: len(c["body"])) if details else None
+    best_s = max(searches, key=lambda c: len(c["body"])) if searches else None
     cfg = {
         "discovered_at": pl.iso(),
         "discovered_with": licence_number,
-        "page_url": final_url,
-        "method": best["method"],
-        "url_template": template_from(best["url"], licence_number, licence_id),
-        "post_data_template": (template_from(best["post_data"], licence_number, licence_id)
-                               if best["post_data"] else None),
-        "headers": best["headers"],
-        "sample_keys": sorted(sample.keys()) if isinstance(sample, dict) else type(sample).__name__,
+        "final_page_url": final_url,
+        "details": endpoint_config(best_d, licence_number, licence_id, final_url, "details") if best_d else None,
+        "search": endpoint_config(best_s, licence_number, licence_id, results_url, "search") if best_s else None,
     }
     pl.write_json(config_path(), cfg)
     log(f"saved {config_path()}")
     print(json.dumps(cfg, indent=2))
-    print("\nsample of the JSON (first 3000 chars):")
-    print(json.dumps(sample, indent=1)[:3000])
-    if "{licence_id}" not in cfg["url_template"] and "{licence_number}" not in cfg["url_template"] \
-            and not (cfg["post_data_template"] and "{licence" in cfg["post_data_template"]):
-        print("\nWARNING: could not find the licence id/number in the request; the endpoint may be "
-              "session-bound. Try `fetch --browser`.")
+    for label, c in (("details", best_d), ("search", best_s)):
+        if c:
+            try:
+                sample = json.loads(c["body"])
+            except json.JSONDecodeError:
+                sample = {"_text": c["body"][:2000]}
+            print(f"\nsample of the {label} JSON (first 3000 chars):")
+            print(json.dumps(sample, indent=1)[:3000])
+    if not best_d:
+        print("\nWARNING: no details endpoint found; `fetch` will use the search endpoint, which gives "
+              "ABN/ACN/address/postcode but not premises or classes.")
+    for label in ("details", "search"):
+        e = cfg[label]
+        if e and "{licence" not in e["url_template"] and "{licence" not in (e["post_data_template"] or ""):
+            print(f"\nWARNING: the {label} request carries no licence id/number; it may be session-bound.")
     return cfg
 
 
@@ -257,12 +300,35 @@ def todo_licences(limit: int = 0) -> list[dict]:
     return todo[:limit] if limit else todo
 
 
-def parse_body(body: str, licence_number: str):
+def wrap_search_result(obj, licence_number: str, licence_id: str | None = None):
+    """Turn a search response into a details-shaped record for the licence.  The search row has
+    ABN/ACN, licensee and the registered address with postcode, which flatten() reads from
+    licenceDetail; the address doubles as the one known premises."""
+    rows = obj.get("results") if isinstance(obj, dict) else obj
+    if not isinstance(rows, list):
+        return None
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        if r.get("licenceNumber") == licence_number or (licence_id and r.get("licenceId") == licence_id):
+            addr = r.get("address") or ""
+            return {"licenceDetail": dict(r, licenceeABN=r.get("ABN", ""), licenceeACN=r.get("ACN", ""),
+                                          startDate=r.get("granted", ""), expiryDate=r.get("expires", "")),
+                    "premises": [{"type": "Registered address", "businessName": None,
+                                  "businessAddress": addr, "endDate": None}] if addr else [],
+                    "licenceClasses": [], "conditions": [], "businessNames": [],
+                    "_site": "search"}
+    return None
+
+
+def parse_body(body: str, licence_number: str, mode: str = "details", licence_id: str | None = None):
     """The site may wrap the payload (e.g. {"data": {...}}) or return the details object itself."""
     try:
         obj = json.loads(body)
     except json.JSONDecodeError:
         return None
+    if mode == "search":
+        return wrap_search_result(obj, licence_number, licence_id)
     if isinstance(obj, dict):
         if "licenceDetail" in obj or "licenceDetails" in obj:
             return obj
@@ -288,8 +354,9 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
     for n, q in enumerate(todo, 1):
         status, body = call(cfg, q["licence_id"], q["licence_number"])
         rec = {"licence_id": q["licence_id"], "licence_number": q["licence_number"],
-               "fetched_at": pl.iso(), "source": "site"}
-        payload = parse_body(body, q["licence_number"]) if status == 200 else None
+               "fetched_at": pl.iso(), "source": f"site-{cfg.get('mode', 'details')}"}
+        payload = (parse_body(body, q["licence_number"], cfg.get("mode", "details"), q["licence_id"])
+                   if status == 200 else None)
         if payload is not None:
             rec["raw"] = payload
             ok += 1
@@ -397,14 +464,25 @@ def main(argv=None) -> int:
     f.add_argument("--limit", type=int, default=0, help="stop after N licences (0 = all)")
     f.add_argument("--browser", action="store_true", help="drive Chromium per licence")
     f.add_argument("--headed", action="store_true")
+    f.add_argument("--mode", choices=("auto", "details", "search"), default="auto",
+                   help="which discovered endpoint to replay (auto = details if found, else search)")
     args = ap.parse_args(argv)
     if args.cmd == "discover":
         discover(args.licence_number, headed=args.headed,
                  debug_dir=Path(args.debug_dir) if args.debug_dir else None)
         return 0
-    cfg = pl.read_json(config_path(), {})
-    if not cfg:
+    site = pl.read_json(config_path(), {})
+    if not site:
         sys.exit(f"{config_path()} missing: run `python scrape_site.py discover` first")
+    if "url_template" in site:          # config written by an older discover
+        site = {"details": dict(site, mode="details"), "search": None}
+    if args.mode == "auto":
+        cfg = site.get("details") or site.get("search")
+    else:
+        cfg = site.get(args.mode)
+    if not cfg:
+        sys.exit(f"no {args.mode} endpoint in {config_path()}; run discover again")
+    log(f"using the {cfg.get('mode')} endpoint: {cfg['method']} {cfg['url_template']}")
     if args.browser:
         fetch_browser(cfg, args.rate, args.limit, headed=args.headed)
     else:
