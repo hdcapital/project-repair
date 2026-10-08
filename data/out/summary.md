@@ -7,7 +7,7 @@ _As of 2026-10-08T05:31:54Z_
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 2901 |
+| details fetched | 2951 |
 | remaining | 9712 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.3 h of run time (~0.3 hourly runs) |
