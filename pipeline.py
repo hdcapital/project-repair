@@ -1090,11 +1090,74 @@ def normalise_site_search(raw, licence_number: str = "", licence_id: str = ""):
     return None
 
 
+def _addr_text(v) -> str:
+    if isinstance(v, dict):
+        return re.sub(r"\s+", " ", " ".join(str(x) for x in v.values() if isinstance(x, (str, int)) and x)).strip()
+    return re.sub(r"\s+", " ", str(v or "")).strip()
+
+
+def normalise_site_details(raw: dict):
+    """The licence-check website's details call answers {"componentData": {...}} with its own key
+    names.  Reshape it, best effort, into the api.nsw details layout flatten() reads; the raw
+    record is stored untouched, so this can be refined and the build re-run at any time."""
+    cd = raw.get("componentData")
+    if not isinstance(cd, dict):
+        return None
+
+    def pick(*names):
+        for n in names:
+            v = _get(cd, n, default=None)
+            if v not in (None, "", [], {}):
+                return v
+        return None
+
+    prem = pick("premises", "premisesList", "businessPremises", "premisesAddresses", "addresses",
+                "locations", "sites") or []
+    if isinstance(prem, dict):
+        prem = [prem]
+    premises = []
+    for p in prem:
+        if isinstance(p, dict):
+            addr = _get(p, "businessAddress", "fullAddress", "premisesAddress", "addressLine", "address",
+                        default=None)
+            if not addr:
+                addr = " ".join(str(_get(p, k)) for k in ("addressLine1", "addressLine2", "street",
+                                                          "suburb", "state", "postcode") if _get(p, k))
+            premises.append({"type": _get(p, "type", "premisesType"),
+                             "businessName": _get(p, "businessName", "tradingName") or None,
+                             "businessAddress": _addr_text(addr),
+                             "endDate": _get(p, "endDate", "ceasedDate", default=None) or None})
+        elif isinstance(p, str) and p.strip():
+            premises.append({"type": "", "businessName": None, "businessAddress": p.strip(), "endDate": None})
+    ld = dict(cd)
+    ld.setdefault("licenceeABN", _get(cd, "ABN", "abn"))
+    ld.setdefault("licenceeACN", _get(cd, "ACN", "acn"))
+    ld.setdefault("startDate", _get(cd, "granted", "startDate", "grantedDate"))
+    ld.setdefault("expiryDate", _get(cd, "expires", "expiryDate", "expiresDate"))
+    classes = pick("licenceClasses", "classes", "licenceClass", "categories") or []
+    conds = pick("conditions", "licenceConditions") or []
+    biz = pick("businessNames", "businessNameList", "tradingNames") or []
+    comp = pick("complianceActions", "compliance", "disciplinaryActions") or {}
+    if isinstance(comp, list):
+        comp = {"disciplinaryActions": comp}
+    return {"licenceDetail": ld,
+            "premises": premises,
+            "licenceClasses": classes if isinstance(classes, list) else [classes],
+            "conditions": conds if isinstance(conds, list) else [conds],
+            "businessNames": [b if isinstance(b, dict) else {"businessName": str(b)} for b in biz],
+            "complianceActions": comp,
+            "_site": "details"}
+
+
 def flatten(rec: dict) -> dict:
     """Flatten one details.jsonl record into the enrichment columns."""
     raw = rec.get("raw") if isinstance(rec.get("raw"), dict) else {}
     if rec.get("error") or not raw:
         return {}
+    if "componentData" in raw:
+        raw = normalise_site_details(raw) or {}
+        if not raw:
+            return {}
     rows = raw.get("results")
     if isinstance(rows, list) and rows and isinstance(rows[0], dict) and "licenceNumber" in rows[0] \
             and "licenceDetail" not in rows[0] and not _get(raw, "licenceDetail", "licenceDetails", default=None):

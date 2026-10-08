@@ -194,7 +194,8 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
         log(f"after search: {results_url}; {len(captured)} licence response(s) captured so far")
 
         def have_details() -> bool:
-            return any(has_detail_markers(c["body"]) and not is_search_response(c["body"]) for c in captured)
+            return any(not is_search_response(c["body"]) and
+                       (has_detail_markers(c["body"]) or '"componentData"' in c["body"]) for c in captured)
 
         # what does the result card actually link to?  (routerLink / href / target)
         hrefs: list[str] = []
@@ -281,7 +282,8 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
                                                        "referer": f"{SITE}/details/{licence_id or licence_number}"})
                     body = r.text()
                     log(f"probe {url} -> HTTP {r.status}, {len(body)} bytes: {body[:160]!r}")
-                    if r.status == 200 and has_detail_markers(body):
+                    if r.status == 200 and (has_detail_markers(body) or '"licenceId"' in body
+                                            or '"componentData"' in body):
                         captured.append({"url": url, "method": "GET",
                                          "headers": {"accept": "application/json, text/plain, */*",
                                                      "user-agent": UA,
@@ -298,7 +300,8 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
         sys.exit("no backend response carrying the licence details was seen; check the screenshots "
                  "and responses.jsonl in the debug dir, and send me the request that returns the "
                  "licence JSON")
-    details = [c for c in captured if has_detail_markers(c["body"]) and not is_search_response(c["body"])]
+    details = [c for c in captured if not is_search_response(c["body"])
+               and (has_detail_markers(c["body"]) or '"componentData"' in c["body"])]
     searches = [c for c in captured if is_search_response(c["body"])]
     best_d = max(details, key=lambda c: len(c["body"])) if details else None
     best_s = max(searches, key=lambda c: len(c["body"])) if searches else None
@@ -318,8 +321,9 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
                 sample = json.loads(c["body"])
             except json.JSONDecodeError:
                 sample = {"_text": c["body"][:2000]}
-            print(f"\nsample of the {label} JSON (first 3000 chars):")
-            print(json.dumps(sample, indent=1)[:3000])
+            limit = 12000 if label == "details" else 2000
+            print(f"\nsample of the {label} JSON (first {limit} chars):")
+            print(json.dumps(sample, indent=1)[:limit])
     if not best_d:
         print("\nWARNING: no details endpoint found; `fetch` will use the search endpoint, which gives "
               "ABN/ACN/address/postcode but not premises or classes.")
@@ -402,7 +406,7 @@ def parse_body(body: str, licence_number: str, mode: str = "details", licence_id
     if mode == "search" or search_shaped:
         return wrap_search_result(obj, licence_number, licence_id)
     if isinstance(obj, dict):
-        if "licenceDetail" in obj or "licenceDetails" in obj:
+        if "licenceDetail" in obj or "licenceDetails" in obj or "componentData" in obj:
             return obj
         for v in obj.values():
             if isinstance(v, dict) and ("licenceDetail" in v or "licenceDetails" in v):

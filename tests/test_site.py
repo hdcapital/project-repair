@@ -72,6 +72,24 @@ class SearchWrapTests(unittest.TestCase):
         self.assertIsNone(ss.parse_body(body, "MVRL1", mode="search"))
         self.assertIsNone(ss.parse_body(json.dumps({"results": []}), "MVRL24145", mode="search"))
 
+    def test_component_data_details_shape_is_normalised(self):
+        raw = {"componentData": dict(SEARCH_ROW, premises=[
+            {"type": "Fixed", "businessName": None, "address": "11 Waltham Street ARTARMON NSW 2064"},
+            {"type": "Fixed", "address": {"addressLine1": "43 Hotham Pde", "suburb": "ARTARMON",
+                                          "state": "NSW", "postcode": "2064"}}],
+            conditions=[{"description": "Restricted to carrying on a business from a mobile workshop"}],
+            businessNameList=["Acme Auto"])}
+        flat = pl.flatten({"raw": raw, "licence_number": "MVRL24145", "licence_id": "1-XT3-1089"})
+        self.assertEqual(flat["abn"], "53000158725")
+        self.assertEqual(flat["acn"], "000158725")
+        self.assertEqual(flat["n_premises"], 2)
+        self.assertIn("43 Hotham Pde ARTARMON NSW 2064", flat["premises"])
+        self.assertEqual(flat["details_postcode"], "2064")
+        self.assertEqual(flat["business_names_full"], "Acme Auto")
+        self.assertIn("mobile workshop", flat["conditions"])
+        self.assertEqual(pl.segment_from_conditions(flat["conditions_list"]), "mobile")
+        self.assertEqual(ss.parse_body(json.dumps(raw), "MVRL24145"), raw)   # stored as-is
+
     def test_response_classification(self):
         search = json.dumps({"pagingInfo": {}, "results": [SEARCH_ROW]})
         self.assertTrue(ss.is_search_response(search))

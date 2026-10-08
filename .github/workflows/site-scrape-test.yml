@@ -118,6 +118,6 @@ jobs:
           echo "discover: ${{ steps.discover.outcome }}"
           echo "site records: $( [ -f data/details_site.jsonl ] && wc -l < data/details_site.jsonl || echo 0 )"
           [ -f data/site_config.json ] && cat data/site_config.json || echo "no site_config.json"
-          echo "--- last record (first 1500 chars) ---"
-          [ -f data/details_site.jsonl ] && tail -n 1 data/details_site.jsonl | head -c 1500 || true
+          echo "--- last record (first 8000 chars) ---"
+          [ -f data/details_site.jsonl ] && tail -n 1 data/details_site.jsonl | head -c 8000 || true
           echo
