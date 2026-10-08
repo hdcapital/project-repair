@@ -7,7 +7,7 @@ _As of 2026-10-08T13:17:55Z_
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 5804 |
+| details fetched | 6705 |
 | remaining | 7410 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.2 h of run time (~0.2 hourly runs) |
@@ -21,25 +21,25 @@ _As of 2026-10-08T13:17:55Z_
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 533 | 99 | 27 | 109 | 1846 | 761 | 1281 | 4656 |
-| Unknown (no address in register) | 56 | 8 | 49 | 36 | 313 | 341 | 2539 | 3342 |
-| Newcastle | 38 | 12 | 5 | 23 | 211 | 128 | 151 | 568 |
-| New England / North West | 36 | 17 | 3 | 10 | 164 | 109 | 152 | 491 |
-| Riverina | 21 | 12 | 2 | 14 | 160 | 105 | 167 | 481 |
-| Northern Rivers | 25 | 9 | 3 | 7 | 137 | 83 | 114 | 378 |
-| Mid North Coast | 23 | 5 | 2 | 8 | 121 | 86 | 119 | 364 |
-| Central West | 19 | 11 | 1 | 8 | 95 | 83 | 134 | 351 |
-| Southern Highlands / Shoalhaven | 21 | 4 | 3 | 5 | 116 | 74 | 100 | 323 |
-| Illawarra | 27 | 5 | 0 | 4 | 115 | 67 | 95 | 313 |
-| Far West / Orana | 16 | 6 | 1 | 12 | 87 | 77 | 102 | 301 |
-| Hunter | 16 | 10 | 1 | 6 | 87 | 71 | 85 | 276 |
-| Capital Region | 14 | 9 | 1 | 11 | 84 | 50 | 68 | 237 |
-| Murray | 3 | 2 | 1 | 8 | 77 | 36 | 55 | 182 |
-| Coffs Harbour - Grafton | 17 | 1 | 2 | 5 | 47 | 40 | 69 | 181 |
-| Central Coast | 8 | 0 | 3 | 3 | 60 | 30 | 34 | 138 |
+| Sydney | 527 | 94 | 25 | 105 | 1918 | 710 | 1281 | 4660 |
+| Unknown (no address in register) | 58 | 8 | 44 | 35 | 322 | 334 | 2539 | 3340 |
+| Newcastle | 38 | 9 | 5 | 20 | 225 | 120 | 151 | 568 |
+| New England / North West | 35 | 15 | 3 | 11 | 175 | 102 | 152 | 493 |
+| Riverina | 23 | 11 | 2 | 13 | 169 | 97 | 167 | 482 |
+| Northern Rivers | 25 | 8 | 2 | 6 | 148 | 75 | 114 | 378 |
+| Mid North Coast | 23 | 4 | 2 | 8 | 129 | 78 | 119 | 363 |
+| Central West | 21 | 10 | 1 | 6 | 105 | 74 | 134 | 351 |
+| Southern Highlands / Shoalhaven | 21 | 3 | 3 | 3 | 126 | 65 | 100 | 321 |
+| Illawarra | 30 | 4 | 0 | 4 | 123 | 58 | 95 | 314 |
+| Far West / Orana | 20 | 5 | 0 | 9 | 94 | 72 | 102 | 302 |
+| Hunter | 16 | 8 | 1 | 6 | 93 | 67 | 85 | 276 |
+| Capital Region | 14 | 8 | 1 | 8 | 91 | 46 | 68 | 236 |
+| Murray | 2 | 2 | 1 | 8 | 78 | 35 | 55 | 181 |
+| Coffs Harbour - Grafton | 17 | 1 | 2 | 4 | 49 | 38 | 69 | 180 |
+| Central Coast | 8 | 0 | 2 | 1 | 66 | 26 | 34 | 137 |
 | Outside NSW postcode table | 2 | 0 | 0 | 0 | 19 | 1 | 7 | 29 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 2 |
-| **total** | 875 | 210 | 104 | 269 | 3740 | 2142 | 5273 | 12613 |
+| **total** | 880 | 190 | 94 | 247 | 3931 | 1998 | 5273 | 12613 |
 
 ## Queue tiers
 
@@ -51,10 +51,11 @@ _As of 2026-10-08T13:17:55Z_
 | 4 | exclusion family in name | 0 | 0 |
 | 5 | sole trader, uninformative name | 0 | 0 |
 
-## Operators (12474) — top 50 by premises
+## Operators (12461) — top 50 by premises
 
 | operator | abn | segment | licences | premises | regions | brand |
 |---|---|---|---|---|---|---|
+| Port Stephens Council | 47504455945 | service | 20 | 22 | Capital Region; Central West; Coffs Harbour - Grafton; Far West / Orana; Hunter; Mid North Coast; Murray; New England / North West; Riverina; Sydney |  |
 | Bob Jane Corporation Pty Ltd |  | unknown | 1 | 18 | Central West; Illawarra; Newcastle; Northern Rivers; Riverina; Southern Highlands / Shoalhaven; Sydney | Bob Jane |
 | Capital Smart Repairs Australia Pty Ltd |  | service | 1 | 17 | Capital Region; Newcastle; Sydney |  |
 | Australian Automotive Group Pty Ltd |  | service | 8 | 16 | Riverina; Sydney; Unknown (no address in register) |  |
@@ -68,9 +69,9 @@ _As of 2026-10-08T13:17:55Z_
 | AHG Newcastle Pty Ltd | 21600832755 | service | 1 | 9 | Hunter; Newcastle |  |
 | Motorserve Pty Ltd |  | unknown | 1 | 9 | Central West; Far West / Orana; Illawarra; Newcastle; Sydney |  |
 | OzCar Pty Ltd | 98052221299 | unknown | 1 | 9 | Capital Region; Central West; Far West / Orana; New England / North West; Newcastle; Southern Highlands / Shoalhaven; Sydney |  |
-| Port Stephens Council | 26987935332 | service | 8 | 8 | Capital Region; Central West; Hunter; Mid North Coast; Murray; New England / North West; Sydney |  |
 | Trivett Automotive Retail Pty Ltd | 94000806904 | service | 7 | 8 | Sydney |  |
 | ARB Corporation Ltd |  | unknown | 1 | 8 | Central West; Mid North Coast; Murray; Sydney |  |
+| BYZANTINE INVESTMENTS PTY LTD |  | body | 1 | 8 | Sydney |  |
 | RDO Equipment Pty Ltd | 58060286759 | unknown | 1 | 8 | Coffs Harbour - Grafton; Hunter; Mid North Coast; Murray; New England / North West; Northern Rivers; Sydney |  |
 | VEHICLE REPAIRHUB PTY LIMITED | 12632384224 | service | 1 | 8 | Sydney |  |
 | CHARLINGTON GROUP PTY LTD |  | service | 1 | 7 | Hunter; Mid North Coast; New England / North West | Goodyear |
@@ -104,9 +105,8 @@ _As of 2026-10-08T13:17:55Z_
 | Autosports Castle Hill Pty Ltd | 65163974481 | dealer | 1 | 4 | Sydney |  |
 | BE SELECT TYRES PTY LTD | 16116519147 | specialist | 1 | 4 | Sydney | Bridgestone |
 | BOSS BUILT AUTOMOTIVE PTY LTD | 33684285149 | service | 1 | 4 | Central West; New England / North West; Riverina |  |
-| CCMG Pty Ltd |  | unknown | 1 | 4 | Newcastle; Sydney |  |
 
 ## Shortlist
 
-- independent multi-site service operators: **161**
-- single-site service companies (widen later): **2282**
+- independent multi-site service operators: **165**
+- single-site service companies (widen later): **2386**
