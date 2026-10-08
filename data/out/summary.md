@@ -7,7 +7,7 @@ _As of 2026-10-08T05:31:54Z_
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 3001 |
+| details fetched | 3051 |
 | remaining | 9712 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.3 h of run time (~0.3 hourly runs) |
@@ -22,13 +22,13 @@ _As of 2026-10-08T05:31:54Z_
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
 | Sydney | 503 | 133 | 29 | 113 | 1682 | 803 | 1388 | 4651 |
-| Unknown (no address in register) | 53 | 17 | 45 | 37 | 281 | 353 | 2563 | 3349 |
+| Unknown (no address in register) | 53 | 17 | 45 | 37 | 281 | 353 | 2562 | 3348 |
 | Newcastle | 37 | 22 | 6 | 23 | 182 | 136 | 164 | 570 |
 | New England / North West | 37 | 18 | 3 | 11 | 141 | 114 | 168 | 492 |
 | Riverina | 21 | 16 | 2 | 13 | 134 | 110 | 182 | 478 |
 | Northern Rivers | 25 | 12 | 3 | 8 | 127 | 83 | 120 | 378 |
 | Mid North Coast | 23 | 6 | 2 | 9 | 111 | 89 | 122 | 362 |
-| Central West | 20 | 13 | 1 | 10 | 79 | 85 | 143 | 351 |
+| Central West | 20 | 13 | 1 | 10 | 79 | 85 | 144 | 352 |
 | Southern Highlands / Shoalhaven | 22 | 4 | 4 | 5 | 103 | 77 | 105 | 320 |
 | Illawarra | 27 | 5 | 1 | 5 | 110 | 68 | 99 | 315 |
 | Far West / Orana | 17 | 6 | 1 | 13 | 79 | 79 | 104 | 299 |
