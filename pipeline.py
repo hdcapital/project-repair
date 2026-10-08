@@ -777,6 +777,17 @@ def is_quota_error(rec: dict) -> bool:
     return bool(QUOTA_BODY_RE.search(text) or QUOTA_BODY_RE.search(str(rec.get("error", ""))))
 
 
+DETAIL_FILES = ("details.jsonl", "details_site.jsonl")   # api.nsw records, then website records
+
+
+def load_details(d: Path) -> dict[str, dict]:
+    """All details records keyed by licence_id, from every source file (later files win)."""
+    out: dict[str, dict] = {}
+    for name in DETAIL_FILES:
+        out.update(read_jsonl(d / name, "licence_id"))
+    return out
+
+
 def fetched_ids(details: dict[str, dict]) -> set[str]:
     """licence_ids that need no further fetching: successes and genuine per-licence errors."""
     return {k for k, v in details.items() if not is_quota_error(v)}
@@ -798,7 +809,7 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
     budget = load_budget(budget_path)
     queue = ensure_queue(d)
     details_path = d / "details.jsonl"
-    done = fetched_ids(read_jsonl(details_path, "licence_id"))
+    done = fetched_ids(load_details(d))
     todo = [q for q in queue if q["licence_id"] not in done]
     log(f"queue {len(queue)}, fetched {len(done)}, remaining {len(todo)}")
 
@@ -937,7 +948,7 @@ def cmd_fetch_details(args) -> int:
     creds = parse_credentials() if not dry else []
     # fast path: every configured key is spent (or, with no key info, the month is) -> no API, <20s
     if keys_exhausted(budget, creds) if creds else quota_exhausted_now(budget):
-        todo = len(ensure_queue(d)) - len(fetched_ids(read_jsonl(d / "details.jsonl", "licence_id")))
+        todo = len(ensure_queue(d)) - len(fetched_ids(load_details(d)))
         log(f"all {len(creds)} configured key(s) spent; quota exhausted until "
             f"{budget['quota_exhausted_until']}; exiting without touching the API")
         write_status(d, remaining=max(todo, 0), budget=budget, extra={"reason": "quota_exhausted"})
@@ -981,7 +992,7 @@ def parse_jsonp(text: str) -> dict:
 
 def fetch_abr(d: Path, guid: str, *, deadline: float, http=http_get, sleep=time.sleep,
               clock=time.time, interval: float = 0.5) -> int:
-    details = read_jsonl(d / "details.jsonl", "licence_id")
+    details = load_details(d)
     have = read_jsonl(d / "abr.jsonl", "abn")
     todo = [a for a in details_abns(details) if a not in have]
     log(f"abr: {len(have)} cached, {len(todo)} to fetch")
@@ -1401,8 +1412,7 @@ def cmd_build(args) -> int:
     out = d / "out"
     seed = read_csv(d / "register_summary.csv")
     queue = ensure_queue(d)
-    details = {k: v for k, v in read_jsonl(d / "details.jsonl", "licence_id").items()
-               if not is_quota_error(v)}
+    details = {k: v for k, v in load_details(d).items() if not is_quota_error(v)}
     abr = read_jsonl(d / "abr.jsonl", "abn")
     budget = load_budget(d / "budget.json")
     status = read_json(d / "status.json", {})

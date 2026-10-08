@@ -62,7 +62,9 @@ class FetchHttpTests(TempData):
         res = ss.fetch_http(self.CFG, rate=1000, limit=0, call=call, sleep=lambda s: None)
         self.assertEqual(res, {"ok": 4, "errors": 0})
         self.assertEqual(calls, ["ID-1", "ID-2", "ID-3", "ID-4"])          # ID-0 skipped
-        recs = pl.read_jsonl(self.d / "details.jsonl", "licence_id")
+        site = pl.read_jsonl(self.d / "details_site.jsonl", "licence_id")
+        self.assertEqual(sorted(site), ["ID-1", "ID-2", "ID-3", "ID-4"])    # api file untouched
+        recs = pl.load_details(self.d)
         self.assertEqual(len(recs), 5)
         self.assertEqual(recs["ID-3"]["source"], "site")
         self.assertIn("licenceDetail", recs["ID-3"]["raw"])
@@ -93,7 +95,7 @@ class FetchHttpTests(TempData):
         res = ss.fetch_http(self.CFG, rate=1000, limit=0, call=call, sleep=lambda s: None)
         self.assertEqual(res["ok"], 0)
         self.assertEqual(len(calls), ss.MAX_CONSECUTIVE_ERRORS)             # stopped, not 40
-        recs = pl.read_jsonl(self.d / "details.jsonl", "licence_id")
+        recs = pl.read_jsonl(self.d / "details_site.jsonl", "licence_id")
         self.assertEqual(list(recs), ["ID-0"])                               # only the 404 is recorded
         self.assertEqual(recs["ID-0"]["error"], "HTTP 404")
 

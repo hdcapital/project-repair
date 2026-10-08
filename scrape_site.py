@@ -78,7 +78,8 @@ def template_from(url: str, licence_number: str, licence_id: str | None) -> str:
     return url
 
 
-def discover(licence_number: str, headed: bool = False, timeout_s: int = 60) -> dict:
+def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
+             debug_dir: Path | None = None) -> dict:
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
@@ -87,6 +88,24 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60) -> 
     captured: list[dict] = []
     seed = {r["licence_number"]: r for r in pl.read_csv(pl.data_dir() / "register_summary.csv")}
     licence_id = seed.get(licence_number, {}).get("licence_id")
+    if debug_dir:
+        debug_dir.mkdir(parents=True, exist_ok=True)
+    shots = [0]
+
+    def snap(page, label):
+        if debug_dir:
+            shots[0] += 1
+            try:
+                page.screenshot(path=str(debug_dir / f"{shots[0]:02d}-{label}.png"), full_page=True)
+                (debug_dir / f"{shots[0]:02d}-{label}.html").write_text(page.content(), encoding="utf-8")
+            except Exception as exc:
+                log(f"screenshot {label} failed: {exc}")
+
+    def settle(page):
+        try:
+            page.wait_for_load_state("networkidle", timeout=timeout_s * 1000)
+        except Exception:
+            page.wait_for_timeout(3000)
 
     def on_response(resp):
         try:
@@ -96,6 +115,11 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60) -> 
             body = resp.text()
         except Exception:
             return
+        if debug_dir and ("json" in ct or resp.request.resource_type in ("xhr", "fetch")):
+            # every data-ish response, so the right call can be found by hand if the markers miss
+            pl.append_jsonl(debug_dir / "responses.jsonl", {
+                "url": resp.url, "status": resp.status, "method": resp.request.method,
+                "content_type": ct, "post_data": resp.request.post_data, "body_head": body[:600]})
         if looks_like_details(body, licence_number):
             req = resp.request
             captured.append({
@@ -112,44 +136,55 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60) -> 
         page = browser.new_page(user_agent=UA)
         page.on("response", on_response)
         log(f"opening {SITE}")
-        page.goto(SITE, wait_until="networkidle", timeout=timeout_s * 1000)
+        page.goto(SITE, timeout=timeout_s * 1000)
+        settle(page)
+        snap(page, "home")
+        log(f"landed on {page.url}; title {page.title()!r}")
         # The search box: try the obvious selectors, then anything that looks like a search input.
         box = None
         for sel in ("input[type=search]", "input[placeholder*='icence' i]", "input[placeholder*='earch' i]",
-                    "input[name*='search' i]", "input[type=text]"):
+                    "input[name*='search' i]", "input[aria-label*='earch' i]", "input[type=text]", "input"):
             if page.locator(sel).count():
                 box = page.locator(sel).first
+                log(f"search box: {sel}")
                 break
         if box is None:
-            sys.exit("could not find the search box; run with --headed and look at the page")
+            snap(page, "no-search-box")
+            browser.close()
+            sys.exit("could not find the search box; see the screenshots")
         box.fill(licence_number)
         box.press("Enter")
-        page.wait_for_load_state("networkidle", timeout=timeout_s * 1000)
+        settle(page)
+        snap(page, "after-search")
+        log(f"after search: {page.url}")
         if not captured:
             # results list -> click the row for our licence
-            link = page.get_by_text(licence_number, exact=False).first
             try:
-                link.click(timeout=10_000)
-                page.wait_for_load_state("networkidle", timeout=timeout_s * 1000)
+                page.get_by_text(licence_number, exact=False).first.click(timeout=10_000)
+                settle(page)
+                snap(page, "after-click")
+                log(f"after click: {page.url}")
             except Exception as exc:
-                log(f"could not click a result for {licence_number}: {exc}")
+                log(f"could not click a result for {licence_number}: {str(exc)[:200]}")
         if not captured:
             # some builds expose the details page directly
             for url in (f"{SITE}/details/Motor%20Dealers%20and%20Repairers/{licence_id or licence_number}",
                         f"{SITE}/details/{licence_id or licence_number}"):
                 try:
-                    page.goto(url, wait_until="networkidle", timeout=timeout_s * 1000)
-                except Exception:
-                    pass
+                    page.goto(url, timeout=timeout_s * 1000)
+                    settle(page)
+                    snap(page, "direct-url")
+                except Exception as exc:
+                    log(f"direct url {url} failed: {str(exc)[:120]}")
                 if captured:
                     break
         final_url = page.url
         browser.close()
 
     if not captured:
-        sys.exit("no backend response carrying the licence details was seen; run with --headed, "
-                 "open DevTools > Network on the details page and send me the request that returns "
-                 "the licence JSON")
+        sys.exit("no backend response carrying the licence details was seen; check the screenshots "
+                 "and responses.jsonl in the debug dir, and send me the request that returns the "
+                 "licence JSON")
     best = max(captured, key=lambda c: len(c["body"]))
     try:
         sample = json.loads(best["body"])
@@ -207,10 +242,17 @@ def http_call(cfg: dict, licence_id: str, licence_number: str, timeout: int = 30
         return 599, str(e)
 
 
+OUT_FILE = "details_site.jsonl"   # kept apart from the api.nsw file so the two never conflict in git
+
+
+def out_path() -> Path:
+    return pl.data_dir() / OUT_FILE
+
+
 def todo_licences(limit: int = 0) -> list[dict]:
     d = pl.data_dir()
     queue = pl.ensure_queue(d)
-    done = pl.fetched_ids(pl.read_jsonl(d / "details.jsonl", "licence_id"))
+    done = pl.fetched_ids(pl.load_details(d))
     todo = [q for q in queue if q["licence_id"] not in done]
     return todo[:limit] if limit else todo
 
@@ -252,7 +294,7 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
             rec["raw"] = payload
             ok += 1
             consecutive = 0
-            pl.append_jsonl(d / "details.jsonl", rec)
+            pl.append_jsonl(out_path(), rec)
         else:
             errors += 1
             consecutive += 1
@@ -260,7 +302,7 @@ def fetch_http(cfg: dict, rate: float, limit: int, call=http_call, sleep=time.sl
             if status == 404:
                 rec["error"] = "HTTP 404"
                 rec["raw"] = {"body": body[:300]}
-                pl.append_jsonl(d / "details.jsonl", rec)
+                pl.append_jsonl(out_path(), rec)
             if consecutive >= MAX_CONSECUTIVE_ERRORS:
                 log(f"{consecutive} consecutive failures (last HTTP {status}) -> stopping; "
                     "the site is probably refusing us. Try --browser, a lower --rate, or later.")
@@ -319,7 +361,7 @@ def fetch_browser(cfg: dict, rate: float, limit: int, headed: bool = False) -> d
                 log(f"{q['licence_number']}: navigation failed: {str(exc)[:120]}")
             payload = parse_body(holder.get("body", ""), q["licence_number"]) if holder.get("body") else None
             if payload is not None:
-                pl.append_jsonl(d / "details.jsonl", {"licence_id": q["licence_id"],
+                pl.append_jsonl(out_path(), {"licence_id": q["licence_id"],
                                                       "licence_number": q["licence_number"],
                                                       "fetched_at": pl.iso(), "source": "site",
                                                       "raw": payload})
@@ -348,6 +390,8 @@ def main(argv=None) -> int:
     s = sub.add_parser("discover", help="drive the browser once and record the backend call")
     s.add_argument("licence_number", nargs="?", default="MVRL24145")
     s.add_argument("--headed", action="store_true")
+    s.add_argument("--debug-dir", default="site_debug",
+                   help="screenshots, page HTML and every data response go here (default site_debug/)")
     f = sub.add_parser("fetch", help="fetch every licence not yet in details.jsonl")
     f.add_argument("--rate", type=float, default=1.0, help="requests per second (default 1)")
     f.add_argument("--limit", type=int, default=0, help="stop after N licences (0 = all)")
@@ -355,7 +399,8 @@ def main(argv=None) -> int:
     f.add_argument("--headed", action="store_true")
     args = ap.parse_args(argv)
     if args.cmd == "discover":
-        discover(args.licence_number, headed=args.headed)
+        discover(args.licence_number, headed=args.headed,
+                 debug_dir=Path(args.debug_dir) if args.debug_dir else None)
         return 0
     cfg = pl.read_json(config_path(), {})
     if not cfg:
