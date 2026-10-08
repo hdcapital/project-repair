@@ -106,11 +106,22 @@ python scrape_site.py fetch --rate 1 --limit 50  # try 50; then drop --limit
 python pipeline.py build
 ```
 
-`fetch` skips everything already in `details.jsonl`, runs at `--rate` requests/second with jitter, and
-stops after 10 consecutive refusals (403/429/5xx) so a block is noticed rather than hammered. If the
-direct replay is refused, `fetch --browser` drives Chromium per licence instead (slower). Use
-`--headed` on either command to watch what it does. Untested against the live site from this repo's
-CI, so expect to run `discover` locally and adjust.
+`fetch` skips everything already in `details.jsonl` / `details_site.jsonl` (in details mode it
+re-fetches records that only came from the search call), runs at `--rate` requests/second with
+jitter, and stops after 10 consecutive refusals (403/429/5xx) so a block is noticed rather than
+hammered. `--run-seconds` and `--checkpoint N` (commit every N records, Actions only) make it fit a
+workflow run.
+
+Two workflows drive it in Actions:
+
+- **`site-scrape-test.yml`**: runs `discover` plus a small fetch and prints every backend response it
+  saw; triggered by pushes to the development branch or by hand. This is how the endpoints were found:
+  the site's details page calls `GET /publicregisterapi/api/v1/licence/search/details/<licence type>/<licenceId>`
+  and returns `{"componentData": {...}}` with premises under `locations[].premises[]`, current classes,
+  the pre-2014 class history, directors and a compliance summary. `pipeline.py` normalises that shape.
+- **`site-scrape.yml`**: hourly cron (37 past) and dispatch; fetches in details mode at 2 req/s for up to
+  50 minutes with a checkpoint commit every 500 records, rebuilds `data/out/`, and disables itself when
+  every licence has a full details record. About 9,000 licences take two runs.
 
 ## Re-enabling for a future refresh
 
