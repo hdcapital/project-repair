@@ -44,6 +44,10 @@ jobs:
       - name: Unit tests
         run: python3 -m unittest discover -s tests
 
+      - name: Count licences still to fetch
+        id: before
+        run: echo "left=$(python3 -c "import scrape_site as s; print(len(s.todo_licences(0, 'details')))")" >> "$GITHUB_OUTPUT"
+
       - name: Fetch details from the site (resumable, checkpoint commits)
         run: |
           [ -f data/site_config.json ] || { echo "data/site_config.json missing: run site-scrape-test (discover) first"; exit 1; }
@@ -58,15 +62,25 @@ jobs:
         run: |
           python3 pipeline.py commit -m "site-scrape run ${{ github.run_number }}"
 
-      - name: Disable this workflow when nothing is left to fetch
+      # GitHub fires `schedule` unreliably on quiet repos (once in 8 hours here), so each run starts
+      # the next one itself.  It only does so if this run made progress, so a blocked site cannot
+      # cause an endless chain; the hourly cron remains as the fallback that restarts the chain.
+      - name: Start the next run, or disable when nothing is left
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ steps.before.outputs.left }}
         run: |
           left=$(python3 -c "import scrape_site as s; print(len(s.todo_licences(0, 'details')))")
-          echo "licences still without full details: $left"
+          echo "licences still without full details: $left (was ${BEFORE:-?})"
+          wf="${GITHUB_WORKFLOW_REF#*/.github/workflows/}"; wf="${wf%@*}"
           if [ "$left" = "0" ]; then
-            wf="${GITHUB_WORKFLOW_REF#*/.github/workflows/}"; wf="${wf%@*}"
             echo "nothing left -> disabling $wf"
             gh workflow disable "$wf" --repo "$GITHUB_REPOSITORY"
+          elif [ -n "$BEFORE" ] && [ "$left" -lt "$BEFORE" ]; then
+            echo "progress made -> starting the next run now"
+            gh workflow run "$wf" --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" \
+              -f run_seconds="$RUN_SECONDS" -f rate="$RATE" -f limit="$LIMIT"
+          else
+            echo "no progress this run -> not chaining; the hourly cron will retry"
           fi
