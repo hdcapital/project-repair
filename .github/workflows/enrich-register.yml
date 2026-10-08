@@ -33,6 +33,7 @@ jobs:
     env:
       NSW_API_KEY: ${{ secrets.NSW_API_KEY }}
       NSW_API_SECRET: ${{ secrets.NSW_API_SECRET }}
+      NSW_API_KEYS: ${{ secrets.NSW_API_KEYS }}
       ABR_GUID: ${{ secrets.ABR_GUID }}
       RUN_SECONDS: ${{ inputs.run_seconds || '3000' }}
       DRY_RUN: ${{ inputs.dry_run || '0' }}

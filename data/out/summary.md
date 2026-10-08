@@ -13,6 +13,7 @@ _As of 2026-10-07T10:34:28Z_
 | ETA at that rate | 0.5 h of run time (~0.6 hourly runs) |
 | calls this month | 2500 |
 | quota state | paused until 2026-11-01T00:00:00Z |
+| api keys seen | none recorded yet |
 | complete | False |
 | last run reason | quota_exhausted |
 

@@ -41,6 +41,14 @@ Locally you can also copy `.env.example` to `.env`, fill in the keys, and run
   **not** disabled, so it resumes by itself next month. Hitting `MONTHLY_CALL_BUDGET` behaves the same
   way. The 2,500/month quota is shared with every other call made with the same key (the
   `nsw_repairers.py` sweep counts against it too).
+- **Several api.nsw accounts**: put every pair in one GitHub secret `NSW_API_KEYS`, one `key:secret`
+  per line (locally in `.env`, separate pairs with `;`). `NSW_API_KEY`/`NSW_API_SECRET` still count as
+  the first pair. The client fetches with one key until api.nsw answers the quota body, marks that key
+  spent in `budget.json` (`keys`, by a short non-secret id), switches to the next key and retries the
+  same licence, so no call and no licence is wasted. A key that fails auth is skipped for the run.
+  Only when every configured key is spent does the month-long pause start, and adding a new line to
+  the secret resumes fetching on the next hourly run by itself. Each free account covers 2,500
+  details, about 7 minutes at the rate the client reaches.
 - **Got a quota increase mid-month?** Actions → **enrich** → *Run workflow* with `reset_quota=1`;
   that clears `quota_exhausted_until` and fetching resumes immediately. Without a per-minute
   throttle the client ramps past 350 req/min, so the remaining queue finishes in a single run.
