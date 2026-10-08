@@ -93,6 +93,25 @@ dicts at the top of `pipeline.py`.
 - **Top 50 operators** — by `n_premises_total` = distinct premises addresses from details, plus one per
   licence that has no details yet.
 
+## Alternative: the public licence-check website (no API quota)
+
+`scrape_site.py` gets the same details from https://verify.licence.nsw.gov.au, the public site the
+API mirrors. It needs a real browser once, to learn which backend call the site makes, then replays
+that call directly. It writes the same `details.jsonl` records, so `build` is unchanged.
+
+```
+pip install playwright && python -m playwright install chromium   # once
+python scrape_site.py discover MVRL24145         # opens the site, records the backend call -> data/site_config.json
+python scrape_site.py fetch --rate 1 --limit 50  # try 50; then drop --limit
+python pipeline.py build
+```
+
+`fetch` skips everything already in `details.jsonl`, runs at `--rate` requests/second with jitter, and
+stops after 10 consecutive refusals (403/429/5xx) so a block is noticed rather than hammered. If the
+direct replay is refused, `fetch --browser` drives Chromium per licence instead (slower). Use
+`--headed` on either command to watch what it does. Untested against the live site from this repo's
+CI, so expect to run `discover` locally and adjust.
+
 ## Re-enabling for a future refresh
 
 1. Re-run the scraper to refresh the seed: `python nsw_repairers.py` then copy `out/nsw_motor_repairers.csv`
