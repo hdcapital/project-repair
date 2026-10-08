@@ -1,6 +1,6 @@
 # NSW motor-repairer enrichment — summary
 
-_As of 2026-10-08T13:17:55Z_
+_As of 2026-10-08T19:49:51Z_
 
 ## Fetch progress
 
@@ -8,12 +8,12 @@ _As of 2026-10-08T13:17:55Z_
 |---|---|
 | licences in queue | 12613 |
 | details fetched | 6705 |
-| remaining | 7410 |
+| remaining | 5908 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.2 h of run time (~0.2 hourly runs) |
-| calls this month | 5001 |
+| calls this month | 5002 |
 | quota state | paused until 2026-11-01T00:00:00Z |
-| api keys seen | HF2T…NH5H: ok (2 calls); au4v…YpF7: spent (2497 calls); m6q4…jFos: spent (2 calls) |
+| api keys seen | HF2T…NH5H: ok (3 calls); au4v…YpF7: spent (2497 calls); m6q4…jFos: spent (2 calls) |
 | complete | False |
 | last run reason | quota_exhausted |
 

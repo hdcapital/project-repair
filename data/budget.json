@@ -1,9 +1,9 @@
 {
-  "calls_used_this_month": 5001,
+  "calls_used_this_month": 5002,
   "keys": {
     "HF2T\u2026NH5H": {
-      "auth_failed_at": "2026-10-08T13:17:55Z",
-      "calls": 2
+      "auth_failed_at": "2026-10-08T19:49:51Z",
+      "calls": 3
     },
     "au4v\u2026YpF7": {
       "calls": 2497,
@@ -20,5 +20,5 @@
   "month": "2026-10",
   "quota_exhausted_until": "2026-11-01T00:00:00Z",
   "quota_reason": "all 3 keys exhausted (2 quota, 1 auth failures)",
-  "updated_at": "2026-10-08T13:17:55Z"
+  "updated_at": "2026-10-08T19:49:51Z"
 }
