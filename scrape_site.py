@@ -158,8 +158,10 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=not headed,
                                     executable_path=os.environ.get("CHROMIUM_PATH") or None)
-        page = browser.new_page(user_agent=UA)
-        page.on("response", on_response)
+        context = browser.new_context(user_agent=UA)
+        context.on("response", on_response)          # every page in the context, popups included
+        context.on("page", lambda p: log(f"new page opened: {p.url}"))
+        page = context.new_page()
         log(f"opening {SITE}")
         page.goto(SITE, timeout=timeout_s * 1000)
         settle(page)
@@ -194,6 +196,20 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
         def have_details() -> bool:
             return any(has_detail_markers(c["body"]) and not is_search_response(c["body"]) for c in captured)
 
+        # what does the result card actually link to?  (routerLink / href / target)
+        hrefs: list[str] = []
+        try:
+            for a in page.locator(".nsw-result-card a, a[href*='details'], a[target]").all()[:10]:
+                href = a.get_attribute("href") or a.get_attribute("ng-reflect-router-link") or ""
+                log(f"result link: href={href!r} target={a.get_attribute('target')!r} "
+                    f"text={(a.inner_text() or '')[:60]!r}")
+                if href:
+                    hrefs.append(href)
+            for el in page.locator("[routerlink], [ng-reflect-router-link]").all()[:10]:
+                log(f"routerlink: {el.get_attribute('routerlink') or el.get_attribute('ng-reflect-router-link')!r}")
+        except Exception as exc:
+            log(f"could not list result links: {str(exc)[:120]}")
+
         # results list -> open the licence's own page (the card, its link, or its title)
         for sel in (f"a:has-text('{licence_number}')", ".nsw-result-card a", ".nsw-result-card__title a",
                     "a[href*='details']", ".nsw-result-card", f"text={licence_number}"):
@@ -203,14 +219,26 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
             if not loc.count():
                 continue
             try:
+                pages_before = len(context.pages)
                 loc.first.click(timeout=8_000, force=sel.startswith(("text=", ".nsw-result-card")))
                 try:
-                    page.wait_for_url(lambda u: u != results_url, timeout=15_000)
+                    page.wait_for_url(lambda u: u != results_url, timeout=8_000)
                 except Exception:
                     pass
-                settle(page)
-                snap(page, "after-click")
-                log(f"clicked {sel!r} -> {page.url}")
+                page.wait_for_timeout(4000)
+                if len(context.pages) > pages_before:          # the link opened a new tab
+                    popup = context.pages[-1]
+                    try:
+                        popup.wait_for_load_state("networkidle", timeout=20_000)
+                    except Exception:
+                        popup.wait_for_timeout(3000)
+                    snap(popup, "popup")
+                    log(f"clicked {sel!r} -> new tab {popup.url}; title {popup.title()!r}")
+                    page = popup
+                else:
+                    settle(page)
+                    snap(page, "after-click")
+                    log(f"clicked {sel!r} -> {page.url}")
             except Exception as exc:
                 log(f"click {sel!r} failed: {str(exc)[:160]}")
         if not have_details():
@@ -234,10 +262,20 @@ def discover(licence_number: str, headed: bool = False, timeout_s: int = 60,
             # details page calls .../licence/search/details/{licenceId}; a bad id 404s with
             # 'Entity "Licence" (...) was not found', which is how this pattern was found.
             api = f"{SITE}/publicregisterapi/api/v1"
-            for url in (f"{api}/licence/search/details/{licence_id}", f"{api}/licence/details/{licence_id}",
-                        f"{api}/licence/{licence_id}", f"{api}/licence/search/details/{licence_number}"):
-                if not licence_id and "{licence_id}" in url:
-                    continue
+            lid = licence_id or licence_number
+            q = urllib.parse.quote
+            # the route is .../search/details/{segment}/{id}: a wrong segment answers
+            # 'Entity "Licence" (...) was not found', a missing one plain 'Not Found'
+            segments = ["Motor Vehicle Repairers Licence", "Motor Vehicle Repairer's Licence", "MVRL",
+                        "motor", "Motor Dealers and Repairers", "MotorVehicleRepairersLicence", "Licence"]
+            for h in hrefs:                                   # whatever the card links to goes first
+                m = re.search(r"/details/([^/?#]+)/([^/?#]+)", h)
+                if m:
+                    segments.insert(0, urllib.parse.unquote(m.group(1)))
+            candidates = [f"{api}/licence/search/details/{q(s)}/{q(lid)}" for s in segments]
+            candidates += [f"{api}/licence/search/details/{q(lid)}", f"{api}/licence/details/{q(lid)}",
+                           f"{api}/licence/{q(lid)}"]
+            for url in candidates:
                 try:
                     r = page.request.get(url, headers={"accept": "application/json, text/plain, */*",
                                                        "referer": f"{SITE}/details/{licence_id or licence_number}"})
