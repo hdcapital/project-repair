@@ -79,12 +79,14 @@ PATTERNS: dict[str, list[str]] = {
                     r"\bHAVAL\b", r"\bCHERY\b", r"\bBYD\b", r"\bFERRARI\b", r"\bLAMBORGHINI\b",
                     r"\bMASERATI\b", r"\bBENTLEY\b", r"\bROLLS[- ]ROYCE\b", r"\bASTON MARTIN\b",
                     r"\bMCLAREN\b", r"\bSSANGYONG\b", r"\bDAF\b", r"\bFUSO\b", r"\bUD TRUCKS\b",
-                    r"\bAUTOMOTIVE RETAIL\b", r"\bAUTOMOTIVE GROUP\b", r"\bAUTOPOOL\b"],
+                    r"\bAUTOMOTIVE RETAIL\b", r"\bAUTOMOTIVE GROUP\b", r"\bAUTOPOOL\b",
+                    r"\bAUTO GROUP\b", r"\bMOTORS GROUP\b", r"\bAUTOMOBILES\b", r"\bMOTOR COMPANY\b",
+                    r"\bCAR CITY\b"],
     "excl_body": [r"\bBODY\b", r"SMASH", r"PANEL", r"\bPAINT", r"\bDENT", r"\bHAIL\b",
-                  r"COLLISION", r"CRASH", r"\bSPRAY", r"BODYWORK", r"\bACCIDENT"],
+                  r"COLLISION", r"CRASH", r"\bSPRAY", r"BODYWORK", r"\bACCIDENT", r"SMART REPAIR"],
     "excl_tyres": [r"\bTYRE", r"\bTIRE", r"\bWHEEL", r"\bRIMS?\b", r"\bMAG\b"],
     "excl_heavy": [r"\bTRUCK", r"\bDIESEL", r"\bHEAVY", r"\bPLANT\b", r"\bTRAILER", r"\bEARTHMOV",
-                   r"\bMACHINERY", r"\bTRACTOR", r"\bAGRICULTUR", r"\bFLEET\b", r"\bBUS\b",
+                   r"\bMACHINERY", r"\bTRACTOR", r"\bAGRICULTUR", r"\bFLEET\b", r"BUS\b", r"\bBUSES\b",
                    r"\bCOACH", r"\bFORKLIFT", r"\bHAULAGE", r"\bFARM\b", r"\bLOGISTICS\b",
                    r"\bCRANE"],
     "excl_specialty_vehicle": [r"MOTORCYCLE", r"MOTOR ?CYCLE", r"\bBIKE", r"\bMARINE", r"\bBOAT",
@@ -1233,7 +1235,7 @@ def flatten(rec: dict) -> dict:
         "historical_classes_list": hist,
         "directors": "; ".join(directors),
         "abn": re.sub(r"\s+", "", str(_get(ld, "licenceeABN", "abn"))),
-        "acn": re.sub(r"\s+", "", str(_get(ld, "licenceeACN", "acn"))),
+        "acn": (lambda a: a if valid_acn(a) else "")(re.sub(r"\s+", "", str(_get(ld, "licenceeACN", "acn")))),
         "address_full": addr,
         "details_postcode": pc,
         "start_date": str(_get(ld, "startDate", "licenceStartDate", "granted")),
@@ -1332,16 +1334,31 @@ def postcode_from_premises(addr: str, localities: dict[str, str] | None = None) 
     return ""
 
 
+def valid_acn(acn: str) -> bool:
+    """ASIC check digit.  Rejects the register's placeholders (999999999 is given to councils,
+    universities and other non-companies, and would merge them all into one operator)."""
+    if len(acn) != 9 or not acn.isdigit() or len(set(acn)) == 1:
+        return False
+    total = sum(int(d) * w for d, w in zip(acn[:8], range(8, 0, -1)))
+    return (10 - total % 10) % 10 == int(acn[8])
+
+
+def valid_abn(abn: str) -> bool:
+    if len(abn) != 11 or not abn.isdigit() or len(set(abn)) == 1:
+        return False
+    digits = [int(abn[0]) - 1] + [int(c) for c in abn[1:]]
+    return sum(d * w for d, w in zip(digits, (10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19))) % 89 == 0
+
+
 def entity_key(det: dict) -> str:
     """Stable operator id from details: ACN first (a company's ABN is its ACN plus two check
-    digits, and the register often has one but not the other), else ABN, else ''."""
+    digits, and the register often has one but not the other), else ABN, else ''.
+    Placeholder or malformed numbers are ignored."""
     acn, abn = det.get("acn", ""), det.get("abn", "")
-    if acn:
+    if valid_acn(acn):
         return f"acn:{acn}"
-    if len(abn) == 11 and abn.isdigit():
-        return f"acn:{abn[2:]}"   # company-style ABN -> its ACN; sole-trader ABNs just use the tail
-    if abn:
-        return f"abn:{abn}"
+    if valid_abn(abn):
+        return f"acn:{abn[2:]}" if valid_acn(abn[2:]) else f"abn:{abn}"
     return ""
 
 
@@ -1386,9 +1403,13 @@ def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict
         q = qmap.get(r["licence_id"])
         row["tier"] = q["tier"] if q else tier_for(cls)
         row["name_flags"] = cls["flags"]
+        # Order: current specific classes, then licence conditions, then a name exclusion family
+        # (a truck depot or council that once held "Motor Mechanic Fixed Workshop" is still not a
+        # service shop), then the pre-2014 class history, then the remaining name flags.
         row["segment_rule"] = (segment_from_classes(det.get("classes_list", []))
-                               or segment_from_classes(det.get("historical_classes_list", []))
                                or segment_from_conditions(det.get("conditions_list", []))
+                               or (segment_from_flags(cls) if cls["exclusions"] else "")
+                               or segment_from_classes(det.get("historical_classes_list", []))
                                or segment_from_flags(cls))
         row["conditions"] = det.get("conditions", "")
         row["premises_regions"] = "; ".join(sorted({region_for(x, postcodes)[0]

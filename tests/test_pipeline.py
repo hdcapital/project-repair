@@ -7,6 +7,7 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import json
+import re
 import os
 import sys
 import tempfile
@@ -42,13 +43,20 @@ class FakeClock:
         self.t += s
 
 
+def fake_acn(seed: str) -> str:
+    """A checksum-valid ACN derived from any digit string (fixtures need real-looking numbers)."""
+    body = re.sub(r"\D", "", seed).zfill(8)[-8:]
+    total = sum(int(d) * w for d, w in zip(body, range(8, 0, -1)))
+    return body + str((10 - total % 10) % 10)
+
+
 def detail_body(lid, abn="11222333444", premises=1, classes=("Motor Vehicle Repairer Licence",),
                 suburb="LIVERPOOL", conditions=()):
     """Shaped like the real /details response: postal address blank, premises carry a suburb
     but no postcode, businessName null, classes usually just the generic licence type."""
     return {
         "licenceDetail": {"addressType": "Postal", "address": "", "licensee": "X", "licenceeABN": abn,
-                          "licenceeACN": (abn[2:] if len(abn) == 11 else f"ACN{abn}"), "startDate": "01/01/2015", "expiryDate": "01/01/2027"},
+                          "licenceeACN": fake_acn(abn), "startDate": "01/01/2015", "expiryDate": "01/01/2027"},
         "licenceClasses": [{"className": c, "isActive": "True", "description": c} for c in classes],
         "conditions": [{"description": c, "isActive": "True"} for c in conditions],
         "premises": [{"type": "Fixed", "businessName": None, "businessAddress": f"{i} Main Rd {suburb}",
@@ -384,7 +392,7 @@ class BuildTests(TempData):
         by = {r["licence_number"]: r for r in lic}
         self.assertEqual(by["MVRL1"]["n_premises"], 2)                # the null-address premises is dropped
         self.assertEqual(by["MVRL1"]["abn"], "111")
-        self.assertEqual(by["MVRL1"]["acn"], "ACN111")
+        self.assertEqual(by["MVRL1"]["acn"], fake_acn("111"))
         self.assertTrue(by["MVRL1"]["details_fetched"])
         self.assertFalse(by["MVRL4"]["details_fetched"])
         self.assertEqual(by["MVRL1"]["segment_rule"], "service")      # generic class -> name flags
@@ -396,17 +404,17 @@ class BuildTests(TempData):
         self.assertEqual(by["MVRL3"]["region"], "Illawarra")
         self.assertEqual(by["MVRL4"]["region"], "Sydney")             # seed region kept when no details
         self.assertEqual(by["MVRL1"]["licence_classes"], "Motor Vehicle Repairer Licence")
-        self.assertEqual(by["MVRL1"]["acn"], "ACN111")
-        self.assertEqual(by["MVRL1"]["operator_key"], "acn:ACN111")        # ACN beats ABN
-        self.assertEqual(by["MVRL4"]["operator_key"], "acn:ACN333")        # unfetched licence adopts
+        self.assertEqual(by["MVRL1"]["acn"], fake_acn("111"))
+        self.assertEqual(by["MVRL1"]["operator_key"], "acn:" + fake_acn("111"))        # ACN beats ABN
+        self.assertEqual(by["MVRL4"]["operator_key"], "acn:" + fake_acn("333"))        # unfetched licence adopts
         ops = pl.build_operators(lic, {})                                   # its namesake's entity id
         byop = {o["operator_key"]: o for o in ops}
-        alpha = byop["acn:ACN111"]
+        alpha = byop["acn:" + fake_acn("111")]
         self.assertEqual(alpha["n_licences"], 2)
         self.assertEqual(alpha["n_premises_total"], 2)                # 3 premises, 2 distinct addresses
         self.assertEqual(alpha["abn"], "111")
         self.assertEqual(alpha["segment"], "service")
-        beta = byop["acn:ACN333"]
+        beta = byop["acn:" + fake_acn("333")]
         self.assertEqual(beta["n_licences"], 2)
         self.assertEqual(beta["n_premises_total"], 2)                 # 1 known + 1 unknown site
         self.assertEqual(beta["segment"], "mobile")                   # tie -> first seen (MVRL3)
@@ -414,16 +422,35 @@ class BuildTests(TempData):
         self.assertNotIn("name:BETA MECHANICAL", byop)
         short = pl.build_shortlist(ops)
         blocks = {s["operator_key"]: s["block"] for s in short}
-        self.assertEqual(blocks["acn:ACN111"], "multi_site")
-        self.assertNotIn("acn:ACN555", blocks)                        # body shop excluded
-        self.assertNotIn("acn:ACN333", blocks)                        # mobile excluded
+        self.assertEqual(blocks["acn:" + fake_acn("111")], "multi_site")
+        self.assertNotIn("acn:" + fake_acn("555"), blocks)                        # body shop excluded
+        self.assertNotIn("acn:" + fake_acn("333"), blocks)                        # mobile excluded
 
     def test_entity_key(self):
         self.assertEqual(pl.entity_key({"acn": "135710940", "abn": ""}), "acn:135710940")
         self.assertEqual(pl.entity_key({"acn": "", "abn": "53000158725"}), "acn:000158725")
         self.assertEqual(pl.entity_key({"acn": "000158725", "abn": "53000158725"}), "acn:000158725")
-        self.assertEqual(pl.entity_key({"acn": "", "abn": "12345"}), "abn:12345")
+        self.assertEqual(pl.entity_key({"acn": "", "abn": "12345"}), "")          # malformed
         self.assertEqual(pl.entity_key({}), "")
+        # the register's placeholder ACN for councils etc. must not merge them
+        self.assertEqual(pl.entity_key({"acn": "999999999", "abn": "47504455945"}), "abn:47504455945")
+        self.assertEqual(pl.entity_key({"acn": "999999999", "abn": "26987935332"}), "abn:26987935332")
+        self.assertFalse(pl.valid_acn("999999999"))
+        self.assertTrue(pl.valid_acn("000158725"))
+        self.assertTrue(pl.valid_abn("53000158725"))
+        self.assertFalse(pl.valid_abn("53000158726"))
+
+    def test_name_exclusion_beats_class_history(self):
+        hist = ["Motor Mechanic Fixed Workshop"]
+        for name, seg in (("Inland Truck Centres Pty Ltd", "specialist"), ("Port Stephens Council", "other"),
+                          ("Hillsbus Co Pty Ltd", "specialist"), ("Capital Smart Repairs Pty Ltd", "body"),
+                          ("Grand Auto Group Pty Ltd", "dealer"), ("Westside Mechanical Pty Ltd", "service")):
+            rows = [seed_row(1, name)]
+            raw = detail_body("ID-1")
+            raw["historicalClasses"] = hist
+            lic = pl.enrich_licences(rows, pl.prioritise(rows), {"ID-1": {"licence_id": "ID-1", "raw": raw}},
+                                     postcodes={})
+            self.assertEqual(lic[0]["segment_rule"], seg, name)
 
     def test_segment_from_classes(self):
         self.assertEqual(pl.segment_from_classes(["Mechanical repairer", "Panel beater"]), "service")
