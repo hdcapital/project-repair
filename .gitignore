@@ -4,3 +4,4 @@ __pycache__/
 /out/
 data/*.tmp
 data/*.jsonl.tmp
+site_debug/

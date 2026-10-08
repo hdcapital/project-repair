@@ -777,6 +777,17 @@ def is_quota_error(rec: dict) -> bool:
     return bool(QUOTA_BODY_RE.search(text) or QUOTA_BODY_RE.search(str(rec.get("error", ""))))
 
 
+DETAIL_FILES = ("details.jsonl", "details_site.jsonl")   # api.nsw records, then website records
+
+
+def load_details(d: Path) -> dict[str, dict]:
+    """All details records keyed by licence_id, from every source file (later files win)."""
+    out: dict[str, dict] = {}
+    for name in DETAIL_FILES:
+        out.update(read_jsonl(d / name, "licence_id"))
+    return out
+
+
 def fetched_ids(details: dict[str, dict]) -> set[str]:
     """licence_ids that need no further fetching: successes and genuine per-licence errors."""
     return {k for k, v in details.items() if not is_quota_error(v)}
@@ -798,7 +809,7 @@ def fetch_details(d: Path, client: AdaptiveClient | None, *, deadline: float, cl
     budget = load_budget(budget_path)
     queue = ensure_queue(d)
     details_path = d / "details.jsonl"
-    done = fetched_ids(read_jsonl(details_path, "licence_id"))
+    done = fetched_ids(load_details(d))
     todo = [q for q in queue if q["licence_id"] not in done]
     log(f"queue {len(queue)}, fetched {len(done)}, remaining {len(todo)}")
 
@@ -937,7 +948,7 @@ def cmd_fetch_details(args) -> int:
     creds = parse_credentials() if not dry else []
     # fast path: every configured key is spent (or, with no key info, the month is) -> no API, <20s
     if keys_exhausted(budget, creds) if creds else quota_exhausted_now(budget):
-        todo = len(ensure_queue(d)) - len(fetched_ids(read_jsonl(d / "details.jsonl", "licence_id")))
+        todo = len(ensure_queue(d)) - len(fetched_ids(load_details(d)))
         log(f"all {len(creds)} configured key(s) spent; quota exhausted until "
             f"{budget['quota_exhausted_until']}; exiting without touching the API")
         write_status(d, remaining=max(todo, 0), budget=budget, extra={"reason": "quota_exhausted"})
@@ -981,7 +992,7 @@ def parse_jsonp(text: str) -> dict:
 
 def fetch_abr(d: Path, guid: str, *, deadline: float, http=http_get, sleep=time.sleep,
               clock=time.time, interval: float = 0.5) -> int:
-    details = read_jsonl(d / "details.jsonl", "licence_id")
+    details = load_details(d)
     have = read_jsonl(d / "abr.jsonl", "abn")
     todo = [a for a in details_abns(details) if a not in have]
     log(f"abr: {len(have)} cached, {len(todo)} to fetch")
@@ -1055,11 +1066,133 @@ def postcode_from_address(addr: str) -> str:
     return m[-1] if m else ""
 
 
+def normalise_site_search(raw, licence_number: str = "", licence_id: str = ""):
+    """The licence-check website's search response ({"pagingInfo", "results": [...]}) carries ABN,
+    ACN, licensee and the registered address with postcode per row.  Reshape the row for this
+    licence into the details layout flatten() reads; the address doubles as the one known site."""
+    rows = raw.get("results") if isinstance(raw, dict) else raw
+    if not isinstance(rows, list):
+        return None
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        if (licence_number and r.get("licenceNumber") == licence_number) or \
+                (licence_id and r.get("licenceId") == licence_id) or \
+                (not licence_number and not licence_id and len(rows) == 1):
+            addr = r.get("address") or ""
+            return {"licenceDetail": dict(r, licenceeABN=r.get("ABN", ""), licenceeACN=r.get("ACN", ""),
+                                          startDate=r.get("granted", ""), expiryDate=r.get("expires", "")),
+                    "premises": [{"type": "Registered address", "businessName": None,
+                                  "businessAddress": addr, "endDate": None}] if addr else [],
+                    "licenceClasses": [], "conditions": [],
+                    "businessNames": [{"businessName": b} for b in (r.get("businessNameList") or [])],
+                    "_site": "search"}
+    return None
+
+
+def _addr_text(v) -> str:
+    if isinstance(v, dict):
+        return re.sub(r"\s+", " ", " ".join(str(x) for x in v.values() if isinstance(x, (str, int)) and x)).strip()
+    return re.sub(r"\s+", " ", str(v or "")).strip()
+
+
+def normalise_site_details(raw: dict):
+    """The licence-check website's details call answers {"componentData": {...}} with its own key
+    names.  Reshape it, best effort, into the api.nsw details layout flatten() reads; the raw
+    record is stored untouched, so this can be refined and the build re-run at any time."""
+    cd = raw.get("componentData")
+    if not isinstance(cd, dict):
+        return None
+
+    def pick(*names):
+        for n in names:
+            v = _get(cd, n, default=None)
+            if v not in (None, "", [], {}):
+                return v
+        return None
+
+    # premises: "locations": [{"type": "Fixed", "premises": [{"address", "suburb", "state",
+    # "postcode", "startDate", "type"}]}] (plus a few flatter spellings, just in case)
+    prem_items: list = []
+    for loc in pick("locations", "sites") or []:
+        if isinstance(loc, dict):
+            inner = loc.get("premises") or loc.get("addresses") or []
+            prem_items += [dict(p, _loctype=loc.get("type")) for p in inner if isinstance(p, dict)]
+    for p in pick("premises", "premisesList", "businessPremises", "premisesAddresses", "addresses") or []:
+        prem_items.append(p)
+    premises = []
+    for p in prem_items:
+        if isinstance(p, dict):
+            addr = _get(p, "businessAddress", "fullAddress", "premisesAddress", "addressLine", "address",
+                        default=None)
+            if not addr:
+                addr = " ".join(str(_get(p, k)) for k in ("addressLine1", "addressLine2", "street",
+                                                          "suburb", "state", "postcode") if _get(p, k))
+            addr = _addr_text(addr)
+            pc = str(_get(p, "postcode", "postCode")).strip()
+            if pc and pc not in addr:           # keep the postcode on the address so regions resolve
+                addr = f"{addr} {_get(p, 'state') or 'NSW'} {pc}".strip()
+            premises.append({"type": _get(p, "type", "premisesType") or p.get("_loctype") or "",
+                             "businessName": _get(p, "businessName", "tradingName") or None,
+                             "businessAddress": addr,
+                             "endDate": _get(p, "endDate", "ceasedDate", default=None) or None})
+        elif isinstance(p, str) and p.strip():
+            premises.append({"type": "", "businessName": None, "businessAddress": p.strip(), "endDate": None})
+    ld = dict(cd)
+    ld.setdefault("licenceeABN", re.sub(r"\s+", "", str(_get(cd, "ABN", "abn", "formattedABN"))))
+    ld.setdefault("licenceeACN", re.sub(r"\s+", "", str(_get(cd, "ACN", "acn", "formattedACN"))))
+    ld.setdefault("startDate", _get(cd, "granted", "startDate", "grantedDate"))
+    ld.setdefault("expiryDate", _get(cd, "expires", "expiryDate", "expiresDate"))
+    classes = pick("licenceClasses", "classes", "licenceClass", "categories") or []
+    conds = pick("conditions", "licenceConditions") or []
+    biz = pick("businessNames", "businessNameList", "tradingNames") or []
+    # class history: the pre-2014 repair classes ("Motor Mechanic Fixed Workshop", "Panel Beater"...)
+    # survive only as Class Approved / Class Lapsed events, and they say what the shop does
+    hist_classes: list[str] = []
+    for ev in pick("history") or []:
+        if isinstance(ev, dict) and "class" in str(ev.get("eventType", "")).lower():
+            for dsc in ev.get("descriptions") or []:
+                name = (dsc.get("short") if isinstance(dsc, dict) else str(dsc)) or ""
+                if name and name not in hist_classes and not GENERIC_CLASS_RE.match(name.strip().upper()):
+                    hist_classes.append(name)
+    directors = []
+    for role in pick("associatedRoles") or []:
+        if isinstance(role, dict) and str(role.get("name", "")).lower() in ("director", "partner", "trustee"):
+            directors += [p.get("name") for p in role.get("parties") or [] if isinstance(p, dict) and p.get("name")]
+    summary = {str(s.get("type")): s.get("count") for s in (pick("complianceSummary") or [])
+               if isinstance(s, dict)}
+    comp = pick("complianceActions", "compliance") or {}
+    if isinstance(comp, list):
+        comp = {"disciplinaryActions": comp}
+    comp = dict(comp)
+    comp.setdefault("publicWarningsCount", summary.get("Public Warning", ""))
+    comp.setdefault("disciplinaryActions", summary.get("Disciplinary Action", ""))
+    return {"licenceDetail": ld,
+            "premises": premises,
+            "licenceClasses": classes if isinstance(classes, list) else [classes],
+            "historicalClasses": hist_classes,
+            "conditions": conds if isinstance(conds, list) else [conds],
+            "businessNames": [b if isinstance(b, dict) else {"businessName": str(b)} for b in biz],
+            "complianceActions": comp,
+            "associatedParties": [{"name": n, "role": "Director"} for n in directors],
+            "_site": "details"}
+
+
 def flatten(rec: dict) -> dict:
     """Flatten one details.jsonl record into the enrichment columns."""
     raw = rec.get("raw") if isinstance(rec.get("raw"), dict) else {}
     if rec.get("error") or not raw:
         return {}
+    if "componentData" in raw:
+        raw = normalise_site_details(raw) or {}
+        if not raw:
+            return {}
+    rows = raw.get("results")
+    if isinstance(rows, list) and rows and isinstance(rows[0], dict) and "licenceNumber" in rows[0] \
+            and "licenceDetail" not in rows[0] and not _get(raw, "licenceDetail", "licenceDetails", default=None):
+        raw = normalise_site_search(raw, rec.get("licence_number", ""), rec.get("licence_id", "")) or {}
+        if not raw:
+            return {}
     ld = _get(raw, "licenceDetail", "licenceDetails", "licence", default={})
     classes = []
     for c in _get(raw, "licenceClasses", "classes", default=[]) or []:
@@ -1089,16 +1222,22 @@ def flatten(rec: dict) -> dict:
     comp = _get(raw, "complianceActions", "compliance", default={})
     addr = str(_get(ld, "address", "licenceeAddress", "fullAddress")).strip()
     premises_pcs = [postcode_from_premises(paddr) for _, paddr in premises if paddr]
-    pc = str(_get(ld, "postcode", "postCode")).strip() or postcode_from_address(addr)
-    if not pc:
-        pc = next((x for x in premises_pcs if x), "")
+    # the shop's postcode beats the licensee's postal one
+    pc = next((x for x in premises_pcs if x), "") or str(_get(ld, "postcode", "postCode")).strip() \
+        or postcode_from_address(addr)
+    hist = [str(h).strip() for h in (_get(raw, "historicalClasses", default=[]) or []) if h]
+    directors = [str(_get(p, "name")) for p in (_get(raw, "associatedParties", default=[]) or [])
+                 if isinstance(p, dict) and str(_get(p, "role")).lower() == "director" and _get(p, "name")]
     return {
+        "historical_classes": "; ".join(hist),
+        "historical_classes_list": hist,
+        "directors": "; ".join(directors),
         "abn": re.sub(r"\s+", "", str(_get(ld, "licenceeABN", "abn"))),
         "acn": re.sub(r"\s+", "", str(_get(ld, "licenceeACN", "acn"))),
         "address_full": addr,
         "details_postcode": pc,
-        "start_date": str(_get(ld, "startDate", "licenceStartDate")),
-        "details_expiry_date": str(_get(ld, "expiryDate", "licenceExpiryDate")),
+        "start_date": str(_get(ld, "startDate", "licenceStartDate", "granted")),
+        "details_expiry_date": str(_get(ld, "expiryDate", "licenceExpiryDate", "expires")),
         "licence_classes": "; ".join(classes),
         "classes_list": classes,
         "n_premises": len(premises),
@@ -1209,9 +1348,9 @@ def entity_key(det: dict) -> str:
 SUMMARY_FIELDS = ["licence_number", "licensee", "licence_name", "business_names", "licence_type",
                   "status", "expiry_date", "classes", "categories", "suburb", "postcode", "region",
                   "sa4", "lga", "licence_id"]
-ENRICH_FIELDS = ["abn", "acn", "address_full", "start_date", "licence_classes", "n_premises",
-                 "premises", "premises_regions", "conditions", "business_names_full",
-                 "public_warnings", "disciplinary_actions"]
+ENRICH_FIELDS = ["abn", "acn", "address_full", "start_date", "licence_classes", "historical_classes",
+                 "n_premises", "premises", "premises_regions", "conditions", "business_names_full",
+                 "directors", "public_warnings", "disciplinary_actions"]
 LICENCE_FIELDS = SUMMARY_FIELDS + ENRICH_FIELDS + ["tier", "name_flags", "segment_rule",
                                                     "franchise_brand", "operator_key", "details_fetched"]
 
@@ -1248,6 +1387,7 @@ def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict
         row["tier"] = q["tier"] if q else tier_for(cls)
         row["name_flags"] = cls["flags"]
         row["segment_rule"] = (segment_from_classes(det.get("classes_list", []))
+                               or segment_from_classes(det.get("historical_classes_list", []))
                                or segment_from_conditions(det.get("conditions_list", []))
                                or segment_from_flags(cls))
         row["conditions"] = det.get("conditions", "")
@@ -1401,8 +1541,7 @@ def cmd_build(args) -> int:
     out = d / "out"
     seed = read_csv(d / "register_summary.csv")
     queue = ensure_queue(d)
-    details = {k: v for k, v in read_jsonl(d / "details.jsonl", "licence_id").items()
-               if not is_quota_error(v)}
+    details = {k: v for k, v in load_details(d).items() if not is_quota_error(v)}
     abr = read_jsonl(d / "abr.jsonl", "abn")
     budget = load_budget(d / "budget.json")
     status = read_json(d / "status.json", {})

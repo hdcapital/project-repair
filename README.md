@@ -93,6 +93,36 @@ dicts at the top of `pipeline.py`.
 - **Top 50 operators** — by `n_premises_total` = distinct premises addresses from details, plus one per
   licence that has no details yet.
 
+## Alternative: the public licence-check website (no API quota)
+
+`scrape_site.py` gets the same details from https://verify.licence.nsw.gov.au, the public site the
+API mirrors. It needs a real browser once, to learn which backend call the site makes, then replays
+that call directly. It writes the same `details.jsonl` records, so `build` is unchanged.
+
+```
+pip install playwright && python -m playwright install chromium   # once
+python scrape_site.py discover MVRL24145         # opens the site, records the backend call -> data/site_config.json
+python scrape_site.py fetch --rate 1 --limit 50  # try 50; then drop --limit
+python pipeline.py build
+```
+
+`fetch` skips everything already in `details.jsonl` / `details_site.jsonl` (in details mode it
+re-fetches records that only came from the search call), runs at `--rate` requests/second with
+jitter, and stops after 10 consecutive refusals (403/429/5xx) so a block is noticed rather than
+hammered. `--run-seconds` and `--checkpoint N` (commit every N records, Actions only) make it fit a
+workflow run.
+
+Two workflows drive it in Actions:
+
+- **`site-scrape-test.yml`**: runs `discover` plus a small fetch and prints every backend response it
+  saw; triggered by pushes to the development branch or by hand. This is how the endpoints were found:
+  the site's details page calls `GET /publicregisterapi/api/v1/licence/search/details/<licence type>/<licenceId>`
+  and returns `{"componentData": {...}}` with premises under `locations[].premises[]`, current classes,
+  the pre-2014 class history, directors and a compliance summary. `pipeline.py` normalises that shape.
+- **`site-scrape.yml`**: hourly cron (37 past) and dispatch; fetches in details mode at 2 req/s for up to
+  50 minutes with a checkpoint commit every 500 records, rebuilds `data/out/`, and disables itself when
+  every licence has a full details record. About 9,000 licences take two runs.
+
 ## Re-enabling for a future refresh
 
 1. Re-run the scraper to refresh the seed: `python nsw_repairers.py` then copy `out/nsw_motor_repairers.csv`

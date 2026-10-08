@@ -1,0 +1,123 @@
+name: site-scrape-test
+
+# Proves scrape_site.py against the live licence-check website from a runner that can reach it:
+# discover the backend call, fetch a small batch, build, commit the records, upload the debug
+# bundle (screenshots, page HTML, every data response seen, site_config.json).
+on:
+  push:
+    branches: [claude/fervent-cray-dwsyob]
+    paths: [scrape_site.py, .github/workflows/site-scrape-test.yml]
+  workflow_dispatch:
+    inputs:
+      licence_number:
+        description: 'Licence to discover with'
+        default: 'MVRL24145'
+        required: false
+      limit:
+        description: 'How many licences to fetch after discovery'
+        default: '50'
+        required: false
+      rate:
+        description: 'Requests per second'
+        default: '1'
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-scrape
+  cancel-in-progress: false
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      LICENCE: ${{ inputs.licence_number || 'MVRL24145' }}
+      LIMIT: ${{ inputs.limit || '50' }}
+      RATE: ${{ inputs.rate || '1' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Install Playwright + Chromium
+        run: |
+          python3 -m pip install --quiet playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: Discover the site's backend calls
+        id: discover
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          mkdir -p site_debug
+          python3 scrape_site.py discover "$LICENCE" --debug-dir site_debug 2>&1 | tee site_debug/discover.log
+
+      - name: Every data response the browser saw (for reading in this log)
+        if: always()
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          p = "site_debug/responses.jsonl"
+          if not os.path.exists(p):
+              print("no responses.jsonl"); raise SystemExit
+          for line in open(p):
+              r = json.loads(line)
+              print(f"{r['status']} {r['method']} {r.get('type','')} {r['url'][:140]}")
+              if r.get("post_data"): print("   post:", r["post_data"][:200])
+              print("   body:", r["body_head"][:300].replace("\n", " "))
+          EOF
+          ls -la site_debug
+
+      - name: Fetch a batch by direct replay (details endpoint if found, else search)
+        id: fetch
+        continue-on-error: true
+        run: |
+          mkdir -p site_debug
+          [ -f data/site_config.json ] || { echo "no site_config.json"; exit 1; }
+          python3 scrape_site.py fetch --rate "$RATE" --limit "$LIMIT" 2>&1 | tee site_debug/fetch.log
+
+      - name: Fetch a smaller batch via the browser (fallback)
+        continue-on-error: true
+        run: |
+          mkdir -p site_debug
+          n=$( [ -f data/details_site.jsonl ] && grep -c '"source":"site' data/details_site.jsonl || echo 0 )
+          if [ -f data/site_config.json ] && [ "$n" -lt 1 ]; then
+            python3 scrape_site.py fetch --browser --rate "$RATE" --limit 10 2>&1 | tee site_debug/fetch-browser.log
+          else
+            echo "direct replay fetched $n records; skipping the browser fallback"
+          fi
+
+      - name: Build
+        if: always()
+        run: python3 pipeline.py build
+
+      - name: Upload debug bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-debug
+          path: |
+            site_debug/
+            data/site_config.json
+          if-no-files-found: warn
+
+      - name: Commit records and config to the branch
+        if: always()
+        run: |
+          python3 pipeline.py commit -m "site-scrape-test run ${{ github.run_number }}"
+
+      - name: Result
+        if: always()
+        run: |
+          echo "discover: ${{ steps.discover.outcome }}"
+          echo "site records: $( [ -f data/details_site.jsonl ] && wc -l < data/details_site.jsonl || echo 0 )"
+          [ -f data/site_config.json ] && cat data/site_config.json || echo "no site_config.json"
+          echo "--- last record (first 8000 chars) ---"
+          [ -f data/details_site.jsonl ] && tail -n 1 data/details_site.jsonl | head -c 8000 || true
+          echo

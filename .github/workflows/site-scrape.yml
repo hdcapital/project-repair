@@ -1,0 +1,71 @@
+name: site-scrape
+
+# Fetch licence details from the public licence-check website (no api.nsw quota):
+# hourly until every licence has a full details record, then self-disable.
+on:
+  schedule:
+    - cron: '37 * * * *'
+  workflow_dispatch:
+    inputs:
+      run_seconds:
+        description: 'Seconds to spend fetching this run (default 3000 = 50 min)'
+        default: '3000'
+        required: false
+      rate:
+        description: 'Requests per second'
+        default: '2'
+        required: false
+      limit:
+        description: 'Stop after N licences (0 = all)'
+        default: '0'
+        required: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: site-scrape
+  cancel-in-progress: false
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      RUN_SECONDS: ${{ inputs.run_seconds || '3000' }}
+      RATE: ${{ inputs.rate || '2' }}
+      LIMIT: ${{ inputs.limit || '0' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Fetch details from the site (resumable, checkpoint commits)
+        run: |
+          [ -f data/site_config.json ] || { echo "data/site_config.json missing: run site-scrape-test (discover) first"; exit 1; }
+          python3 scrape_site.py fetch --mode details --rate "$RATE" --limit "$LIMIT" --run-seconds "$RUN_SECONDS" --checkpoint 500
+
+      - name: Build
+        if: always()
+        run: python3 pipeline.py build
+
+      - name: Commit and push data/
+        if: always()
+        run: python3 pipeline.py commit -m "site-scrape: run ${{ github.run_number }}"
+
+      - name: Disable this workflow when nothing is left to fetch
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          left=$(python3 -c "import scrape_site as s; print(len(s.todo_licences(0, 'details')))")
+          echo "licences still without full details: $left"
+          if [ "$left" = "0" ]; then
+            wf="${GITHUB_WORKFLOW_REF#*/.github/workflows/}"; wf="${wf%@*}"
+            echo "nothing left -> disabling $wf"
+            gh workflow disable "$wf" --repo "$GITHUB_REPOSITORY"
+          fi
