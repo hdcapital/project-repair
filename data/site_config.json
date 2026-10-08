@@ -1,0 +1,25 @@
+{
+  "discovered_at": "2026-10-08T05:40:54Z",
+  "discovered_with": "MVRL24145",
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "content-type": "application/json",
+    "newrelic": "eyJ2IjpbMCwxXSwiZCI6eyJ0eSI6IkJyb3dzZXIiLCJhYyI6IjI3NjYzMyIsImFwIjoiMTM4NjA1MzMxMiIsImlkIjoiMWI2NjM4OGQ3OTZjNzNhNyIsInRyIjoiNDk3MmU3MWY3YjU1NzUwZDQ4OTg1Mjc3ZjQ0Y2Y0ZDUiLCJ0aSI6MTc5MTQzODA0NDQ3MH19",
+    "referer": "https://verify.licence.nsw.gov.au/results?searchTerm=MVRL24145&filter=search&status=all",
+    "sec-ch-ua": "\"HeadlessChrome\";v=\"153\", \"Not_A Brand\";v=\"8\", \"Chromium\";v=\"153\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "traceparent": "00-4972e71f7b55750d48985277f44cf4d5-1b66388d796c73a7-01",
+    "tracestate": "276633@nr=0-1-276633-1386053312-1b66388d796c73a7----1791438044470",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "x-correlation-id": "gh-62b40742-7877"
+  },
+  "method": "POST",
+  "page_url": "https://verify.licence.nsw.gov.au/results?searchTerm=MVRL24145&filter=search&status=all",
+  "post_data_template": "{\"licenceGroup\":\"\",\"search\":\"{licence_number}\",\"autoComplete\":false,\"pageNumber\":0,\"pageSize\":10,\"licenceTypes\":[]}",
+  "sample_keys": [
+    "pagingInfo",
+    "results"
+  ],
+  "url_template": "https://verify.licence.nsw.gov.au/publicregisterapi/api/v1/licence/search/advQuery"
+}
