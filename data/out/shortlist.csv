@@ -14,6 +14,7 @@ multi_site,Clintons Motors Pty Ltd,92008444844,008444844,Company,1,4,11-23 Lasso
 multi_site,Moro & Sons Automotive Pty Ltd,,169829609,Company,1,4,6 Cook St FORESTVILLE; 28 Curlewis St BONDI BEACH; 3 By The Sea Road MONA VALE; 3 COOK ST FORESTVILLE,Sydney,service,1/1,MVRL51050
 multi_site,White/King Wollongong Pty Ltd,,103483389,Company,1,4,13-15 Princes Hwy ALBION PARK RAIL NSW 2527; 46 FLINDERS ST WOLLONGONG NSW 2500; 2a Flinders St NORTH WOLLONGONG NSW 2500; 1-3 MYE PL ALBION PARK RAIL NSW 2527,Illawarra; Southern Highlands / Shoalhaven,service,1/1,MVRL42785
 multi_site,Tynan Motors Pty Ltd,,000663347,Company,3,3,39 Beatson Street WOLLONGONG; 3/1 KIORA RD MIRANDA; 98 Oak Road KIRRAWEE,Illawarra; Sydney,service,3/3,MVRL1737; MVRL35891; MVRL44491
+multi_site,Michael Zammit,,,Individual/Partnership,2,3,470 Wattle St ULTIMO NSW 2007; 16 Perry St MATRAVILLE NSW 2036; 7-9 Perry Street MATRAVILLE NSW 2036,Sydney,service,2/2,MVRL42737; MVRL5077
 multi_site,Basha Auto Salon Pty Ltd,,155133341,Company,1,3,88 FALCONER ST WEST RYDE; UNIT 2 2-4 MULVIHILL ST WEST RYDE; Unit 7 2-4 Mulvihill St WEST RYDE,Sydney,service,1/1,MVRL49293
 multi_site,BEARS AUTO SOLUTIONS PTY LTD,69675483851,675483851,Company,1,3,55 MONTAGUE ST NORTH WOLLONGONG; 85 PRINCES HWY FAIRY MEADOW; 65 BAYLDON RD QUEANBEYAN WEST,Capital Region; Illawarra,service,1/1,MVRL62341
 multi_site,Geoff King Motors Pty Ltd,,000130843,Company,1,3,Cnr Bent Street & Ryan Street GRAFTON; Pacific Highway MACKSVILLE; U 1 211 Pacific Hwy COFFS HARBOUR,Coffs Harbour - Grafton; Mid North Coast; New England / North West,service,1/1,MVRL3265
@@ -36,17 +37,20 @@ multi_site,SPINNING X AUTO PTY LTD,77654512517,654512517,Company,1,3,100 MILEHAM
 multi_site,Tradecore Industries Pty Ltd,,102710958,Company,1,3,10b Carramere Road MUSWELLBROOK NSW 2333; 41 MUSTANG DR RUTHERFORD NSW 2320; 16 Magpie St SINGLETON NSW 2330,Hunter; Sydney,service,1/1,MVRL47254
 multi_site,VVG Services NSW Pty Ltd,,647661194,Company,1,3,3 BABILLA CL BERESFIELD; 20 HUNTINGWOOD DR HUNTINGWOOD; 10 DECKER PL HUNTINGWOOD,Newcastle; Sydney,service,1/1,MVRL58865
 multi_site,Xceed Autos Pty Ltd,,114779690,Company,1,3,U 3 4 Morley Avenue KINGSWOOD; 1 Morley Avenue KINGSWOOD; 74-76 BATT ST JAMISONTOWN,New England / North West; Sydney,service,1/1,MVRL56683
+multi_site,Andrew McDougall,,,Individual/Partnership,2,2,24 Silver Street BROKEN HILL NSW 2880; U 5 14 Snow St SOUTH LISMORE NSW 2480,Far West / Orana; Northern Rivers,service,2/2,MVRL44076; MVRL54225
 multi_site,D & A Luck Automotive Pty Ltd,28600293758,600293758,Company,2,2,60 Hopson St DOUGLAS PARK; 8 29 Camden St WILTON,Sydney,service,2/2,MVRL53524; MVRL54835
+multi_site,Luigi Ricco,,,Individual/Partnership,2,2,U 9 8 Brennan Close ASQUITH NSW 2078; UNIT 9 8 BRENNAN CL ASQUITH NSW 2077,Outside NSW postcode table; Sydney,service,2/2,MVRL37756; MVRL45501
 multi_site,Minchinbury Mechanical Repair Pty Ltd,91608545080,608545080,Company,2,2,UNIT 2 5 COLYTON RD MINCHINBURY; U 2 5 Colyton Rd MINCHINBURY,Sydney,service,2/2,MVRL52365; MVRL64219
 multi_site,North Star Motors (NSW) Pty Ltd,,003485041,Company,2,2,337-341 Pacific Highway HEATHERBRAE; Lot 5 Kilkenny Place GLENN INNES,Mid North Coast; New England / North West,service,2/2,MVRL24604; MVRL35308
 multi_site,Owen Patrick Bull,,,Individual/Partnership,2,2,7 Arizona Rd CHARMHAVEN NSW 2263; 146 MAIN RD TOUKLEY NSW 2263,Central Coast,service,2/2,MVRL38696; MVRL60843
-multi_site,Rocco Junior Zoccali,,,Individual/Partnership,2,2,292 Victoria Road GLADESVILLE NSW 2111,Sydney; Unknown (no address in register),service,1/2,MVRL29234; MVRL35697
 multi_site,Suttons Motors Arncliffe Pty Ltd,,000083929,Company,2,2,484-486 VICTORIA ST WETHERILL PARK; 59-93 Princes Highway ARNCLIFFE,Sydney; Unknown (no address in register),service,2/2,MVRL43651; MVRL5064
 multi_site,4K Motors Pty Ltd,97677442983,677442983,Company,1,2,644-654 PARRAMATTA RD CROYDON; 144 FRANCES ST LIDCOMBE,Sydney,service,1/1,MVRL62983
 multi_site,911 AUTOMOTIVE PTY LTD,26646401774,646401774,Company,1,2,1 AVERILL ST RHODES; 90 DICKSON AV ARTARMON,Sydney,service,1/1,MVRL58549
 multi_site,A To Z Automotive Services Pty Ltd,,630763245,Company,1,2,3 22 Munibung Road CARDIFF; 74 MITCHELL RD CARDIFF,Newcastle,service,1/1,MVRL56122
+multi_site,Adrian Peter Smith,,,Individual/Partnership,1,2,481 Port Hacking Road LILLI PILLI NSW 2229; 1/50 Box Rd CARINGBAH NSW 2229,Sydney,service,1/1,MVRL38328
 multi_site,AMH FINANCIAL SERVICES PTY LIMITED,86610815908,610815908,Company,1,2,91 CAMPBELL ST MORUYA; 47 KYLIE CR BATEMANS BAY,Capital Region; Southern Highlands / Shoalhaven,service,1/1,MVRL59276
 multi_site,Andrew Miedecke Motors Pty Ltd,,002582621,Company,1,2,157 HASTINGS RIVER DR PORT MACQUARIE; 100 Hastings River Drive PORT MACQUARIE,Mid North Coast,service,1/1,MVRL15017
+multi_site,Anthony Craig Minto,,,Individual/Partnership,1,2,3 Newcastle Drive TOORMINA NSW 2452; 1 DIGGERS BEACH RD COFFS HARBOUR NSW 2450,Coffs Harbour - Grafton,service,1/1,MVRL25275
 multi_site,APEX MECH REPAIRS PTY LTD,42639002485,639002485,Company,1,2,86 RACECOURSE RD RUTHERFORD; 970 HUNTER ST NEWCASTLE WEST,Hunter; Newcastle,service,1/1,MVRL62019
 multi_site,ARRB Mechanical Pty Ltd,11109321459,109321459,Company,1,2,102 Laurel Avenue LISMORE; 16 ENDEAVOUR CL BALLINA,Northern Rivers,service,1/1,MVRL56613
 multi_site,ARS Radiators Australia Pty Ltd,,128893523,Company,1,2,522 Botany Rd BEACONSFIELD; U 13 380 West Botany St ROCKDALE,Sydney,service,1/1,MVRL51610
@@ -125,9 +129,12 @@ multi_site,Vim Tech Automotive Engineers Pty Ltd,,101205609,Company,1,2,106 Ball
 multi_site,Western Region Automotive Pty Ltd,,112718420,Company,1,2,U 1 11 Sovereign Pl SOUTH WINDSOR; 111-117 Great Western Hwy KINGSWOOD,New England / North West; Sydney,service,1/1,MVRL41271
 multi_site,Whittaker Contracting Pty Ltd,,,Company,1,2,4 Colliers Ave ORANGE NSW 2800; 5 Colliers Ave ORANGE NSW 2800,Central West,service,1/1,MVRL48789
 multi_site,Wizard Automotive Systems Pty Ltd,,104029414,Company,1,2,8 EUSTON ST RYDALMERE; 1 - 3 Boundary Road NORTHMEAD,Sydney,service,1/1,MVRL43374
+multi_site,David John Bartolo,,,Individual/Partnership,2,1,U 6 176 FORRESTER RD ST MARYS NSW 2760,Sydney; Unknown (no address in register),service,2/2,MVRL32795; MVRL62701
 multi_site,David Mitchell AutoBody Services Pty Ltd,,001381595,Company,2,1,104 - 106 Gipps St WOLLONGONG,Illawarra,service,2/2,MVRL43512; MVRL8834
 multi_site,Ken Ross Repairs Mudgee Pty Ltd,,105155299,Company,2,1,5 Horatio Lane MUDGEE,Hunter; Unknown (no address in register),service,2/2,MVRL30597; MVRL35066
 multi_site,Kumar Motors (Bankstown) Pty Ltd,,003857832,Company,2,1,376 Edgar Street BANKSTOWN,Sydney,service,2/2,MVRL39370; MVRL41962
+multi_site,Rocco Junior Zoccali,,,Individual/Partnership,2,1,292 Victoria Road GLADESVILLE NSW 2111,Sydney; Unknown (no address in register),service,2/2,MVRL29234; MVRL35697
+multi_site,Stephen John Bevege,,,Individual/Partnership,2,1,17 Monkittee Street BRAIDWOOD NSW 2622,Southern Highlands / Shoalhaven; Unknown (no address in register),service,2/2,MVRL24173; MVRL46783
 single_site_company,083 Motors Pty Ltd,,000416571,Company,1,1,"Yass Trade Centre, 5/81 Laidlaw Street YASS",Riverina,service,1/1,MVRL26563
 single_site_company,168 MOTOR MECHANIC PTY LTD,57675885131,675885131,Company,1,1,UNIT 3 247 RAILWAY PDE CABRAMATTA,Sydney,service,1/1,MVRL62668
 single_site_company,1ST CHOICE MECHANICAL REPAIRS PTY LTD,67169134552,169134552,Company,1,1,UNIT 7 30 SWAN ST WOLLONGONG,Illawarra,service,1/1,MVRL59080
