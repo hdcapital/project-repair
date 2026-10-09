@@ -22,7 +22,7 @@ _As of 2026-10-08T19:49:51Z_
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
 | Sydney | 585 | 156 | 29 | 119 | 2000 | 813 | 966 | 4668 |
-| Unknown (no address in register) | 100 | 18 | 49 | 35 | 595 | 397 | 2129 | 3323 |
+| Mobile (no fixed premises) | 0 | 0 | 3309 | 0 | 0 | 0 | 0 | 3309 |
 | Newcastle | 44 | 24 | 7 | 21 | 207 | 137 | 126 | 566 |
 | New England / North West | 40 | 20 | 3 | 13 | 195 | 122 | 106 | 499 |
 | Riverina | 31 | 16 | 2 | 13 | 190 | 117 | 115 | 484 |
@@ -38,8 +38,9 @@ _As of 2026-10-08T19:49:51Z_
 | Coffs Harbour - Grafton | 19 | 1 | 2 | 5 | 56 | 41 | 54 | 178 |
 | Central Coast | 12 | 2 | 3 | 2 | 64 | 30 | 24 | 137 |
 | Outside NSW postcode table | 2 | 1 | 0 | 0 | 18 | 2 | 6 | 29 |
+| Unknown (no address in register) | 0 | 0 | 1 | 0 | 4 | 2 | 7 | 14 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 2 |
-| **total** | 1032 | 324 | 110 | 288 | 4393 | 2313 | 4153 | 12613 |
+| **total** | 932 | 306 | 3371 | 253 | 3802 | 1918 | 2031 | 12613 |
 
 ## Queue tiers
 
@@ -60,7 +61,7 @@ _As of 2026-10-08T19:49:51Z_
 | O'Brien Glass Industries Limited | 74000022275 | specialist | 1 | 21 | Central West; Coffs Harbour - Grafton; Far West / Orana; Hunter; Illawarra; Mid North Coast; Murray; New England / North West; Newcastle; Northern Rivers; Riverina; Sydney | Windscreens O'Brien |
 | Bob Jane Corporation Pty Ltd |  | unknown | 1 | 18 | Central West; Illawarra; Newcastle; Northern Rivers; Riverina; Southern Highlands / Shoalhaven; Sydney | Bob Jane |
 | Capital Smart Repairs Australia Pty Ltd |  | body | 1 | 17 | Capital Region; Newcastle; Sydney |  |
-| Australian Automotive Group Pty Ltd |  | dealer | 8 | 16 | Riverina; Sydney; Unknown (no address in register) |  |
+| Australian Automotive Group Pty Ltd |  | dealer | 8 | 16 | Mobile (no fixed premises); Riverina; Sydney |  |
 | Transport for NSW | 64480155255 | other | 1 | 16 | Capital Region; Far West / Orana; Illawarra; Mid North Coast; Murray; New England / North West; Newcastle; Northern Rivers; Riverina; Sydney |  |
 | BAPCOR RETAIL PTY LTD | 99159177803 | other | 1 | 15 | Central Coast; Coffs Harbour - Grafton; Hunter; Mid North Coast; Murray; New England / North West; Newcastle; Northern Rivers; Riverina; Southern Highlands / Shoalhaven; Sydney | Autobarn |
 | TRANS AUSTRALIA GLASS PTY LTD | 63009360392 | specialist | 1 | 13 | Coffs Harbour - Grafton; Hunter; Illawarra; Mid North Coast; Murray; Newcastle; Northern Rivers; Sydney |  |
@@ -99,7 +100,7 @@ _As of 2026-10-08T19:49:51Z_
 | Tyreright Operations Pty Ltd | 49646640897 | specialist | 1 | 6 | Central Coast; Newcastle; Sydney | Tyreright |
 | Hunter Regional Tyres Pty Ltd |  | specialist | 3 | 5 | Newcastle; Sydney | Bridgestone |
 | Inland Truck Centres Pty Ltd |  | specialist | 3 | 5 | Central West; Far West / Orana; Outside NSW postcode table; Riverina |  |
-| James Frizelles Automotive Group Pty Ltd |  | dealer | 3 | 5 | Northern Rivers; Unknown (no address in register) |  |
+| James Frizelles Automotive Group Pty Ltd |  | dealer | 3 | 5 | Mobile (no fixed premises); Northern Rivers |  |
 | Wollongong City Motors Pty Ltd |  | service | 2 | 5 | Illawarra; Southern Highlands / Shoalhaven |  |
 | Abalner Pty Ltd |  | unknown | 1 | 5 | Illawarra; Sydney |  |
 | Australian Native Landscapes Pty Limited | 42001749980 | unknown | 1 | 5 | Central West; Mid North Coast; Newcastle; Sydney |  |
@@ -109,4 +110,4 @@ _As of 2026-10-08T19:49:51Z_
 ## Shortlist
 
 - independent multi-site service operators: **147**
-- single-site service companies (widen later): **2216**
+- single-site service companies (widen later): **1960**

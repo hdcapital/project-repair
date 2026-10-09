@@ -1135,6 +1135,7 @@ def normalise_site_details(raw: dict):
             if pc and pc not in addr:           # keep the postcode on the address so regions resolve
                 addr = f"{addr} {_get(p, 'state') or 'NSW'} {pc}".strip()
             premises.append({"type": _get(p, "type", "premisesType") or p.get("_loctype") or "",
+                             "rego": _get(p, "rego", "registration") or None,
                              "businessName": _get(p, "businessName", "tradingName") or None,
                              "businessAddress": addr,
                              "endDate": _get(p, "endDate", "ceasedDate", default=None) or None})
@@ -1202,6 +1203,7 @@ def flatten(rec: dict) -> dict:
         if name and (not isinstance(c, dict) or _active(c)):
             classes.append(str(name).strip())
     premises = []
+    vehicles = 0          # mobile workshops: the register lists a vehicle (rego), not an address
     for p in _get(raw, "premises", "premisesList", default=[]) or []:
         if not isinstance(p, dict):
             continue
@@ -1211,6 +1213,8 @@ def flatten(rec: dict) -> dict:
         paddr = re.sub(r"\s+", " ", str(_get(p, "businessAddress", "address", "premisesAddress"))).strip()
         if pname or paddr:
             premises.append((pname, paddr))
+        elif _get(p, "rego", "registration") or "mobile" in str(_get(p, "type")).lower():
+            vehicles += 1
     conditions = []
     for c in _get(raw, "conditions", default=[]) or []:
         txt = _get(c, "description", "condition", "text") if isinstance(c, dict) else str(c)
@@ -1243,6 +1247,7 @@ def flatten(rec: dict) -> dict:
         "licence_classes": "; ".join(classes),
         "classes_list": classes,
         "n_premises": len(premises),
+        "mobile_vehicles": vehicles,
         "premises": "; ".join(f"{n} @ {a}".strip(" @") for n, a in premises),
         "premises_list": premises,
         "premises_postcodes": premises_pcs,
@@ -1366,8 +1371,9 @@ SUMMARY_FIELDS = ["licence_number", "licensee", "licence_name", "business_names"
                   "status", "expiry_date", "classes", "categories", "suburb", "postcode", "region",
                   "sa4", "lga", "licence_id"]
 ENRICH_FIELDS = ["abn", "acn", "address_full", "start_date", "licence_classes", "historical_classes",
-                 "n_premises", "premises", "premises_regions", "conditions", "business_names_full",
-                 "directors", "public_warnings", "disciplinary_actions"]
+                 "n_premises", "mobile_vehicles", "premises", "premises_regions", "conditions",
+                 "business_names_full", "directors", "public_warnings", "disciplinary_actions"]
+MOBILE_REGION = "Mobile (no fixed premises)"
 LICENCE_FIELDS = SUMMARY_FIELDS + ENRICH_FIELDS + ["tier", "name_flags", "segment_rule",
                                                     "franchise_brand", "operator_key", "details_fetched"]
 
@@ -1391,9 +1397,12 @@ def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict
             row[k] = det.get(k, "")
         if det.get("details_expiry_date") and not row["expiry_date"]:
             row["expiry_date"] = det["details_expiry_date"]
+        mobile_only = bool(det.get("mobile_vehicles")) and not det.get("premises_list")
         if det.get("details_postcode"):
             row["postcode"] = det["details_postcode"]
             row["region"], row["sa4"], row["lga"] = region_for(det["details_postcode"], postcodes)
+        elif mobile_only and (not row["region"] or row["region"].startswith("Unknown")):
+            row["region"], row["sa4"], row["lga"] = MOBILE_REGION, "", ""
         elif not row["region"]:
             row["region"], row["sa4"], row["lga"] = region_for(row["postcode"], postcodes)
         # name flags: recompute with the extra names from details, fall back to queue
@@ -1407,6 +1416,7 @@ def enrich_licences(seed: list[dict], queue: list[dict], details: dict[str, dict
         # (a truck depot or council that once held "Motor Mechanic Fixed Workshop" is still not a
         # service shop), then the pre-2014 class history, then the remaining name flags.
         row["segment_rule"] = (segment_from_classes(det.get("classes_list", []))
+                               or ("mobile" if mobile_only else "")
                                or segment_from_conditions(det.get("conditions_list", []))
                                or (segment_from_flags(cls) if cls["exclusions"] else "")
                                or segment_from_classes(det.get("historical_classes_list", []))
