@@ -7,7 +7,7 @@ _As of 2026-10-08T19:49:51Z_
 | metric | value |
 |---|---|
 | licences in queue | 12613 |
-| details fetched | 12111 |
+| details fetched | 12613 |
 | remaining | 5908 |
 | last good rate | 600 req/min |
 | ETA at that rate | 0.2 h of run time (~0.2 hourly runs) |
@@ -21,25 +21,25 @@ _As of 2026-10-08T19:49:51Z_
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 576 | 156 | 29 | 119 | 1963 | 812 | 1013 | 4668 |
-| Unknown (no address in register) | 94 | 18 | 49 | 35 | 549 | 393 | 2186 | 3324 |
-| Newcastle | 43 | 24 | 7 | 21 | 206 | 135 | 130 | 566 |
-| New England / North West | 40 | 20 | 3 | 13 | 188 | 122 | 113 | 499 |
-| Riverina | 27 | 16 | 2 | 13 | 186 | 117 | 123 | 484 |
-| Northern Rivers | 32 | 14 | 3 | 9 | 154 | 86 | 81 | 379 |
-| Mid North Coast | 27 | 9 | 2 | 10 | 141 | 88 | 87 | 364 |
-| Central West | 20 | 13 | 1 | 10 | 113 | 89 | 109 | 355 |
-| Southern Highlands / Shoalhaven | 24 | 7 | 4 | 5 | 123 | 77 | 79 | 319 |
-| Illawarra | 31 | 6 | 1 | 5 | 132 | 70 | 71 | 316 |
-| Far West / Orana | 21 | 6 | 1 | 13 | 112 | 83 | 67 | 303 |
-| Hunter | 14 | 15 | 1 | 7 | 88 | 72 | 76 | 273 |
-| Capital Region | 18 | 13 | 1 | 13 | 95 | 50 | 47 | 237 |
-| Murray | 4 | 3 | 1 | 8 | 79 | 36 | 49 | 180 |
-| Coffs Harbour - Grafton | 19 | 1 | 2 | 5 | 55 | 41 | 55 | 178 |
-| Central Coast | 11 | 2 | 3 | 2 | 63 | 30 | 26 | 137 |
+| Sydney | 585 | 156 | 29 | 119 | 2000 | 813 | 966 | 4668 |
+| Unknown (no address in register) | 100 | 18 | 49 | 35 | 595 | 397 | 2129 | 3323 |
+| Newcastle | 44 | 24 | 7 | 21 | 207 | 137 | 126 | 566 |
+| New England / North West | 40 | 20 | 3 | 13 | 195 | 122 | 106 | 499 |
+| Riverina | 31 | 16 | 2 | 13 | 190 | 117 | 115 | 484 |
+| Northern Rivers | 36 | 14 | 3 | 9 | 156 | 87 | 74 | 379 |
+| Mid North Coast | 27 | 9 | 2 | 10 | 144 | 88 | 84 | 364 |
+| Central West | 21 | 13 | 1 | 10 | 120 | 89 | 101 | 355 |
+| Southern Highlands / Shoalhaven | 24 | 7 | 4 | 5 | 126 | 77 | 75 | 318 |
+| Illawarra | 32 | 6 | 1 | 5 | 134 | 70 | 69 | 317 |
+| Far West / Orana | 23 | 6 | 1 | 13 | 117 | 84 | 59 | 303 |
+| Hunter | 14 | 15 | 1 | 7 | 89 | 72 | 75 | 273 |
+| Capital Region | 18 | 13 | 1 | 13 | 99 | 50 | 44 | 238 |
+| Murray | 4 | 3 | 1 | 8 | 81 | 37 | 46 | 180 |
+| Coffs Harbour - Grafton | 19 | 1 | 2 | 5 | 56 | 41 | 54 | 178 |
+| Central Coast | 12 | 2 | 3 | 2 | 64 | 30 | 24 | 137 |
 | Outside NSW postcode table | 2 | 1 | 0 | 0 | 18 | 2 | 6 | 29 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 2 |
-| **total** | 1003 | 324 | 110 | 288 | 4267 | 2303 | 4318 | 12613 |
+| **total** | 1032 | 324 | 110 | 288 | 4393 | 2313 | 4153 | 12613 |
 
 ## Queue tiers
 
@@ -108,5 +108,5 @@ _As of 2026-10-08T19:49:51Z_
 
 ## Shortlist
 
-- independent multi-site service operators: **145**
-- single-site service companies (widen later): **2215**
+- independent multi-site service operators: **147**
+- single-site service companies (widen later): **2216**

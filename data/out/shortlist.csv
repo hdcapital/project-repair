@@ -34,6 +34,7 @@ multi_site,Royans Dubbo Pty Ltd,,105352789,Company,1,3,31 Barnes Street TAMWORTH
 multi_site,S & I Automotive Services Pty Ltd,,125835832,Company,1,3,Shop 2 118 Bronte Rd BONDI JUNCTION; 120-138 Birrell Street BONDI JUNCTION; 390 Anzac Parade KINGSFORD,Sydney,service,1/1,MVRL45286
 multi_site,Servco Australia Chatswood Pty Ltd,,159103296,Company,1,3,1044-1062 Victoria Road West RYDE NSW 2114; UNIT 2 135 AIRDS RD MINTO NSW 2566; 12 Marden St ARTARMON NSW 2064,Sydney,service,1/1,MVRL49576
 multi_site,SPINNING X AUTO PTY LTD,77654512517,654512517,Company,1,3,100 MILEHAM ST SOUTH WINDSOR; 32 FAIREY RD SOUTH WINDSOR; 11 PEACHTREE RD PENRITH,Sydney,service,1/1,MVRL59703
+multi_site,Steven Paul Dimech,,,Individual/Partnership,1,3,13/124 Ham St SOUTH WINDSOR NSW 2756; U 12 124 Ham St SOUTH WINDSOR NSW 2756; UNIT 14 124 HAM ST SOUTH WINDSOR NSW 2756,Sydney,service,1/1,MVRL45089
 multi_site,Tradecore Industries Pty Ltd,,102710958,Company,1,3,10b Carramere Road MUSWELLBROOK NSW 2333; 41 MUSTANG DR RUTHERFORD NSW 2320; 16 Magpie St SINGLETON NSW 2330,Hunter; Sydney,service,1/1,MVRL47254
 multi_site,VVG Services NSW Pty Ltd,,647661194,Company,1,3,3 BABILLA CL BERESFIELD; 20 HUNTINGWOOD DR HUNTINGWOOD; 10 DECKER PL HUNTINGWOOD,Newcastle; Sydney,service,1/1,MVRL58865
 multi_site,Xceed Autos Pty Ltd,,114779690,Company,1,3,U 3 4 Morley Avenue KINGSWOOD; 1 Morley Avenue KINGSWOOD; 74-76 BATT ST JAMISONTOWN,New England / North West; Sydney,service,1/1,MVRL56683
@@ -135,6 +136,7 @@ multi_site,TJW AUTOMOTIVE SERVICES PTY LTD,,635949718,Company,1,2,516 Military R
 multi_site,Tracserv Pty Ltd,,003859069,Company,1,2,30 COLLIERS AV ORANGE NSW 2800; 19 Purvis Lane DUBBO NSW 2830,Central West; Far West / Orana,service,1/1,MVRL23376
 multi_site,United Automotive Pty Ltd,11621786249,621786249,Company,1,2,1 Marsh St CLYDE; 28-30 Meeks Road MARRICKVILLE,Sydney,service,1/1,MVRL54874
 multi_site,Vim Tech Automotive Engineers Pty Ltd,,101205609,Company,1,2,106 Ballandella Rd PENDLE HILL; 133-137 Targo Road GIRRAWEEN,Sydney,service,1/1,MVRL39977
+multi_site,Wayne John James,,,Individual/Partnership,1,2,Cnr Church & Bourke Streets GLENN INNES NSW 2370; 185 Bourke St Glen Innes NSW 2370,New England / North West,service,1/1,MVRL35318
 multi_site,Western Region Automotive Pty Ltd,,112718420,Company,1,2,U 1 11 Sovereign Pl SOUTH WINDSOR; 111-117 Great Western Hwy KINGSWOOD,New England / North West; Sydney,service,1/1,MVRL41271
 multi_site,Whittaker Contracting Pty Ltd,,,Company,1,2,4 Colliers Ave ORANGE NSW 2800; 5 Colliers Ave ORANGE NSW 2800,Central West,service,1/1,MVRL48789
 multi_site,Wizard Automotive Systems Pty Ltd,,104029414,Company,1,2,8 EUSTON ST RYDALMERE; 1 - 3 Boundary Road NORTHMEAD,Sydney,service,1/1,MVRL43374
@@ -2006,6 +2008,7 @@ single_site_company,WARD'S AUTO SUPPLIES PTY LTD,,002292828,Company,1,1,118 TAYL
 single_site_company,WARNERS BAY MECHANICAL PTY LTD,68665654491,665654491,Company,1,1,38 MEDCALF ST WARNERS BAY,Newcastle,service,1/1,MVRL61275
 single_site_company,Warriewood Automotive Services Pty Ltd,,002174487,Company,1,1,Unit 7 1-3 Apollo Street WARRIEWOOD,Sydney,service,1/1,MVRL40837
 single_site_company,WATCH INVESTMENTS PTY LTD,11653919781,653919781,Company,1,1,10 MCCORMACK ST ARNDELL PARK,Sydney,service,1/1,MVRL63622
+single_site_company,Watchtower Bible & Tract Society of Australia,,002861225,Company,1,1,12-14 Zouch Rd DENHAM COURT NSW 2565,Sydney,service,1/1,MVRL21897
 single_site_company,Watermin Drillers Pty Limited,,001313499,Company,1,1,27 Tynan St ORANGE NSW 2800,Central West,service,1/1,MVRL8024
 single_site_company,WATERS ENTERPRISES PTY LTD,91652370119,652370119,Company,1,1,1 STATION ST BRANXTON,Hunter,service,1/1,MVRL59398
 single_site_company,Waters Mechanical Repairs Pty Ltd,,604709542,Company,1,1,1 STATION ST BRANXTON,Hunter,service,1/1,MVRL52561
