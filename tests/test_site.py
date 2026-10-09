@@ -118,6 +118,25 @@ class SearchWrapTests(unittest.TestCase):
         self.assertEqual(pl.segment_from_classes(flat["historical_classes_list"]), "service")
         self.assertEqual(ss.parse_body(json.dumps(raw), "MVRL25148"), raw)   # stored as-is
 
+    def test_vehicle_only_licence_is_mobile(self):
+        """Mobile workshops list a vehicle registration instead of an address."""
+        cd = {"licenceId": "1-M", "licenceNumber": "MVRL1", "licensee": "Joe Bloggs Auto Services Pty Ltd",
+              "ACN": "000158725", "classes": [{"name": "Motor Vehicle Repairer Licence", "isActive": True}],
+              "history": [{"eventType": "Class Lapsed", "descriptions": [{"short": "Motor Mechanic Fixed Workshop"}]}],
+              "locations": [{"type": "Mobile", "premises": [{"rego": "ETL97Y", "type": "Mobile"}]}]}
+        rec = {"licence_id": "ID-1", "licence_number": "MVRL1", "raw": {"componentData": cd}}
+        flat = pl.flatten(rec)
+        self.assertEqual((flat["n_premises"], flat["mobile_vehicles"]), (0, 1))
+        rows = [seed_row(1, "Joe Bloggs Auto Services Pty Ltd", region="", postcode="")]
+        lic = pl.enrich_licences(rows, pl.prioritise(rows), {"ID-1": rec}, postcodes={})
+        self.assertEqual(lic[0]["segment_rule"], "mobile")                 # beats name and class history
+        self.assertEqual(lic[0]["region"], pl.MOBILE_REGION)
+        # fixed premises plus a vehicle is still a fixed shop
+        cd["locations"].append({"type": "Fixed", "premises": [{"address": "1 Main Rd LIVERPOOL",
+                                                               "postcode": "2170", "type": "Fixed"}]})
+        lic = pl.enrich_licences(rows, pl.prioritise(rows), {"ID-1": rec}, postcodes={})
+        self.assertEqual(lic[0]["segment_rule"], "service")
+
     def test_response_classification(self):
         search = json.dumps({"pagingInfo": {}, "results": [SEARCH_ROW]})
         self.assertTrue(ss.is_search_response(search))
