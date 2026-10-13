@@ -159,7 +159,7 @@ Excluded because: mobile only 3254, mostly specialist 1773, mostly body 892, dea
 
 Tier A 58, tier B 351, tier C 232. These rank first within each tier.
 
-Dealer-licence check, tiers A and B: clear 0, not checked 2917. Groups found holding a dealer licence are in tier X.
+Dealer-licence check, tiers A and B: clear 13, not checked 2904. Groups found holding a dealer licence are in tier X.
 
 | rank | tier | group | score | sites | km | why |
 |---|---|---|---|---|---|---|
