@@ -142,6 +142,17 @@ Tiers: **A** platform candidates (2+ sites), **B** single-site companies within 
 group (bolt-ons), **C** other service operators, **X** excluded with the reason: any dealer or
 franchise entity in the group, mobile only, or mostly a non-service segment.
 
+**Newcastle first**: groups with a site within 80 km of Newcastle in a straight line (about an
+hour's drive) rank first within every tier; `in_focus` and `km_to_focus` columns. Inside that radius
+every single-site service company counts as a bolt-on (tier B). Change `FOCUS_*` in `targets.py`.
+
+**Dealer check**: the `dealer-check` workflow (Actions → *Run workflow*) searches the register for
+every licence held by the tier-A companies statewide and the tier-B companies near Newcastle, and
+stores the results in `data/licence_lookup.jsonl`. A group whose company holds a current dealer
+licence moves to tier X; `dealer_check` says clear, dealer licence, or not checked, and
+`other_licences` lists what else each group holds. It runs at the site's safe pace, commits every
+200 names and starts its own next run until the queue is done. Locally: `python scrape_site.py lookup`.
+
 **Overrides**: add rows to `data/overrides.csv` (`match,action,note`). `match` is an ACN, ABN,
 licence number or exact entity name; `action` is `exclude` or `keep`. Re-run `python pipeline.py build`.
 Use it for dealers the name rules miss, owners who have said no, or anything checked by hand.

@@ -40,12 +40,21 @@ HERE = Path(__file__).resolve().parent
 NEARBY_KM = 25.0
 # The register's records begin on 31 March 1981; that date means "licensed then or earlier".
 REGISTER_START = dt.date(1981, 3, 31)
+# Focus region: groups with a site within FOCUS_KM (straight line) of FOCUS_POINT are listed first
+# in every tier.  80 km straight-line is about an hour's drive from Newcastle: Singleton 77 km,
+# Gosford 71 km, Dungog 73 km; Muswellbrook (126 km) and Forster (102 km) fall outside.
+FOCUS_NAME = "Newcastle"
+FOCUS_POINT = (-32.9283, 151.7817)
+FOCUS_KM = 80.0
+# Licence types in the register that mean the business sells cars (or trades them).
+DEALER_LICENCE_RE = re.compile(r"dealer|wholesal|auction", re.I)
 UNKNOWN_SERVICE_WEIGHT = 0.5
 GENERIC_SURNAMES = {"AUTO", "AUTOS", "MOTOR", "MOTORS", "SERVICE", "SERVICES", "PTY", "LTD", "GROUP",
                     "HOLDINGS", "NSW", "AUSTRALIA", "AND", "THE", "CAR", "CARS", "REPAIRS", "MECHANICAL"}
 
 TARGET_FIELDS = ["rank", "tier", "score", "fit", "succession", "dealability", "name", "why",
-                 "exclusion", "n_entities", "n_licences", "n_sites", "regions", "nearby_service_operators",
+                 "exclusion", "in_focus", "km_to_focus", "dealer_check", "other_licences",
+                 "n_entities", "n_licences", "n_sites", "regions", "nearby_service_operators",
                  "first_licensed", "tenure_years", "people", "n_people", "family_signal",
                  "service_share", "segments", "entities", "abns", "acns", "licence_numbers", "premises",
                  "group_id"]
@@ -279,6 +288,70 @@ def _override_for(t: dict, rows: list[dict], overrides: list[dict]) -> dict | No
     return None
 
 
+def load_lookups(path: str | os.PathLike | None) -> dict[str, dict]:
+    """data/licence_lookup.jsonl: one record per searched entity name (last one wins)."""
+    import json
+    out: dict[str, dict] = {}
+    if not path or not Path(path).exists():
+        return out
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                continue
+            if rec.get("query"):
+                out[norm_person(rec["query"])] = rec
+    return out
+
+
+def _digits(s: str) -> str:
+    return re.sub(r"\D", "", s or "")
+
+
+def licences_held(rows: list[dict], lookups: dict[str, dict]) -> tuple[bool, list[dict]]:
+    """(were all the group's entities looked up, other licences they hold).  A search result
+    counts as the entity's own licence when its ACN or ABN matches, or, if it carries neither,
+    when the licensee name matches exactly."""
+    names = {norm_person(r["licensee"]) for r in rows}
+    acns = {_digits(r.get("acn", "")) for r in rows if r.get("acn")}
+    abns = {_digits(r.get("abn", "")) for r in rows if r.get("abn")}
+    own = {r["licence_number"] for r in rows}
+    checked = bool(names) and all(n in lookups and not lookups[n].get("error") for n in names)
+    held: dict[str, dict] = {}
+    for n in names:
+        for res in (lookups.get(n) or {}).get("results") or []:
+            num = res.get("licenceNumber") or ""
+            if not num or num in own:
+                continue
+            acn, abn = _digits(res.get("ACN", "")), _digits(res.get("ABN", ""))
+            mine = (acn and acn in acns) or (abn and abn in abns) or \
+                   (not acn and not abn and norm_person(res.get("licensee", "")) in names)
+            if mine:
+                held[num] = res
+    return checked, sorted(held.values(), key=lambda r: r.get("licenceNumber", ""))
+
+
+def lookup_queue(targets: list[dict]) -> list[str]:
+    """Entity names to search, most useful first: focus-region tier A, focus-region tier B,
+    then the rest of tier A."""
+    def focus(t):            # bool from build_targets, "True"/"False" when read back from targets.csv
+        return t["in_focus"] is True or str(t["in_focus"]).lower() == "true"
+
+    order = []
+    for keep in (lambda t: t["tier"] == "A" and focus(t), lambda t: t["tier"] == "B" and focus(t),
+                 lambda t: t["tier"] == "A"):
+        for t in targets:
+            if keep(t):
+                order += [e for e in t["entities"].split("; ") if e]
+    seen, out = set(), []
+    for e in order:
+        if norm_person(e) not in seen:
+            seen.add(norm_person(e))
+            out.append(e)
+    return out
+
+
 def display_name(rows: list[dict]) -> str:
     """Prefer the most common company name; fall back to the licensee (a person)."""
     companies = Counter(r["licensee"].strip() for r in rows if "company" in (r.get("name_flags") or ""))
@@ -287,9 +360,11 @@ def display_name(rows: list[dict]) -> str:
 
 
 def build_targets(licences: list[dict], *, today: dt.date | None = None,
-                  points: dict | None = None, overrides: list[dict] | None = None) -> list[dict]:
+                  points: dict | None = None, overrides: list[dict] | None = None,
+                  lookups: dict[str, dict] | None = None) -> list[dict]:
     today = today or dt.date.today()
     overrides = overrides or []
+    lookups = lookups or {}
     pts = postcode_points() if points is None else points
     gid = group_operators(licences)
     groups: dict[str, list[dict]] = defaultdict(list)
@@ -321,6 +396,20 @@ def build_targets(licences: list[dict], *, today: dt.date | None = None,
     for g, rows in groups.items():
         s = score_group(rows, today=today, nearby=len(near[g]))
         ops = sorted({r["operator_key"] for r in rows})
+        checked, held = licences_held(rows, lookups)
+        current = [h for h in held if str(h.get("status", "")).lower() in ("current", "")]
+        dealer = [h for h in current if DEALER_LICENCE_RE.search(h.get("licenceType", "") or "")]
+        s["dealer_check"] = ("dealer licence" if dealer else "clear") if checked else \
+            ("dealer licence" if dealer else "not checked")
+        s["other_licences"] = "; ".join(f"{h.get('licenceType', '')} {h.get('licenceNumber', '')}"
+                                        f"{'' if h in current else ' (' + str(h.get('status', '')) + ')'}"
+                                        for h in held)
+        if dealer:
+            s["exclusion"] = "; ".join(x for x in (s["exclusion"], "holds a dealer licence " +
+                                                   ", ".join(h["licenceNumber"] for h in dealer)) if x)
+        dists = [km(p, FOCUS_POINT) for p in gpoints[g]]
+        s["km_to_focus"] = round(min(dists)) if dists else ""
+        s["in_focus"] = bool(dists) and min(dists) <= FOCUS_KM
         o = _override_for(s, rows, overrides)
         if o and o["action"].strip().lower() == "exclude":
             s["exclusion"] = f"override: {(o.get('note') or 'excluded by hand').strip()}"
@@ -349,12 +438,12 @@ def build_targets(licences: list[dict], *, today: dt.date | None = None,
             t["tier"] = "X"
         elif t["group_id"] in a_groups:
             t["tier"] = "A"
-        elif t["_company"] and t["n_sites"] <= 1 and near[t["group_id"]] & a_groups:
-            t["tier"] = "B"
+        elif t["_company"] and t["n_sites"] <= 1 and (near[t["group_id"]] & a_groups or t["in_focus"]):
+            t["tier"] = "B"          # near a platform candidate, or anywhere in the focus region
         else:
             t["tier"] = "C"
     order = {"A": 0, "B": 1, "C": 2, "X": 3}
-    out.sort(key=lambda t: (order[t["tier"]], -t["score"], -t["n_sites"], t["name"].upper()))
+    out.sort(key=lambda t: (order[t["tier"]], not t["in_focus"], -t["score"], -t["n_sites"], t["name"].upper()))
     for i, t in enumerate(out, 1):
         t["rank"] = i
     return out
@@ -377,4 +466,15 @@ def summary_lines(targets: list[dict], top: int = 25) -> list[str]:
     for t in [t for t in targets if t["tier"] == "A"][:top]:
         lines.append(f"| {t['rank']} | {t['name']} | {t['score']} | {t['n_sites']} | {t['n_entities']} | "
                      f"{t['first_licensed'][:4]} | {t['why']} |")
+    focus = [t for t in targets if t["in_focus"]]
+    chk = Counter(t["dealer_check"] for t in targets if t["tier"] in ("A", "B"))
+    lines += ["", f"### Within about an hour of {FOCUS_NAME} ({int(FOCUS_KM)} km straight line)", "",
+              f"Tier A {sum(t['tier'] == 'A' for t in focus)}, tier B {sum(t['tier'] == 'B' for t in focus)}, "
+              f"tier C {sum(t['tier'] == 'C' for t in focus)}. These rank first within each tier.", "",
+              f"Dealer-licence check, tiers A and B: clear {chk['clear']}, not checked {chk['not checked']}. "
+              f"Groups found holding a dealer licence are in tier X.", "",
+              "| rank | tier | group | score | sites | km | why |", "|---|---|---|---|---|---|---|"]
+    for t in [t for t in focus if t["tier"] in ("A", "B")][:top]:
+        lines.append(f"| {t['rank']} | {t['tier']} | {t['name']} | {t['score']} | {t['n_sites']} | "
+                     f"{t['km_to_focus']} | {t['why']} |")
     return lines + [""]

@@ -1586,7 +1586,8 @@ def cmd_build(args) -> int:
         status = {"remaining": len([q for q in queue if q["licence_id"] not in details]),
                   "complete": all(q["licence_id"] in details for q in queue)}
     import targets as tg          # director grouping + target scoring
-    tlist = tg.build_targets(licences, overrides=tg.load_overrides(d / "overrides.csv"))
+    tlist = tg.build_targets(licences, overrides=tg.load_overrides(d / "overrides.csv"),
+                             lookups=tg.load_lookups(d / "licence_lookup.jsonl"))
     write_csv(out / "targets.csv", tlist, tg.TARGET_FIELDS)
     summary = build_summary(licences, ops, shortlist, status, budget, len(queue))
     (out / "summary.md").write_text(summary + "\n" + "\n".join(tg.summary_lines(tlist)), encoding="utf-8")

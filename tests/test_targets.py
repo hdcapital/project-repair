@@ -119,3 +119,63 @@ class ScoringTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DealerAndFocusTests(unittest.TestCase):
+    NEWY = {"2300": (-32.93, 151.78), "2320": (-32.73, 151.55), "2170": (-33.92, 150.92), "2168": (-33.94, 150.88)}
+
+    def rows(self):
+        return [
+            lic(1, "Hunter Mechanical Pty Ltd", pc="2320", directors="Ann Marie Jones",
+                premises="1 A St MAITLAND NSW 2320; 2 B St MAITLAND NSW 2320"),
+            lic(2, "Sydney Mechanical Pty Ltd", directors="Bob John Brown",
+                premises="1 A St LIVERPOOL NSW 2170; 2 B St LIVERPOOL NSW 2170"),
+            lic(3, "Tynan Motors Pty Ltd", directors="Peter John Tynan",
+                premises="3 C St LIVERPOOL NSW 2170; 4 D St LIVERPOOL NSW 2170"),
+            lic(4, "Newcastle Single Pty Ltd", pc="2300", directors="Cara Lee Smith"),
+        ]
+
+    def test_focus_region_ranks_first_and_widens_tier_b(self):
+        t = tg.build_targets(self.rows(), today=TODAY, points=self.NEWY)
+        a = [x["name"] for x in t if x["tier"] == "A"]
+        self.assertEqual(a[0], "Hunter Mechanical Pty Ltd")                 # in focus beats a higher score
+        by = {x["name"]: x for x in t}
+        self.assertTrue(by["Hunter Mechanical Pty Ltd"]["in_focus"])
+        self.assertLess(by["Hunter Mechanical Pty Ltd"]["km_to_focus"], 40)
+        self.assertFalse(by["Sydney Mechanical Pty Ltd"]["in_focus"])
+        self.assertEqual(by["Newcastle Single Pty Ltd"]["tier"], "B")       # in focus, no A within 25 km needed
+        self.assertEqual(by["Tynan Motors Pty Ltd"]["dealer_check"], "not checked")
+
+    def test_dealer_licence_excludes_group(self):
+        lookups = {
+            tg.norm_person("Tynan Motors Pty Ltd"): {"query": "Tynan Motors Pty Ltd", "results": [
+                {"licenceNumber": "MVRL3", "licenceType": "Motor Vehicle Repairers Licence", "status": "Current",
+                 "ACN": "000000003"},                                           # its own repairer licence
+                {"licenceNumber": "MD12345", "licenceType": "Motor Dealers Licence", "status": "Current",
+                 "ACN": "000000003", "licensee": "Tynan Motors Pty Ltd"},
+                {"licenceNumber": "MD999", "licenceType": "Motor Dealers Licence", "status": "Current",
+                 "ACN": "123456780", "licensee": "Tynan Motors Holdings Pty Ltd"}]},   # someone else
+            tg.norm_person("Sydney Mechanical Pty Ltd"): {"query": "Sydney Mechanical Pty Ltd", "results": [
+                {"licenceNumber": "MD5", "licenceType": "Motor Dealers Licence", "status": "Cancelled",
+                 "ACN": "000000002"}]},                                          # lapsed dealer licence: not excluded
+            tg.norm_person("Hunter Mechanical Pty Ltd"): {"query": "x", "error": "HTTP 429"},
+        }
+        by = {x["name"]: x for x in tg.build_targets(self.rows(), today=TODAY, points=self.NEWY, lookups=lookups)}
+        tyn = by["Tynan Motors Pty Ltd"]
+        self.assertEqual(tyn["tier"], "X")
+        self.assertIn("holds a dealer licence MD12345", tyn["exclusion"])
+        self.assertNotIn("MD999", tyn["other_licences"])
+        self.assertEqual(tyn["dealer_check"], "dealer licence")
+        syd = by["Sydney Mechanical Pty Ltd"]
+        self.assertEqual(syd["tier"], "A")
+        self.assertEqual(syd["dealer_check"], "clear")
+        self.assertIn("MD5 (Cancelled)", syd["other_licences"])
+        self.assertEqual(by["Hunter Mechanical Pty Ltd"]["dealer_check"], "not checked")   # errored lookup
+
+    def test_lookup_queue_order_and_csv_strings(self):
+        t = tg.build_targets(self.rows(), today=TODAY, points=self.NEWY)
+        q = tg.lookup_queue(t)
+        self.assertEqual(q[:2], ["Hunter Mechanical Pty Ltd", "Newcastle Single Pty Ltd"])
+        self.assertEqual(set(q[2:]), {"Sydney Mechanical Pty Ltd", "Tynan Motors Pty Ltd"})
+        as_csv = [{k: str(v) for k, v in x.items()} for x in t]                    # read back from targets.csv
+        self.assertEqual(tg.lookup_queue(as_csv), q)

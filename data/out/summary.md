@@ -119,8 +119,8 @@ _As of 2026-10-08T19:49:51Z_
 | tier | meaning | groups |
 |---|---|---|
 | A | platform candidates: service, 2+ sites | 368 |
-| B | bolt-ons: single-site service company within 25 km of a tier-A group | 2536 |
-| C | other service operators | 2559 |
+| B | bolt-ons: single-site service company within 25 km of a tier-A group | 2549 |
+| C | other service operators | 2546 |
 | X | excluded | 6617 |
 
 Excluded because: mobile only 3254, mostly specialist 1773, mostly body 892, dealer entity in group 265, mostly other 239, franchise 173, mostly mobile 21.
@@ -129,28 +129,62 @@ Excluded because: mobile only 3254, mostly specialist 1773, mostly body 892, dea
 
 | rank | group | score | sites | companies | first licensed | why |
 |---|---|---|---|---|---|---|
-| 1 | Tynan Motors Pty Ltd | 100.0 | 3 | 1 | 1981 | 3 sites; licensed since register began (1981); directors share surname Tynan; 2 owners; 136 service shops within 25 km |
-| 2 | Geoff King Motors Pty Ltd | 99.5 | 3 | 1 | 1981 | 3 sites; licensed since register began (1981); King in the trading name; 1 owner; 41 service shops within 25 km |
-| 3 | CARINGBAH AUTO REPAIRS & SERVICE PTY LTD | 95.0 | 4 | 2 | 2002 | 4 sites; licensed 24 yrs; Smith in the trading name; 1 owner; 725 service shops within 25 km |
-| 4 | Eastern Suburbs Mechanical Pty Ltd | 95.0 | 4 | 2 | 2006 | 4 sites; licensed 20 yrs; directors share surname Zammit; 2 owners; 1133 service shops within 25 km |
-| 5 | MPSR GROUP PTY LTD | 95.0 | 3 | 2 | 1981 | 3 sites; licensed since register began (1981); Karavasilias in the trading name; 1 owner; 1128 service shops within 25 km |
-| 6 | Artarmon Mechanical Repairs Pty Ltd | 95.0 | 2 | 2 | 2001 | 2 sites; licensed 25 yrs; directors share surname Guiroyan; 2 owners; 1097 service shops within 25 km |
-| 7 | Dee Why Auto Care Pty Ltd | 95.0 | 2 | 2 | 1994 | 2 sites; licensed 32 yrs; Rostamians in the trading name; 1 owner; 579 service shops within 25 km |
-| 8 | JWS Mechanical Repairs Pty Ltd | 95.0 | 2 | 2 | 1999 | 2 sites; licensed 27 yrs; directors share surname Schuberg; 2 owners; 789 service shops within 25 km |
-| 9 | Manning Valley Automotive Pty Ltd | 93.7 | 6 | 3 | 1984 | 6 sites; licensed 42 yrs; Miedecke in the trading name; 1 owner; 58 service shops within 25 km |
-| 10 | North Star Motors (NSW) Pty Ltd | 92.9 | 2 | 1 | 1998 | 2 sites; licensed 28 yrs; directors share surname Sepos; 2 owners; 21 service shops within 25 km |
-| 11 | Rutherford Mechanical Repairs Pty Ltd | 92.9 | 2 | 1 | 1995 | 2 sites; licensed 31 yrs; directors share surname Emmerson; 2 owners; 21 service shops within 25 km |
-| 12 | JD Lange Pty Ltd | 91.1 | 2 | 2 | 1981 | 2 sites; licensed since register began (1981); directors share surname Lange; 2 owners |
-| 13 | Dulwich Hill Automotive Pty Ltd | 90.0 | 4 | 3 | 2012 | 4 sites; Leondis in the trading name; 2 owners; 1127 service shops within 25 km |
-| 14 | Moro & Sons Automotive Pty Ltd | 90.0 | 4 | 1 | 2014 | 4 sites; directors share surname Moro; 2 owners; 932 service shops within 25 km |
-| 15 | Balgowlah Automotive Pty Ltd | 90.0 | 3 | 2 | 1999 | 3 sites; licensed 27 yrs; directors share surname Smith; 840 service shops within 25 km |
-| 16 | Keene Pty Ltd | 90.0 | 2 | 2 | 1995 | 2 sites; licensed 30 yrs; Balfour in the trading name; 1 owner; 164 service shops within 25 km |
-| 17 | M H MECHANICAL SERVICES PTY LTD | 90.0 | 2 | 2 | 2006 | 2 sites; licensed 20 yrs; Helwe in the trading name; 1 owner; 1236 service shops within 25 km |
-| 18 | On The Road Automotive Pty Ltd | 90.0 | 2 | 2 | 2000 | 2 sites; licensed 26 yrs; directors share surname Smit; 2 owners; 779 service shops within 25 km |
-| 19 | SA & R Biviano Holdings Pty Ltd | 90.0 | 2 | 1 | 2005 | 2 sites; licensed 21 yrs; directors share surname Biviano; 2 owners; 1064 service shops within 25 km |
-| 20 | SILVER STAR SERVICE CENTRE PTY LTD | 90.0 | 2 | 2 | 2003 | 2 sites; licensed 23 yrs; Szekeres in the trading name; 1 owner; 1206 service shops within 25 km |
-| 21 | Tom's Automotive Services Pty Ltd | 90.0 | 2 | 2 | 2006 | 2 sites; licensed 20 yrs; directors share surname Stergiopoulos; 2 owners; 1236 service shops within 25 km |
-| 22 | MB Lismore Pty Ltd | 89.8 | 2 | 2 | 2009 | 2 sites; licensed 17 yrs; Frost in the trading name; 1 owner; 46 service shops within 25 km |
-| 23 | MJAT Pty Ltd | 89.6 | 2 | 2 | 2004 | 2 sites; licensed 21 yrs; directors share surname Bartlett; 2 owners; 43 service shops within 25 km |
-| 24 | Motortorque Pty Ltd | 89.5 | 3 | 1 | 2015 | 3 sites; directors share surname Rose; 2 owners; 41 service shops within 25 km |
-| 25 | BELCAT08 PTY LTD | 89.3 | 3 | 3 | 2015 | 3 sites; Piercy in the trading name; 1 owner; 37 service shops within 25 km |
+| 1 | North Star Motors (NSW) Pty Ltd | 92.9 | 2 | 1 | 1998 | 2 sites; licensed 28 yrs; directors share surname Sepos; 2 owners; 21 service shops within 25 km |
+| 2 | Rutherford Mechanical Repairs Pty Ltd | 92.9 | 2 | 1 | 1995 | 2 sites; licensed 31 yrs; directors share surname Emmerson; 2 owners; 21 service shops within 25 km |
+| 3 | Tradecore Industries Pty Ltd | 85.0 | 3 | 1 | 2009 | 3 sites; licensed 16 yrs; 1 owner; 136 service shops within 25 km |
+| 4 | John L Pierce Pty Ltd | 85.0 | 2 | 1 | 1981 | 2 sites; licensed since register began (1981); directors share surname Pierce; 2 owners; 183 service shops within 25 km |
+| 5 | LBJC PTY LTD | 85.0 | 2 | 2 | 2015 | 2 sites; Coulits in the trading name; 2 owners; 91 service shops within 25 km |
+| 6 | Linvista Pty Ltd | 85.0 | 2 | 2 | 2005 | 2 sites; licensed 20 yrs; Buhajiar in the trading name; 2 owners; 142 service shops within 25 km |
+| 7 | Moimac Pty Ltd | 85.0 | 2 | 1 | 1995 | 2 sites; licensed 31 yrs; 1 owner; 100 service shops within 25 km |
+| 8 | Express Lube Pty Ltd | 82.0 | 9 | 1 | 2010 | 9 sites; licensed 16 yrs; directors share surname Young; 103 service shops within 25 km |
+| 9 | Driveline Services Australia Pty Ltd | 80.0 | 5 | 1 | 2018 | 5 sites; directors share surname Dorrstein; 180 service shops within 25 km |
+| 10 | SAI MOTOR WORKS PTY LTD | 80.0 | 4 | 3 | 2014 | 4 sites; directors share surname Ahuja; 112 service shops within 25 km |
+| 11 | EJ & WA Booth Pty Ltd | 80.0 | 3 | 1 | 1980 | 3 sites; licensed since register began (1981); directors share surname Booth; 92 service shops within 25 km |
+| 12 | Ocean Beach TP Pty Ltd | 80.0 | 3 | 3 | 2014 | 3 sites; directors share surname Vandersteen; 2 owners; 104 service shops within 25 km |
+| 13 | Adams Automotive Servicing Pty Ltd | 80.0 | 2 | 2 | 2007 | 2 sites; licensed 19 yrs; directors share surname Adams; 2 owners; 92 service shops within 25 km |
+| 14 | Paula Gresham Pty Ltd | 80.0 | 2 | 1 | 2004 | 2 sites; licensed 21 yrs; Gresham in the trading name; 1 owner; 188 service shops within 25 km |
+| 15 | Promine Contracting Pty Ltd | 80.0 | 2 | 1 | 2010 | 2 sites; licensed 16 yrs; 1 owner; 193 service shops within 25 km |
+| 16 | Robson Civil Projects Pty Ltd | 80.0 | 2 | 1 | 2000 | 2 sites; licensed 25 yrs; 102 service shops within 25 km |
+| 17 | Lifeguard Cessnock Pty Ltd | 76.5 | 2 | 1 | 2002 | 2 sites; licensed 23 yrs; directors share surname Mckay; 2 owners |
+| 18 | Passfield Automotive Pty Limited | 76.5 | 2 | 2 | 2010 | 2 sites; licensed 16 yrs; Passfield in the trading name; 1 owner |
+| 19 | CCMG Pty Ltd | 75.0 | 4 | 1 | 2003 | 4 sites; licensed 23 yrs; 2 owners; 92 service shops within 25 km |
+| 20 | NOVA AUTO INNOVATIONS PTY LTD | 75.0 | 3 | 1 | 2022 | 3 sites; 1 owner; 154 service shops within 25 km |
+| 21 | 4 B Action Mechanical Services Pty Ltd | 75.0 | 2 | 2 | 2009 | 2 sites; licensed 17 yrs; 1 owner; 181 service shops within 25 km |
+| 22 | C & C's Mechanical Pty Ltd | 75.0 | 2 | 2 | 2012 | 2 sites; 2 owners; 182 service shops within 25 km |
+| 23 | COASTWIDE MECHANICAL SERVICES PTY LTD | 75.0 | 2 | 2 | 2008 | 2 sites; licensed 18 yrs; 2 owners; 132 service shops within 25 km |
+| 24 | Jonkir Pty Ltd | 75.0 | 2 | 2 | 2008 | 2 sites; licensed 18 yrs; 2 owners; 165 service shops within 25 km |
+| 25 | Macsif Pty Limited | 75.0 | 2 | 1 | 1993 | 2 sites; licensed 33 yrs; 1 owner; 113 service shops within 25 km |
+
+### Within about an hour of Newcastle (80 km straight line)
+
+Tier A 58, tier B 351, tier C 232. These rank first within each tier.
+
+Dealer-licence check, tiers A and B: clear 0, not checked 2917. Groups found holding a dealer licence are in tier X.
+
+| rank | tier | group | score | sites | km | why |
+|---|---|---|---|---|---|---|
+| 1 | A | North Star Motors (NSW) Pty Ltd | 92.9 | 2 | 60 | 2 sites; licensed 28 yrs; directors share surname Sepos; 2 owners; 21 service shops within 25 km |
+| 2 | A | Rutherford Mechanical Repairs Pty Ltd | 92.9 | 2 | 60 | 2 sites; licensed 31 yrs; directors share surname Emmerson; 2 owners; 21 service shops within 25 km |
+| 3 | A | Tradecore Industries Pty Ltd | 85.0 | 3 | 30 | 3 sites; licensed 16 yrs; 1 owner; 136 service shops within 25 km |
+| 4 | A | John L Pierce Pty Ltd | 85.0 | 2 | 12 | 2 sites; licensed since register began (1981); directors share surname Pierce; 2 owners; 183 service shops within 25 km |
+| 5 | A | LBJC PTY LTD | 85.0 | 2 | 71 | 2 sites; Coulits in the trading name; 2 owners; 91 service shops within 25 km |
+| 6 | A | Linvista Pty Ltd | 85.0 | 2 | 61 | 2 sites; licensed 20 yrs; Buhajiar in the trading name; 2 owners; 142 service shops within 25 km |
+| 7 | A | Moimac Pty Ltd | 85.0 | 2 | 38 | 2 sites; licensed 31 yrs; 1 owner; 100 service shops within 25 km |
+| 8 | A | Express Lube Pty Ltd | 82.0 | 9 | 74 | 9 sites; licensed 16 yrs; directors share surname Young; 103 service shops within 25 km |
+| 9 | A | Driveline Services Australia Pty Ltd | 80.0 | 5 | 18 | 5 sites; directors share surname Dorrstein; 180 service shops within 25 km |
+| 10 | A | SAI MOTOR WORKS PTY LTD | 80.0 | 4 | 30 | 4 sites; directors share surname Ahuja; 112 service shops within 25 km |
+| 11 | A | EJ & WA Booth Pty Ltd | 80.0 | 3 | 71 | 3 sites; licensed since register began (1981); directors share surname Booth; 92 service shops within 25 km |
+| 12 | A | Ocean Beach TP Pty Ltd | 80.0 | 3 | 74 | 3 sites; directors share surname Vandersteen; 2 owners; 104 service shops within 25 km |
+| 13 | A | Adams Automotive Servicing Pty Ltd | 80.0 | 2 | 71 | 2 sites; licensed 19 yrs; directors share surname Adams; 2 owners; 92 service shops within 25 km |
+| 14 | A | Paula Gresham Pty Ltd | 80.0 | 2 | 12 | 2 sites; licensed 21 yrs; Gresham in the trading name; 1 owner; 188 service shops within 25 km |
+| 15 | A | Promine Contracting Pty Ltd | 80.0 | 2 | 18 | 2 sites; licensed 16 yrs; 1 owner; 193 service shops within 25 km |
+| 16 | A | Robson Civil Projects Pty Ltd | 80.0 | 2 | 71 | 2 sites; licensed 25 yrs; 102 service shops within 25 km |
+| 17 | A | Lifeguard Cessnock Pty Ltd | 76.5 | 2 | 48 | 2 sites; licensed 23 yrs; directors share surname Mckay; 2 owners |
+| 18 | A | Passfield Automotive Pty Limited | 76.5 | 2 | 48 | 2 sites; licensed 16 yrs; Passfield in the trading name; 1 owner |
+| 19 | A | CCMG Pty Ltd | 75.0 | 4 | 71 | 4 sites; licensed 23 yrs; 2 owners; 92 service shops within 25 km |
+| 20 | A | NOVA AUTO INNOVATIONS PTY LTD | 75.0 | 3 | 22 | 3 sites; 1 owner; 154 service shops within 25 km |
+| 21 | A | 4 B Action Mechanical Services Pty Ltd | 75.0 | 2 | 7 | 2 sites; licensed 17 yrs; 1 owner; 181 service shops within 25 km |
+| 22 | A | C & C's Mechanical Pty Ltd | 75.0 | 2 | 12 | 2 sites; 2 owners; 182 service shops within 25 km |
+| 23 | A | COASTWIDE MECHANICAL SERVICES PTY LTD | 75.0 | 2 | 47 | 2 sites; licensed 18 yrs; 2 owners; 132 service shops within 25 km |
+| 24 | A | Jonkir Pty Ltd | 75.0 | 2 | 22 | 2 sites; licensed 18 yrs; 2 owners; 165 service shops within 25 km |
+| 25 | A | Macsif Pty Limited | 75.0 | 2 | 30 | 2 sites; licensed 33 yrs; 1 owner; 113 service shops within 25 km |
