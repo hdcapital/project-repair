@@ -21,7 +21,7 @@ _As of 2026-10-08T19:49:51Z_
 
 | region | body | dealer | mobile | other | service | specialist | unknown | total |
 |---|---|---|---|---|---|---|---|---|
-| Sydney | 585 | 156 | 29 | 119 | 2000 | 813 | 966 | 4668 |
+| Sydney | 585 | 156 | 29 | 119 | 2000 | 815 | 964 | 4668 |
 | Mobile (no fixed premises) | 0 | 0 | 3309 | 0 | 0 | 0 | 0 | 3309 |
 | Newcastle | 44 | 24 | 7 | 21 | 207 | 137 | 126 | 566 |
 | New England / North West | 40 | 20 | 3 | 13 | 195 | 122 | 106 | 499 |
@@ -36,11 +36,11 @@ _As of 2026-10-08T19:49:51Z_
 | Capital Region | 18 | 13 | 1 | 13 | 99 | 50 | 44 | 238 |
 | Murray | 4 | 3 | 1 | 8 | 81 | 37 | 46 | 180 |
 | Coffs Harbour - Grafton | 19 | 1 | 2 | 5 | 56 | 41 | 54 | 178 |
-| Central Coast | 12 | 2 | 3 | 2 | 64 | 30 | 24 | 137 |
+| Central Coast | 12 | 2 | 3 | 2 | 64 | 31 | 23 | 137 |
 | Outside NSW postcode table | 2 | 1 | 0 | 0 | 18 | 2 | 6 | 29 |
 | Unknown (no address in register) | 0 | 0 | 1 | 0 | 4 | 2 | 7 | 14 |
 | Border (interstate postcode) | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 2 |
-| **total** | 932 | 306 | 3371 | 253 | 3802 | 1918 | 2031 | 12613 |
+| **total** | 932 | 306 | 3371 | 253 | 3802 | 1921 | 2028 | 12613 |
 
 ## Queue tiers
 
@@ -111,3 +111,46 @@ _As of 2026-10-08T19:49:51Z_
 
 - independent multi-site service operators: **147**
 - single-site service companies (widen later): **1960**
+
+## Targets (director-grouped, scored)
+
+12080 operator groups; 320 combine more than one company through shared directors.
+
+| tier | meaning | groups |
+|---|---|---|
+| A | platform candidates: service, 2+ sites | 368 |
+| B | bolt-ons: single-site service company within 25 km of a tier-A group | 2536 |
+| C | other service operators | 2559 |
+| X | excluded | 6617 |
+
+Excluded because: mobile only 3254, mostly specialist 1773, mostly body 892, dealer entity in group 265, mostly other 239, franchise 173, mostly mobile 21.
+
+### Top 25 tier A
+
+| rank | group | score | sites | companies | first licensed | why |
+|---|---|---|---|---|---|---|
+| 1 | Tynan Motors Pty Ltd | 100.0 | 3 | 1 | 1981 | 3 sites; licensed since register began (1981); directors share surname Tynan; 2 owners; 136 service shops within 25 km |
+| 2 | Geoff King Motors Pty Ltd | 99.5 | 3 | 1 | 1981 | 3 sites; licensed since register began (1981); King in the trading name; 1 owner; 41 service shops within 25 km |
+| 3 | CARINGBAH AUTO REPAIRS & SERVICE PTY LTD | 95.0 | 4 | 2 | 2002 | 4 sites; licensed 24 yrs; Smith in the trading name; 1 owner; 725 service shops within 25 km |
+| 4 | Eastern Suburbs Mechanical Pty Ltd | 95.0 | 4 | 2 | 2006 | 4 sites; licensed 20 yrs; directors share surname Zammit; 2 owners; 1133 service shops within 25 km |
+| 5 | MPSR GROUP PTY LTD | 95.0 | 3 | 2 | 1981 | 3 sites; licensed since register began (1981); Karavasilias in the trading name; 1 owner; 1128 service shops within 25 km |
+| 6 | Artarmon Mechanical Repairs Pty Ltd | 95.0 | 2 | 2 | 2001 | 2 sites; licensed 25 yrs; directors share surname Guiroyan; 2 owners; 1097 service shops within 25 km |
+| 7 | Dee Why Auto Care Pty Ltd | 95.0 | 2 | 2 | 1994 | 2 sites; licensed 32 yrs; Rostamians in the trading name; 1 owner; 579 service shops within 25 km |
+| 8 | JWS Mechanical Repairs Pty Ltd | 95.0 | 2 | 2 | 1999 | 2 sites; licensed 27 yrs; directors share surname Schuberg; 2 owners; 789 service shops within 25 km |
+| 9 | Manning Valley Automotive Pty Ltd | 93.7 | 6 | 3 | 1984 | 6 sites; licensed 42 yrs; Miedecke in the trading name; 1 owner; 58 service shops within 25 km |
+| 10 | North Star Motors (NSW) Pty Ltd | 92.9 | 2 | 1 | 1998 | 2 sites; licensed 28 yrs; directors share surname Sepos; 2 owners; 21 service shops within 25 km |
+| 11 | Rutherford Mechanical Repairs Pty Ltd | 92.9 | 2 | 1 | 1995 | 2 sites; licensed 31 yrs; directors share surname Emmerson; 2 owners; 21 service shops within 25 km |
+| 12 | JD Lange Pty Ltd | 91.1 | 2 | 2 | 1981 | 2 sites; licensed since register began (1981); directors share surname Lange; 2 owners |
+| 13 | Dulwich Hill Automotive Pty Ltd | 90.0 | 4 | 3 | 2012 | 4 sites; Leondis in the trading name; 2 owners; 1127 service shops within 25 km |
+| 14 | Moro & Sons Automotive Pty Ltd | 90.0 | 4 | 1 | 2014 | 4 sites; directors share surname Moro; 2 owners; 932 service shops within 25 km |
+| 15 | Balgowlah Automotive Pty Ltd | 90.0 | 3 | 2 | 1999 | 3 sites; licensed 27 yrs; directors share surname Smith; 840 service shops within 25 km |
+| 16 | Keene Pty Ltd | 90.0 | 2 | 2 | 1995 | 2 sites; licensed 30 yrs; Balfour in the trading name; 1 owner; 164 service shops within 25 km |
+| 17 | M H MECHANICAL SERVICES PTY LTD | 90.0 | 2 | 2 | 2006 | 2 sites; licensed 20 yrs; Helwe in the trading name; 1 owner; 1236 service shops within 25 km |
+| 18 | On The Road Automotive Pty Ltd | 90.0 | 2 | 2 | 2000 | 2 sites; licensed 26 yrs; directors share surname Smit; 2 owners; 779 service shops within 25 km |
+| 19 | SA & R Biviano Holdings Pty Ltd | 90.0 | 2 | 1 | 2005 | 2 sites; licensed 21 yrs; directors share surname Biviano; 2 owners; 1064 service shops within 25 km |
+| 20 | SILVER STAR SERVICE CENTRE PTY LTD | 90.0 | 2 | 2 | 2003 | 2 sites; licensed 23 yrs; Szekeres in the trading name; 1 owner; 1206 service shops within 25 km |
+| 21 | Tom's Automotive Services Pty Ltd | 90.0 | 2 | 2 | 2006 | 2 sites; licensed 20 yrs; directors share surname Stergiopoulos; 2 owners; 1236 service shops within 25 km |
+| 22 | MB Lismore Pty Ltd | 89.8 | 2 | 2 | 2009 | 2 sites; licensed 17 yrs; Frost in the trading name; 1 owner; 46 service shops within 25 km |
+| 23 | MJAT Pty Ltd | 89.6 | 2 | 2 | 2004 | 2 sites; licensed 21 yrs; directors share surname Bartlett; 2 owners; 43 service shops within 25 km |
+| 24 | Motortorque Pty Ltd | 89.5 | 3 | 1 | 2015 | 3 sites; directors share surname Rose; 2 owners; 41 service shops within 25 km |
+| 25 | BELCAT08 PTY LTD | 89.3 | 3 | 3 | 2015 | 3 sites; Piercy in the trading name; 1 owner; 37 service shops within 25 km |

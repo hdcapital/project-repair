@@ -123,6 +123,29 @@ Two workflows drive it in Actions:
   50 minutes with a checkpoint commit every 500 records, rebuilds `data/out/`, and disables itself when
   every licence has a full details record. About 9,000 licences take two runs.
 
+## Target list (`data/out/targets.csv`)
+
+`build` also writes a ranked acquisition target list, one row per **operator group**. Operators
+(one per ACN/ABN) are grouped when they share a person: a director, or the licensee themselves for
+a sole trader. A three-part name links on its own; a two-part name needs a shared region or a
+second shared person. This surfaces owners who run each site through a separate company.
+
+Each group is scored out of 100 (rules in `targets.py`):
+
+| part | max | signals |
+|---|---|---|
+| fit | 45 | share of licences in service (unknown names count half), number of sites, service operators within 25 km |
+| succession | 35 | years since the earliest licence (31/03/1981 is when the register's records start, so it means "1981 or earlier"), one or two owners, family or founder name |
+| deal-ability | 20 | a company, a valid ABN/ACN, no compliance actions |
+
+Tiers: **A** platform candidates (2+ sites), **B** single-site companies within 25 km of a tier-A
+group (bolt-ons), **C** other service operators, **X** excluded with the reason: any dealer or
+franchise entity in the group, mobile only, or mostly a non-service segment.
+
+**Overrides**: add rows to `data/overrides.csv` (`match,action,note`). `match` is an ACN, ABN,
+licence number or exact entity name; `action` is `exclude` or `keep`. Re-run `python pipeline.py build`.
+Use it for dealers the name rules miss, owners who have said no, or anything checked by hand.
+
 ## Re-enabling for a future refresh
 
 1. Re-run the scraper to refresh the seed: `python nsw_repairers.py` then copy `out/nsw_motor_repairers.csv`
