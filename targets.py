@@ -48,13 +48,16 @@ FOCUS_POINT = (-32.9283, 151.7817)
 FOCUS_KM = 80.0
 # Licence types in the register that mean the business sells cars (or trades them).  The search
 # call files a dealer licence as licenceType "Motor" with licenceTypeFriendly "Motor Dealer's
-# Licence" and a number starting MD, so all three are checked.
+# Licence" and a number starting MD. Recycler's licences also get MD numbers, so the number only
+# decides when the friendly name is missing.
 DEALER_LICENCE_RE = re.compile(r"dealer|wholesal|auction", re.I)
 
 
 def is_dealer_licence(h: dict) -> bool:
-    return bool(DEALER_LICENCE_RE.search(f"{h.get('licenceType') or ''} {h.get('licenceTypeFriendly') or ''}")
-                or str(h.get("licenceNumber") or "").upper().startswith("MD"))
+    friendly = str(h.get("licenceTypeFriendly") or "")
+    if DEALER_LICENCE_RE.search(f"{h.get('licenceType') or ''} {friendly}"):
+        return True
+    return not friendly and str(h.get("licenceNumber") or "").upper().startswith("MD")
 UNKNOWN_SERVICE_WEIGHT = 0.5
 GENERIC_SURNAMES = {"AUTO", "AUTOS", "MOTOR", "MOTORS", "SERVICE", "SERVICES", "PTY", "LTD", "GROUP",
                     "HOLDINGS", "NSW", "AUSTRALIA", "AND", "THE", "CAR", "CARS", "REPAIRS", "MECHANICAL"}

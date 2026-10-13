@@ -189,6 +189,8 @@ class DealerAndFocusTests(unittest.TestCase):
         self.assertTrue(tg.is_dealer_licence({"licenceNumber": "MD1", "licenceType": "Motor"}))
         self.assertFalse(tg.is_dealer_licence({"licenceNumber": "MVRL1", "licenceType": "Motor",
                                                "licenceTypeFriendly": "Motor Vehicle Repairer's Licence"}))
+        self.assertFalse(tg.is_dealer_licence({"licenceNumber": "MD19142", "licenceType": "Motor",
+                                               "licenceTypeFriendly": "Motor Vehicle Recycler's Licence"}))
         self.assertEqual(tyn["dealer_check"], "dealer licence")
         syd = by["Sydney Mechanical Pty Ltd"]
         self.assertEqual(syd["tier"], "A")
