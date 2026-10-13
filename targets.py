@@ -46,8 +46,15 @@ REGISTER_START = dt.date(1981, 3, 31)
 FOCUS_NAME = "Newcastle"
 FOCUS_POINT = (-32.9283, 151.7817)
 FOCUS_KM = 80.0
-# Licence types in the register that mean the business sells cars (or trades them).
+# Licence types in the register that mean the business sells cars (or trades them).  The search
+# call files a dealer licence as licenceType "Motor" with licenceTypeFriendly "Motor Dealer's
+# Licence" and a number starting MD, so all three are checked.
 DEALER_LICENCE_RE = re.compile(r"dealer|wholesal|auction", re.I)
+
+
+def is_dealer_licence(h: dict) -> bool:
+    return bool(DEALER_LICENCE_RE.search(f"{h.get('licenceType') or ''} {h.get('licenceTypeFriendly') or ''}")
+                or str(h.get("licenceNumber") or "").upper().startswith("MD"))
 UNKNOWN_SERVICE_WEIGHT = 0.5
 GENERIC_SURNAMES = {"AUTO", "AUTOS", "MOTOR", "MOTORS", "SERVICE", "SERVICES", "PTY", "LTD", "GROUP",
                     "HOLDINGS", "NSW", "AUSTRALIA", "AND", "THE", "CAR", "CARS", "REPAIRS", "MECHANICAL"}
@@ -398,12 +405,15 @@ def build_targets(licences: list[dict], *, today: dt.date | None = None,
         ops = sorted({r["operator_key"] for r in rows})
         checked, held = licences_held(rows, lookups)
         current = [h for h in held if str(h.get("status", "")).lower() in ("current", "")]
-        dealer = [h for h in current if DEALER_LICENCE_RE.search(h.get("licenceType", "") or "")]
+        dealer = [h for h in current if is_dealer_licence(h)]
         s["dealer_check"] = ("dealer licence" if dealer else "clear") if checked else \
             ("dealer licence" if dealer else "not checked")
-        s["other_licences"] = "; ".join(f"{h.get('licenceType', '')} {h.get('licenceNumber', '')}"
+        # motor licences only: a sole trader's name also matches their white card, security licence...
+        motor = [h for h in held if str(h.get("licenceGroup") or "Motor") == "Motor" or is_dealer_licence(h)]
+        s["other_licences"] = "; ".join(f"{h.get('licenceTypeFriendly') or h.get('licenceType', '')} "
+                                        f"{h.get('licenceNumber', '')}"
                                         f"{'' if h in current else ' (' + str(h.get('status', '')) + ')'}"
-                                        for h in held)
+                                        for h in motor)
         if dealer:
             s["exclusion"] = "; ".join(x for x in (s["exclusion"], "holds a dealer licence " +
                                                    ", ".join(h["licenceNumber"] for h in dealer)) if x)

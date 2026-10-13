@@ -151,8 +151,11 @@ class DealerAndFocusTests(unittest.TestCase):
             tg.norm_person("Tynan Motors Pty Ltd"): {"query": "Tynan Motors Pty Ltd", "results": [
                 {"licenceNumber": "MVRL3", "licenceType": "Motor Vehicle Repairers Licence", "status": "Current",
                  "ACN": "000000003"},                                           # its own repairer licence
-                {"licenceNumber": "MD12345", "licenceType": "Motor Dealers Licence", "status": "Current",
-                 "ACN": "000000003", "licensee": "Tynan Motors Pty Ltd"},
+                {"licenceNumber": "MD12345", "licenceType": "Motor", "licenceTypeFriendly": "Motor Dealer's Licence",
+                 "licenceGroup": "Motor", "status": "Current",
+                 "ACN": "000000003", "licensee": "Tynan Motors Pty Ltd"},          # shape the site returns
+                {"licenceNumber": "193669C", "licenceType": "Contractor Licence", "licenceGroup": "Trades",
+                 "status": "Expired", "ACN": "000000003"},                          # not a motor licence
                 {"licenceNumber": "MD999", "licenceType": "Motor Dealers Licence", "status": "Current",
                  "ACN": "123456780", "licensee": "Tynan Motors Holdings Pty Ltd"}]},   # someone else
             tg.norm_person("Sydney Mechanical Pty Ltd"): {"query": "Sydney Mechanical Pty Ltd", "results": [
@@ -165,6 +168,11 @@ class DealerAndFocusTests(unittest.TestCase):
         self.assertEqual(tyn["tier"], "X")
         self.assertIn("holds a dealer licence MD12345", tyn["exclusion"])
         self.assertNotIn("MD999", tyn["other_licences"])
+        self.assertIn("Motor Dealer's Licence MD12345", tyn["other_licences"])
+        self.assertNotIn("193669C", tyn["other_licences"])
+        self.assertTrue(tg.is_dealer_licence({"licenceNumber": "MD1", "licenceType": "Motor"}))
+        self.assertFalse(tg.is_dealer_licence({"licenceNumber": "MVRL1", "licenceType": "Motor",
+                                               "licenceTypeFriendly": "Motor Vehicle Repairer's Licence"}))
         self.assertEqual(tyn["dealer_check"], "dealer licence")
         syd = by["Sydney Mechanical Pty Ltd"]
         self.assertEqual(syd["tier"], "A")
