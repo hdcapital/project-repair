@@ -128,6 +128,29 @@ def people_of(rows: list[dict]) -> set[str]:
     return {p for p in out if p}
 
 
+def same_person(a: str, b: str) -> bool:
+    """True when two normalised names are variants of one person: same first and last name, and the
+    shorter one's middle names (or initials) appear in order in the longer one's
+    ("DAMIAN YOUNG" = "DAMIAN STEPHEN YOUNG" = "DAMIAN S YOUNG")."""
+    ta, tb = a.split(), b.split()
+    if len(ta) > len(tb):
+        ta, tb = tb, ta
+    if len(ta) < 2 or ta[0] != tb[0] or ta[-1] != tb[-1]:
+        return False
+    rest = iter(tb[1:-1])
+    return all(any(m.startswith(t) for m in rest) for t in ta[1:-1])
+
+
+def dedupe_people(people: set[str]) -> set[str]:
+    """Collapse name variants of one person to the fullest form, so one director listed two ways
+    is not counted as two owners or as two people sharing a surname."""
+    out: list[str] = []
+    for p in sorted(people, key=lambda s: (-len(s.split()), -len(s), s)):
+        if not any(same_person(p, q) for q in out):
+            out.append(p)
+    return set(out)
+
+
 def regions_of(rows: list[dict]) -> set[str]:
     out = set()
     for r in rows:
@@ -217,7 +240,7 @@ def score_group(rows: list[dict], *, today: dt.date, nearby: int) -> dict:
     service_share = (segs["service"] + UNKNOWN_SERVICE_WEIGHT * segs["unknown"]) / n
     sites = _sites(rows)
     n_sites = len(sites)
-    people = people_of(rows)
+    people = dedupe_people(people_of(rows))
     names = sorted({r["licensee"].strip() for r in rows}
                    | {b.strip() for r in rows for b in (r.get("business_names_full") or r.get("business_names") or "").split(";") if b.strip()})
     starts = [d for d in (parse_date(r.get("start_date", "")) for r in rows) if d]
