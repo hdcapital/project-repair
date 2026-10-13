@@ -1,0 +1,72 @@
+name: dealer-check
+
+# Search the licence register for every licence held by the target entities (tier A statewide,
+# tier B near Newcastle) so groups holding a motor dealer licence drop to tier X.  Resumable;
+# starts its own next run while it is making progress; disables nothing (re-run after a refresh).
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Stop after N names (0 = all)'
+        default: '0'
+        required: false
+      run_seconds:
+        description: 'Seconds to spend searching this run'
+        default: '3000'
+        required: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: site-scrape
+  cancel-in-progress: false
+
+jobs:
+  lookup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      LIMIT: ${{ inputs.limit || '0' }}
+      RUN_SECONDS: ${{ inputs.run_seconds || '3000' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests
+
+      - name: Count names still to search
+        id: before
+        run: |
+          echo "left=$(python3 -c "import pipeline as pl, targets as tg; q=tg.lookup_queue(pl.read_csv(pl.data_dir()/'out'/'targets.csv')); d=tg.load_lookups(pl.data_dir()/'licence_lookup.jsonl'); print(sum(1 for n in q if tg.norm_person(n) not in d or d[tg.norm_person(n)].get('error')))")" >> "$GITHUB_OUTPUT"
+
+      - name: Search the register (paced, checkpoint commits)
+        run: |
+          python3 scrape_site.py lookup --rate 0.5 --limit "$LIMIT" --run-seconds "$RUN_SECONDS" --checkpoint 200 --window-max 180 --window-seconds 600
+
+      - name: Build
+        if: always()
+        run: python3 pipeline.py build
+
+      - name: Commit and push data/
+        if: always()
+        run: |
+          python3 pipeline.py commit -m "dealer-check run ${{ github.run_number }}"
+
+      - name: Start the next run while progress is being made
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ steps.before.outputs.left }}
+        run: |
+          left=$(python3 -c "import pipeline as pl, targets as tg; q=tg.lookup_queue(pl.read_csv(pl.data_dir()/'out'/'targets.csv')); d=tg.load_lookups(pl.data_dir()/'licence_lookup.jsonl'); print(sum(1 for n in q if tg.norm_person(n) not in d or d[tg.norm_person(n)].get('error')))")
+          echo "names still to search: $left (was ${BEFORE:-?})"
+          if [ "$LIMIT" != "0" ]; then
+            echo "limited trial run -> not chaining"
+          elif [ "$left" != "0" ] && [ -n "$BEFORE" ] && [ "$left" -lt "$BEFORE" ]; then
+            wf="${GITHUB_WORKFLOW_REF#*/.github/workflows/}"; wf="${wf%@*}"
+            gh workflow run "$wf" --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f run_seconds="$RUN_SECONDS"
+          fi

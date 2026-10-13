@@ -11,6 +11,7 @@ sys.path.insert(0, str(HERE.parent))
 
 import pipeline as pl  # noqa: E402
 import scrape_site as ss  # noqa: E402
+import targets as tg  # noqa: E402
 from test_pipeline import TempData, detail_body, seed_row  # noqa: E402
 
 
@@ -330,3 +331,52 @@ class FetchHttpTests(TempData):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LookupTests(TempData):
+    CFG = {"url_template": "https://x/api/search", "method": "POST", "headers": {}, "mode": "search",
+           "post_data_template": '{"licenceGroup":"","search":"{licence_number}","pageSize":10}'}
+
+    def test_search_term_strips_company_suffixes(self):
+        self.assertEqual(ss.search_term("S M A Motors Pty Ltd"), "S M A Motors")
+        self.assertEqual(ss.search_term("North Star Motors (NSW) Pty Ltd"), "North Star Motors")
+        self.assertEqual(ss.search_term("Alweal Pty. Limited"), "Alweal")
+
+    def test_lookup_resumes_retries_errors_and_backs_off(self):
+        pl.append_jsonl(self.d / ss.LOOKUP_FILE, {"query": "Done Pty Ltd", "results": []})
+        pl.append_jsonl(self.d / ss.LOOKUP_FILE, {"query": "Failed Pty Ltd", "error": "HTTP 500"})
+        calls, sleeps = [], []
+        script = {"Failed": [429]}
+
+        def call(cfg, term, page=0):
+            calls.append(term)
+            if script.get(term):
+                script[term].pop(0)
+                return 429, "limited"
+            return 200, json.dumps({"pagingInfo": {"totalRecords": 1},
+                                    "results": [{"licenceNumber": "MD1", "licenceType": "Motor Dealers Licence",
+                                                 "status": "Current", "ACN": "1", "extra": "dropped"}]})
+
+        res = ss.lookup_entities(["Done Pty Ltd", "Failed Pty Ltd", "New Pty Ltd"], self.CFG, rate=1000,
+                                 call=call, sleep=sleeps.append)
+        self.assertEqual(res, {"ok": 2, "errors": 0})
+        self.assertEqual(calls, ["Failed", "Failed", "New"])                  # Done skipped, 429 retried
+        self.assertIn(ss.THROTTLE_HOLDS[0], sleeps)
+        recs = tg.load_lookups(self.d / ss.LOOKUP_FILE)
+        new = recs[tg.norm_person("New Pty Ltd")]
+        self.assertEqual(new["results"][0]["licenceNumber"], "MD1")
+        self.assertNotIn("extra", new["results"][0])
+        self.assertFalse(new["truncated"])
+        self.assertNotIn("error", recs[tg.norm_person("Failed Pty Ltd")])     # retried record wins
+
+    def test_pacer_window(self):
+        t, sleeps = [0.0], []
+
+        def sleep(s):
+            sleeps.append(s)
+            t[0] += s
+
+        p = ss.Pacer(1000, window_max=2, window_seconds=60, sleep=sleep, clock=lambda: t[0])
+        for _ in range(3):
+            p.wait()
+        self.assertTrue(any(s > 50 for s in sleeps))

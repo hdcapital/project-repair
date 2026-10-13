@@ -618,6 +618,146 @@ def fetch_browser(cfg: dict, rate: float, limit: int, headed: bool = False) -> d
 
 
 # --------------------------------------------------------------------------- #
+# lookup: every licence an entity holds (dealer check), via the site's search call
+# --------------------------------------------------------------------------- #
+
+LOOKUP_FILE = "licence_lookup.jsonl"
+LOOKUP_PAGE = 100
+LOOKUP_FIELDS = ("licenceId", "licenceNumber", "licenceType", "licenceTypeFriendly", "licenceGroup",
+                 "status", "licensee", "ABN", "ACN", "suburb", "postcode", "granted", "expires")
+COMPANY_SUFFIX_RE = re.compile(r"(\bPTY\b\.?|\bLTD\b\.?|\bLIMITED\b|\bP/L\b|\bPROPRIETARY\b|\(NSW\)|\(AUST(RALIA)?\))\s*",
+                               re.I)
+
+
+def search_term(name: str) -> str:
+    """'S M A Motors Pty Ltd' -> 'S M A Motors' (the site matches words, suffixes only add noise)."""
+    return re.sub(r"\s+", " ", COMPANY_SUFFIX_RE.sub(" ", name)).strip(" ,.") or name
+
+
+def search_call(cfg: dict, term: str, page: int = 0, timeout: int = 30) -> tuple[int, str]:
+    body = json.loads(cfg.get("post_data_template") or "{}")
+    body.update({"search": term, "pageNumber": page, "pageSize": LOOKUP_PAGE, "autoComplete": False})
+    headers = dict(cfg.get("headers") or {})
+    headers.setdefault("user-agent", UA)
+    headers.setdefault("accept", "application/json, text/plain, */*")
+    headers["content-type"] = "application/json"
+    headers.setdefault("referer", cfg.get("page_url") or SITE)
+    req = urllib.request.Request(cfg["url_template"], data=json.dumps(body).encode(), headers=headers,
+                                 method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status, resp.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode("utf-8", "replace")
+    except (urllib.error.URLError, OSError) as e:
+        return 599, str(e)
+
+
+class Pacer:
+    """At most `rate` requests/second and `window_max` per `window_seconds`; on a 429, hold
+    (THROTTLE_HOLDS) and halve the rate.  `wait()` before each request, `throttled()` on a 429
+    (returns False once the holds are used up), `ok()` after a success."""
+
+    def __init__(self, rate: float, window_max: int = WINDOW_MAX, window_seconds: int = WINDOW_SECONDS,
+                 sleep=time.sleep, clock=time.time):
+        from collections import deque
+        self.cap, self.rate = rate, rate
+        self.window_max, self.window_seconds = window_max, window_seconds
+        self.sleep, self.clock = sleep, clock
+        self.sent: deque = deque()
+        self.holds = 0
+        self.clean = 0
+        self.first = True
+
+    def wait(self) -> None:
+        if not self.first:
+            self.sleep(max(0.0, (1.0 / self.rate) * random.uniform(0.7, 1.3)))
+        self.first = False
+        now = self.clock()
+        while self.sent and self.sent[0] <= now - self.window_seconds:
+            self.sent.popleft()
+        if len(self.sent) >= self.window_max:
+            pause = self.sent[0] + self.window_seconds - now + 0.5
+            log(f"window full ({self.window_max} in {self.window_seconds}s) -> pausing {pause:.0f}s")
+            self.sleep(pause)
+        self.sent.append(self.clock())
+
+    def throttled(self) -> bool:
+        if self.holds >= len(THROTTLE_HOLDS):
+            return False
+        hold = THROTTLE_HOLDS[self.holds]
+        self.holds += 1
+        self.rate = max(MIN_RATE, self.rate / 2)
+        self.clean = 0
+        log(f"HTTP 429 (rate limited) -> holding {hold}s, rate now {self.rate:.2f}/s")
+        self.sleep(hold)
+        return True
+
+    def ok(self) -> None:
+        self.holds = 0
+        self.clean += 1
+        if self.clean % 50 == 0 and self.rate < self.cap:
+            self.rate = min(self.cap, self.rate * 1.25)
+
+
+def lookup_entities(names: list[str], cfg: dict, *, rate: float = 0.5, limit: int = 0,
+                    call=search_call, sleep=time.sleep, clock=time.time, deadline: float | None = None,
+                    checkpoint_every: int = 0, checkpoint=None,
+                    window_max: int = WINDOW_MAX, window_seconds: int = WINDOW_SECONDS) -> dict:
+    """Search the register for each entity name not already looked up; append one record per
+    name to data/licence_lookup.jsonl with every licence the search returned."""
+    import targets as tg
+    path = pl.data_dir() / LOOKUP_FILE
+    done = {k for k, v in tg.load_lookups(path).items() if not v.get("error")}
+    todo = [n for n in names if tg.norm_person(n) not in done]
+    if limit:
+        todo = todo[:limit]
+    log(f"lookup: {len(names)} names queued, {len(done)} already looked up, {len(todo)} to search now")
+    pacer = Pacer(rate, window_max, window_seconds, sleep=sleep, clock=clock)
+    ok = errors = consecutive = 0
+    since = 0
+    for i, name in enumerate(todo, 1):
+        if deadline and clock() >= deadline:
+            log(f"run time is up after {i - 1} names")
+            break
+        term = search_term(name)
+        while True:
+            pacer.wait()
+            status, body = call(cfg, term)
+            if status == 429 and pacer.throttled():
+                continue
+            break
+        rec = {"query": name, "term": term, "fetched_at": pl.iso()}
+        try:
+            obj = json.loads(body) if status == 200 else None
+        except ValueError:
+            obj = None
+        if isinstance(obj, dict) and isinstance(obj.get("results"), list):
+            total = int((obj.get("pagingInfo") or {}).get("totalRecords") or len(obj["results"]))
+            rec.update(total=total, truncated=total > len(obj["results"]),
+                       results=[{k: r.get(k) for k in LOOKUP_FIELDS if k in r} for r in obj["results"]
+                                if isinstance(r, dict)])
+            ok += 1
+            consecutive = 0
+            pacer.ok()
+        else:
+            rec["error"] = f"HTTP {status}"
+            errors += 1
+            consecutive += 1
+            log(f"{name!r}: HTTP {status} {body[:120]!r}")
+        pl.append_jsonl(path, rec)
+        since += 1
+        if consecutive >= MAX_CONSECUTIVE_ERRORS:
+            log(f"{consecutive} consecutive failures -> stopping")
+            break
+        if checkpoint and checkpoint_every and since >= checkpoint_every:
+            checkpoint(f"dealer-check: checkpoint {ok} looked up, {len(todo) - i} to go")
+            since = 0
+        if i % 50 == 0:
+            log(f"{i}/{len(todo)} searched, {ok} ok, {errors} errors")
+    log(f"lookup done: {ok} ok, {errors} errors")
+    return {"ok": ok, "errors": errors}
+
 
 def main(argv=None) -> int:
     pl.load_dotenv(HERE / ".env")
@@ -643,6 +783,14 @@ def main(argv=None) -> int:
                    help=f"at most this many requests per --window-seconds (default {WINDOW_MAX})")
     f.add_argument("--window-seconds", type=int, default=WINDOW_SECONDS,
                    help=f"sliding window length in seconds (default {WINDOW_SECONDS})")
+    k = sub.add_parser("lookup", help="search the register for every licence the target entities hold "
+                                      "(dealer check); queue taken from data/out/targets.csv")
+    k.add_argument("--rate", type=float, default=0.5)
+    k.add_argument("--limit", type=int, default=0, help="stop after N names (0 = all)")
+    k.add_argument("--run-seconds", type=int, default=0)
+    k.add_argument("--checkpoint", type=int, default=0)
+    k.add_argument("--window-max", type=int, default=WINDOW_MAX)
+    k.add_argument("--window-seconds", type=int, default=WINDOW_SECONDS)
     args = ap.parse_args(argv)
     if args.cmd == "discover":
         discover(args.licence_number, headed=args.headed,
@@ -651,6 +799,19 @@ def main(argv=None) -> int:
     site = pl.read_json(config_path(), {})
     if not site:
         sys.exit(f"{config_path()} missing: run `python scrape_site.py discover` first")
+    if args.cmd == "lookup":
+        import targets as tg
+        cfg = site.get("search")
+        if not cfg:
+            sys.exit(f"no search endpoint in {config_path()}; run discover again")
+        names = tg.lookup_queue(pl.read_csv(pl.data_dir() / "out" / "targets.csv"))
+        deadline = float(os.environ["RUN_DEADLINE"]) if os.environ.get("RUN_DEADLINE", "").strip() else \
+            (time.time() + args.run_seconds if args.run_seconds else None)
+        checkpoint = (lambda msg: pl.commit_and_push(msg)) if (args.checkpoint and pl.should_push()) else None
+        lookup_entities(names, cfg, rate=args.rate, limit=args.limit, deadline=deadline,
+                        checkpoint_every=args.checkpoint, checkpoint=checkpoint,
+                        window_max=args.window_max, window_seconds=args.window_seconds)
+        return 0
     if "url_template" in site:          # config written by an older discover
         site = {"details": dict(site, mode="details"), "search": None}
     if args.mode == "auto":
