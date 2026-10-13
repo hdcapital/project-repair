@@ -86,7 +86,7 @@ PATTERNS: dict[str, list[str]] = {
                   r"COLLISION", r"CRASH", r"\bSPRAY", r"BODYWORK", r"\bACCIDENT", r"SMART REPAIR"],
     "excl_tyres": [r"\bTYRE", r"\bTIRE", r"\bWHEEL", r"\bRIMS?\b", r"\bMAG\b"],
     "excl_heavy": [r"\bTRUCK", r"\bDIESEL", r"\bHEAVY", r"\bPLANT\b", r"\bTRAILER", r"\bEARTHMOV",
-                   r"\bMACHINERY", r"\bTRACTOR", r"\bAGRICULTUR", r"\bFLEET\b", r"BUS\b", r"\bBUSES\b",
+                   r"\bMACHINERY", r"\bTRACTOR", r"\bAGRICULTUR", r"\bFLEET\b", r"BUS\b", r"\bBUS(ES|WAYS|LINES)\b",
                    r"\bCOACH", r"\bFORKLIFT", r"\bHAULAGE", r"\bFARM\b", r"\bLOGISTICS\b",
                    r"\bCRANE"],
     "excl_specialty_vehicle": [r"MOTORCYCLE", r"MOTOR ?CYCLE", r"\bBIKE", r"\bMARINE", r"\bBOAT",
@@ -1585,9 +1585,13 @@ def cmd_build(args) -> int:
     if not status:
         status = {"remaining": len([q for q in queue if q["licence_id"] not in details]),
                   "complete": all(q["licence_id"] in details for q in queue)}
-    (out / "summary.md").write_text(build_summary(licences, ops, shortlist, status, budget, len(queue)),
-                                    encoding="utf-8")
-    log(f"build: {len(licences)} licences, {len(ops)} operators, {len(shortlist)} shortlisted -> {out}")
+    import targets as tg          # director grouping + target scoring
+    tlist = tg.build_targets(licences, overrides=tg.load_overrides(d / "overrides.csv"))
+    write_csv(out / "targets.csv", tlist, tg.TARGET_FIELDS)
+    summary = build_summary(licences, ops, shortlist, status, budget, len(queue))
+    (out / "summary.md").write_text(summary + "\n" + "\n".join(tg.summary_lines(tlist)), encoding="utf-8")
+    log(f"build: {len(licences)} licences, {len(ops)} operators, {len(shortlist)} shortlisted, "
+        f"{sum(t['tier'] == 'A' for t in tlist)} tier-A targets -> {out}")
     return 0
 
 
