@@ -93,6 +93,22 @@ class ScoringTests(unittest.TestCase):
         ranks = sorted(t.values(), key=lambda x: x["rank"])
         self.assertEqual(ranks[0]["name"], "Tynan Mechanical Pty Ltd")
 
+    def test_name_variants_are_one_person(self):
+        self.assertTrue(tg.same_person("DAMIAN YOUNG", "DAMIAN STEPHEN YOUNG"))
+        self.assertTrue(tg.same_person("DAMIAN S YOUNG", "DAMIAN STEPHEN YOUNG"))
+        self.assertFalse(tg.same_person("DAMIAN YOUNG", "SARAH YOUNG"))
+        self.assertFalse(tg.same_person("DAMIAN A YOUNG", "DAMIAN STEPHEN YOUNG"))
+        # one director listed two ways on two licences: no surname match, three owners not four
+        rows = [lic(1, "Express Lube Pty Ltd", directors="Damian Young; Damon Rybie; Peter Colin Willcockson",
+                    premises="1 A St LIVERPOOL NSW 2170"),
+                lic(2, "Express Lube Pty Ltd", directors="Damian Stephen Young; Damon Rybie; Peter Colin Willcockson",
+                    premises="9 B St LIVERPOOL NSW 2170")]
+        a = self.build(rows)["Express Lube Pty Ltd"]
+        self.assertEqual(a["family_signal"], "")
+        self.assertEqual(a["n_people"], 3)
+        self.assertIn("Damian Stephen Young", a["people"])
+        self.assertNotIn("Damian Young;", a["people"] + ";")
+
     def test_overrides(self):
         rows = [lic(1, "Tynan Mechanical Pty Ltd", premises="1 A St LIVERPOOL NSW 2170; 9 B St LIVERPOOL NSW 2170"),
                 lic(7, "Bash Smash Pty Ltd", seg="body", flags="company;excl_body")]
@@ -173,6 +189,8 @@ class DealerAndFocusTests(unittest.TestCase):
         self.assertTrue(tg.is_dealer_licence({"licenceNumber": "MD1", "licenceType": "Motor"}))
         self.assertFalse(tg.is_dealer_licence({"licenceNumber": "MVRL1", "licenceType": "Motor",
                                                "licenceTypeFriendly": "Motor Vehicle Repairer's Licence"}))
+        self.assertFalse(tg.is_dealer_licence({"licenceNumber": "MD19142", "licenceType": "Motor",
+                                               "licenceTypeFriendly": "Motor Vehicle Recycler's Licence"}))
         self.assertEqual(tyn["dealer_check"], "dealer licence")
         syd = by["Sydney Mechanical Pty Ltd"]
         self.assertEqual(syd["tier"], "A")

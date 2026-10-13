@@ -48,13 +48,16 @@ FOCUS_POINT = (-32.9283, 151.7817)
 FOCUS_KM = 80.0
 # Licence types in the register that mean the business sells cars (or trades them).  The search
 # call files a dealer licence as licenceType "Motor" with licenceTypeFriendly "Motor Dealer's
-# Licence" and a number starting MD, so all three are checked.
+# Licence" and a number starting MD. Recycler's licences also get MD numbers, so the number only
+# decides when the friendly name is missing.
 DEALER_LICENCE_RE = re.compile(r"dealer|wholesal|auction", re.I)
 
 
 def is_dealer_licence(h: dict) -> bool:
-    return bool(DEALER_LICENCE_RE.search(f"{h.get('licenceType') or ''} {h.get('licenceTypeFriendly') or ''}")
-                or str(h.get("licenceNumber") or "").upper().startswith("MD"))
+    friendly = str(h.get("licenceTypeFriendly") or "")
+    if DEALER_LICENCE_RE.search(f"{h.get('licenceType') or ''} {friendly}"):
+        return True
+    return not friendly and str(h.get("licenceNumber") or "").upper().startswith("MD")
 UNKNOWN_SERVICE_WEIGHT = 0.5
 GENERIC_SURNAMES = {"AUTO", "AUTOS", "MOTOR", "MOTORS", "SERVICE", "SERVICES", "PTY", "LTD", "GROUP",
                     "HOLDINGS", "NSW", "AUSTRALIA", "AND", "THE", "CAR", "CARS", "REPAIRS", "MECHANICAL"}
@@ -126,6 +129,29 @@ def people_of(rows: list[dict]) -> set[str]:
         if "sole_trader" in (r.get("name_flags") or "") and not (r.get("directors") or "").strip():
             out.add(norm_person(r.get("licensee", "")))
     return {p for p in out if p}
+
+
+def same_person(a: str, b: str) -> bool:
+    """True when two normalised names are variants of one person: same first and last name, and the
+    shorter one's middle names (or initials) appear in order in the longer one's
+    ("DAMIAN YOUNG" = "DAMIAN STEPHEN YOUNG" = "DAMIAN S YOUNG")."""
+    ta, tb = a.split(), b.split()
+    if len(ta) > len(tb):
+        ta, tb = tb, ta
+    if len(ta) < 2 or ta[0] != tb[0] or ta[-1] != tb[-1]:
+        return False
+    rest = iter(tb[1:-1])
+    return all(any(m.startswith(t) for m in rest) for t in ta[1:-1])
+
+
+def dedupe_people(people: set[str]) -> set[str]:
+    """Collapse name variants of one person to the fullest form, so one director listed two ways
+    is not counted as two owners or as two people sharing a surname."""
+    out: list[str] = []
+    for p in sorted(people, key=lambda s: (-len(s.split()), -len(s), s)):
+        if not any(same_person(p, q) for q in out):
+            out.append(p)
+    return set(out)
 
 
 def regions_of(rows: list[dict]) -> set[str]:
@@ -217,7 +243,7 @@ def score_group(rows: list[dict], *, today: dt.date, nearby: int) -> dict:
     service_share = (segs["service"] + UNKNOWN_SERVICE_WEIGHT * segs["unknown"]) / n
     sites = _sites(rows)
     n_sites = len(sites)
-    people = people_of(rows)
+    people = dedupe_people(people_of(rows))
     names = sorted({r["licensee"].strip() for r in rows}
                    | {b.strip() for r in rows for b in (r.get("business_names_full") or r.get("business_names") or "").split(";") if b.strip()})
     starts = [d for d in (parse_date(r.get("start_date", "")) for r in rows) if d]
